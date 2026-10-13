@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
                 A
               </div>
               <span className="font-serif text-xl font-semibold text-white tracking-tight">
-                AURA · Calculate My Returns Global
+                Ariel Returns Calculator
               </span>
             </div>
 
@@ -99,7 +99,7 @@ export const Footer: React.FC<FooterProps> = ({
             These calculators and AI audits are provided for educational and illustrative purposes only. They do not constitute formal legal, taxation, or investment advice. No financial data is transmitted or retained.
           </p>
           <div className="whitespace-nowrap">
-            © {new Date().getFullYear()} AURA Global Returns · All rights reserved.
+            © {new Date().getFullYear()} Ariel Returns Calculator · All rights reserved.
           </div>
         </div>
 

@@ -722,7 +722,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#D4AF37]" />
                 <span className="text-xs font-mono uppercase tracking-wider text-white">
-                  Ask Aura AI · Localized Real Estate Advisory
+                  Ask Ariel AI · Localized Real Estate Advisory
                 </span>
               </div>
               <span className="text-[10px] font-mono text-emerald-400">Zero Hallucinations Guarantee</span>

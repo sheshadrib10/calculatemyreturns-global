@@ -58,14 +58,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-white group-hover:text-[#D4AF37] transition-colors">
-                    AURA
+                    ARIEL
                   </span>
                   <span className="text-[10px] tracking-[0.2em] uppercase font-mono text-[#D4AF37] border-l border-[#2E2421] pl-2 hidden sm:inline">
-                    Global Returns
+                    Returns Calculator
                   </span>
                 </div>
                 <p className="text-[11px] text-[#A39E98] tracking-wide font-sans hidden md:block">
-                  CalculateMyReturns · Private Wealth & Real Estate Intelligence
+                  Ariel Returns Calculator · Private Wealth &amp; Real Estate Intelligence
                 </p>
               </div>
             </button>
@@ -206,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#2B1B13] via-[#3D2619] to-[#2B1B13] border border-[#D4AF37]/50 hover:border-[#D4AF37] text-xs font-semibold text-[#FDFBF7] shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] transition-all"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] animate-pulse" />
-              <span>Aura AI Audit</span>
+              <span>Ariel AI Audit</span>
             </button>
           </div>
 
@@ -317,7 +317,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="w-full py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B98A3D] text-[#140F0E] font-semibold text-sm flex items-center justify-center gap-2 shadow-lg"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Launch Aura AI Deal Audit</span>
+                <span>Launch Ariel AI Deal Audit</span>
               </button>
             </div>
 

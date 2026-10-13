@@ -29,7 +29,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
 
     // If Cloudflare Workers AI binding is available
     if (context.env?.AI) {
-      const systemPrompt = `You are Aura AI, an ultra-precise institutional private wealth and luxury real estate financial advisor.
+      const systemPrompt = `You are Ariel AI, an ultra-precise institutional private wealth and luxury real estate financial advisor.
 Analyze the following investment deal strictly using the verified numbers provided:
 Country: ${dealContext?.country || 'Global'}
 Currency: ${dealContext?.currency || 'USD'}

@@ -36,7 +36,7 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
           <div>
             <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] mb-1">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Aura AI Investment Intelligence · Private Placement Memorandum</span>
+              <span>Ariel AI Investment Intelligence · Private Placement Memorandum</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl font-medium text-white tracking-tight">
               {auditReport.headline}
