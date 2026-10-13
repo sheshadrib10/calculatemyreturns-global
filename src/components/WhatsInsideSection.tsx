@@ -36,7 +36,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       title: 'The 45-Calculator Wealth & Solvency Suite',
       category: 'Haute Horlogerie & Wealth Suite',
       desc: 'From systematic equity compounding (SIP, Step-up SIP, CAGR, XIRR) to retirement runway solvency (4% rule, corpus solver), debt-to-income (DTI), and take-home compensation engineering.',
-      img: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=1200&q=80',
+      img: 'https://images.unsplash.com/photo-1620625515032-6ed0c1790c75?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Browse All 45 Tools',
       onClick: onOpenDirectory,
     },
