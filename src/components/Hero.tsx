@@ -1,16 +1,7 @@
 import React from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
-import {
-  Search,
-  Sparkles,
-  ShieldCheck,
-  Scale,
-  TrendingUp,
-  Landmark,
-  Building2,
-  Lock,
-} from 'lucide-react';
+import { Search, Sparkles, Lock, ArrowDown } from 'lucide-react';
 
 interface HeroProps {
   currentJurisdiction: JurisdictionCode;
@@ -31,135 +22,131 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   const activeJur = JURISDICTIONS[currentJurisdiction] || JURISDICTIONS.SG;
 
+  const scrollToOverview = () => {
+    document.getElementById('overview-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative overflow-hidden pt-12 pb-14 border-b border-[#2E2421]/60">
+    <section className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#191514] text-[#FAF7F2]">
       
-      {/* Subtle Luxury Radial Background Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[380px] bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.08)_0%,rgba(38,16,13,0.15)_40%,transparent_70%)] pointer-events-none" />
+      {/* Cinematic Full-Bleed Architectural Background (Lenval The Den Signature Imagery) */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://cdn.prod.website-files.com/69e15aa1d45aa73e62a536a8/6a778aab1f6681ee558e6866_the-den-13.webp"
+          alt="Ariel Luxury Penthouse Interior"
+          className="w-full h-full object-cover object-center filter brightness-[0.45] contrast-[1.08] scale-105 animate-in fade-in duration-1000"
+        />
+        {/* Top and Bottom Lenval Gradient Fades */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#191514] via-transparent to-[#191514]/70" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      {/* Top Padding */}
+      <div className="pt-16 sm:pt-24" />
+
+      {/* Hero Center Text (Exact Lenval Typography & Alignment) */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         
-        {/* Lenval-style Prime Location Tagline */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#D4AF37]/30 bg-[#1C1615]/80 backdrop-blur-md mb-6 shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-ping" />
-          <span className="text-[11px] font-mono tracking-[0.25em] text-[#D4AF37] uppercase">
-            SINGAPORE · KUALA LUMPUR · MUMBAI · DUBAI · LONDON · NEW YORK
-          </span>
-        </div>
+        {/* Tracked Kicker */}
+        <p className="text-xs sm:text-sm font-sans uppercase tracking-[0.3em] text-[#D9D3CE] font-light">
+          Singapore · Malaysia · Dubai · London · New York · Mumbai
+        </p>
 
-        {/* Hero Editorial Heading */}
-        <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-[#F9F7F5] max-w-4xl mx-auto leading-[1.12]">
-          Every critical number, <br className="hidden sm:block" />
-          <span className="italic font-normal text-gold-gradient">before you commit capital.</span>
+        {/* Huge Lenval Editorial Headline */}
+        <h1 className="mt-5 font-serif text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-[#FAF7F2] leading-[1.05]">
+          Ariel Returns Calculator
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-5 text-sm sm:text-base text-[#B9B5AF] max-w-2xl mx-auto leading-relaxed font-sans">
-          Institutional-grade investment, real estate IRR, statutory tax shield, and private wealth calculators — precision-engineered with actual country laws, stamp duty matrices, and localized tax regimes.
+        <p className="mt-6 font-serif italic text-xl sm:text-3xl text-[#E5DFD9] font-light max-w-3xl mx-auto leading-relaxed">
+          A Space Where Capital Compounds Across Generations.
         </p>
 
-        {/* Lenval-style Architectural Specs & Legal Rules Bar */}
-        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl mx-auto">
-          <div className="p-3 rounded-xl border border-[#2E2421] bg-[#171211]/80 backdrop-blur-sm text-left">
-            <div className="text-[10px] font-mono text-[#8C857E] uppercase">Active Jurisdiction</div>
-            <div className="text-sm font-semibold text-white flex items-center gap-1.5 mt-0.5">
-              <span>{activeJur.flag}</span>
-              <span className="truncate">{activeJur.name}</span>
-            </div>
-            <div className="text-[10px] text-[#D4AF37] mt-1 font-mono">{activeJur.currency} Baseline</div>
-          </div>
+        <p className="mt-4 text-xs sm:text-sm font-sans text-[#B9B5AF] max-w-2xl mx-auto leading-relaxed font-light">
+          Institutional financial modeling for prime real estate acquisitions, cross-border tax shields, and private wealth — engineered with actual statutory laws, tiered stamp duty schedules, and zero data tracking.
+        </p>
 
-          <div className="p-3 rounded-xl border border-[#2E2421] bg-[#171211]/80 backdrop-blur-sm text-left">
-            <div className="text-[10px] font-mono text-[#8C857E] uppercase">Capital Gains Law</div>
-            <div className="text-xs font-medium text-white truncate mt-0.5">
-              {currentJurisdiction === 'SG' || currentJurisdiction === 'AE'
-                ? '0% Exit CGT'
-                : currentJurisdiction === 'MY'
-                ? '0% RPGT after 5 yrs'
-                : currentJurisdiction === 'IN'
-                ? '12.5% Unified LTCG'
-                : 'Tiered Marginal'}
-            </div>
-            <div className="text-[10px] text-emerald-400 mt-1 font-mono">Verified Statutory</div>
-          </div>
-
-          <div className="p-3 rounded-xl border border-[#2E2421] bg-[#171211]/80 backdrop-blur-sm text-left">
-            <div className="text-[10px] font-mono text-[#8C857E] uppercase">Acquisition Duty</div>
-            <div className="text-xs font-medium text-white truncate mt-0.5">
-              {activeJur.stampDutyName}
-            </div>
-            <div className="text-[10px] text-[#D4AF37] mt-1 font-mono">Tiered & Surcharges</div>
-          </div>
-
-          <div className="p-3 rounded-xl border border-[#2E2421] bg-[#171211]/80 backdrop-blur-sm text-left">
-            <div className="text-[10px] font-mono text-[#8C857E] uppercase">Data Confidentiality</div>
-            <div className="text-xs font-semibold text-emerald-400 flex items-center gap-1 mt-0.5">
-              <Lock className="w-3 h-3" />
-              <span>Zero-Storage</span>
-            </div>
-            <div className="text-[10px] text-[#8C857E] mt-1 font-mono">No GDPR / PDPA Risk</div>
-          </div>
-        </div>
-
-        {/* Global Quick Search for All 45 Calculators */}
-        <div className="mt-8 max-w-xl mx-auto relative">
+        {/* Minimalist Search Bar */}
+        <div className="mt-8 max-w-md mx-auto relative">
           <div className="relative">
             <Search className="w-4 h-4 text-[#8C857E] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 45 calculators (e.g. Rental IRR, Stamp Duty, SIP, Rent vs Buy, DTI, Tax)..."
-              className="w-full bg-[#1A1413] border border-[#2E2421] rounded-full pl-11 pr-5 py-3 text-sm text-[#EAE6E1] placeholder-[#736B65] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 transition-all font-sans"
+              placeholder="Search 45 institutional calculators..."
+              className="w-full bg-[#191514]/80 backdrop-blur-md border border-[#FAF7F2]/20 rounded-full pl-11 pr-5 py-3 text-xs text-[#FAF7F2] placeholder-[#8C857E] focus:outline-none focus:border-[#FAF7F2] transition-all font-sans"
             />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8C857E] hover:text-white"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-
-          {/* Quick jump tags */}
-          <div className="mt-3 flex items-center justify-center gap-2 flex-wrap text-xs">
-            <span className="text-[11px] font-mono text-[#736B65]">Featured:</span>
-            <button
-              onClick={() => onSelectCalculator('rental-property')}
-              className="px-2.5 py-1 rounded-md bg-[#251D1B] border border-[#2E2421] text-[#EAE6E1] hover:border-[#D4AF37] text-[11px] transition-colors"
-            >
-              Rental Property IRR
-            </button>
-            <button
-              onClick={() => onSelectCalculator('stamp-duty-global')}
-              className="px-2.5 py-1 rounded-md bg-[#251D1B] border border-[#2E2421] text-[#EAE6E1] hover:border-[#D4AF37] text-[11px] transition-colors"
-            >
-              Stamp Duty & ABSD
-            </button>
-            <button
-              onClick={() => onSelectCalculator('rent-vs-buy')}
-              className="px-2.5 py-1 rounded-md bg-[#251D1B] border border-[#2E2421] text-[#EAE6E1] hover:border-[#D4AF37] text-[11px] transition-colors"
-            >
-              Rent vs Buy
-            </button>
-            <button
-              onClick={() => onSelectCalculator('sip')}
-              className="px-2.5 py-1 rounded-md bg-[#251D1B] border border-[#2E2421] text-[#EAE6E1] hover:border-[#D4AF37] text-[11px] transition-colors"
-            >
-              SIP Wealth
-            </button>
-            <button
-              onClick={onOpenCompare}
-              className="px-2.5 py-1 rounded-md bg-[#2B1B13] border border-[#D4AF37]/40 text-[#D4AF37] hover:border-[#D4AF37] text-[11px] transition-colors flex items-center gap-1"
-            >
-              <TrendingUp className="w-3 h-3" />
-              <span>Cross-Border Yields</span>
-            </button>
           </div>
         </div>
 
+        {/* Scroll Indicator */}
+        <div className="mt-8">
+          <button
+            onClick={scrollToOverview}
+            className="inline-flex items-center gap-2 text-[11px] font-sans uppercase tracking-[0.2em] text-[#FAF7F2]/70 hover:text-[#FAF7F2] transition-colors"
+          >
+            <span>Explore Overview</span>
+            <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
+          </button>
+        </div>
+
       </div>
+
+      {/* Bottom Lenval 4-Metric Specification Bar with Vertical Rules */}
+      <div className="relative z-10 border-t border-[#FAF7F2]/15 bg-[#191514]/75 backdrop-blur-md">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
+          
+          <div className="border-r border-[#FAF7F2]/10 pr-4 last:border-0">
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+              Active Market
+            </div>
+            <div className="font-serif text-lg text-[#FAF7F2] mt-1 flex items-center gap-2">
+              <span>{activeJur.flag}</span>
+              <span className="truncate">{activeJur.name}</span>
+            </div>
+            <div className="text-[11px] font-mono text-[#B9B5AF] mt-0.5">{activeJur.currency} Baseline</div>
+          </div>
+
+          <div className="border-r border-[#FAF7F2]/10 pr-4 last:border-0">
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+              Suite Scope
+            </div>
+            <div className="font-serif text-lg text-[#FAF7F2] mt-1">
+              45 Financial Calculators
+            </div>
+            <div className="text-[11px] font-mono text-[#B9B5AF] mt-0.5">Real Estate, SIP, Tax, Debt</div>
+          </div>
+
+          <div className="border-r border-[#FAF7F2]/10 pr-4 last:border-0">
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+              Statutory Tax
+            </div>
+            <div className="font-serif text-lg text-[#FAF7F2] mt-1 truncate">
+              {currentJurisdiction === 'SG' || currentJurisdiction === 'AE'
+                ? '0% Exit Capital Gains'
+                : currentJurisdiction === 'MY'
+                ? '0% RPGT after 5 Years'
+                : currentJurisdiction === 'IN'
+                ? '12.5% Budget 2024 LTCG'
+                : '27.5-Yr US Tax Shelter'}
+            </div>
+            <div className="text-[11px] font-mono text-emerald-400 mt-0.5">Verified Legal Model</div>
+          </div>
+
+          <div>
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+              Data Privacy
+            </div>
+            <div className="font-serif text-lg text-emerald-400 mt-1 flex items-center gap-1.5">
+              <Lock className="w-4 h-4" />
+              <span>Zero-Storage</span>
+            </div>
+            <div className="text-[11px] font-mono text-[#8C857E] mt-0.5">No Signup · Client-Side</div>
+          </div>
+
+        </div>
+      </div>
+
     </section>
   );
 };

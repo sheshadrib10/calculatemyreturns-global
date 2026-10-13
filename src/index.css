@@ -1,22 +1,29 @@
 @import "tailwindcss";
 
 @layer utilities {
-  .bg-radial-luxury {
-    background: radial-gradient(circle at 50% 0%, rgba(27, 67, 50, 0.35) 0%, rgba(8, 12, 10, 0.95) 70%, #080C0A 100%);
+  .bg-lenval-dark {
+    background-color: #191514;
   }
-  .bg-gold-gradient {
-    background: linear-gradient(135deg, #F3E7C4 0%, #D4AF37 50%, #9A7B2C 100%);
+  .bg-lenval-light {
+    background-color: #FAF7F2;
   }
-  .text-gold-gradient {
-    background: linear-gradient(135deg, #FDFBF7 0%, #E5C07B 40%, #C5A059 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .bg-lenval-wood {
+    background-color: #26100D;
   }
-  .gold-glow {
-    box-shadow: 0 0 35px -5px rgba(212, 175, 55, 0.15);
+  .text-lenval-dark {
+    color: #211A19;
   }
-  .emerald-glow {
-    box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.12);
+  .text-lenval-light {
+    color: #FAF7F2;
+  }
+  .text-lenval-muted {
+    color: #8C857E;
+  }
+  .border-lenval-dark {
+    border-color: #302826;
+  }
+  .border-lenval-light {
+    border-color: #E8E2D8;
   }
 }
 
@@ -27,9 +34,6 @@
   }
   .no-print {
     display: none !important;
-  }
-  .print-only {
-    display: block !important;
   }
   .print-clean {
     border-color: #e5e7eb !important;

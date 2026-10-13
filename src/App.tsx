@@ -5,7 +5,9 @@ import { simulatePropertyInvestment } from './utils/finance';
 import { generateDeterministicAiAudit } from './utils/aiAdvisory';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { OverviewSection } from './components/OverviewSection';
 import { RentalPropertyCalculator } from './components/RentalPropertyCalculator';
+import { WhatsInsideSection } from './components/WhatsInsideSection';
 import { CalculatorDirectory } from './components/CalculatorDirectory';
 import { InteractiveModalCalculator } from './components/InteractiveModalCalculator';
 import { CountryComparisonModal } from './components/CountryComparisonModal';
@@ -39,10 +41,15 @@ export const App: React.FC = () => {
   const handleOpenCalculator = (calcId: string) => {
     if (calcId === 'rental-property' || calcId === 'stamp-duty-global') {
       setActiveTab('simulator');
-      window.scrollTo({ top: 400, behavior: 'smooth' });
+      document.getElementById('calculator-section')?.scrollIntoView({ behavior: 'smooth' });
     } else {
       setActiveModalCalcId(calcId);
     }
+  };
+
+  const scrollToCalculator = () => {
+    setActiveTab('simulator');
+    document.getElementById('calculator-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Baseline property simulation inputs for AI audit modal
@@ -57,7 +64,7 @@ export const App: React.FC = () => {
     appreciationRate: currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5,
     monthlyRent: jur.currency === curr.code ? curr.defaultRent : 4500,
     rentHike: 3.5,
-    monthlyMaintenance: Math.round(((jur.currency === curr.code ? curr.defaultRent : 4500) * 0.12)),
+    monthlyMaintenance: Math.round((jur.currency === curr.code ? curr.defaultRent : 4500) * 0.12),
     maintenanceHike: 3.0,
     vacancyWeeksPerYear: 2,
     buyerStatus: 'citizen',
@@ -68,9 +75,9 @@ export const App: React.FC = () => {
   const sampleAuditReport = generateDeterministicAiAudit(sampleInputs, sampleResults, currentJurisdiction);
 
   return (
-    <div className="min-h-screen bg-[#0E0B0A] text-[#F3F4F6] selection:bg-[#D4AF37]/30 selection:text-white flex flex-col justify-between font-sans">
+    <div className="min-h-screen bg-[#191514] text-[#FAF7F2] flex flex-col justify-between font-sans selection:bg-[#8C5E3C]/40 selection:text-white">
       
-      {/* Top Luxury Navbar */}
+      {/* Top Lenval Navbar */}
       <Navbar
         currentJurisdiction={currentJurisdiction}
         onSelectJurisdiction={handleSelectJurisdiction}
@@ -82,55 +89,62 @@ export const App: React.FC = () => {
         onOpenCompare={() => setIsCompareModalOpen(true)}
       />
 
-      {/* Main Page Body */}
+      {/* Main Page Flow (Lenval Rhythmic Transitions) */}
       <main className="flex-grow">
         
-        {/* Editorial Luxury Hero */}
+        {/* Section 00: Cinematic Architectural Hero */}
         <Hero
           currentJurisdiction={currentJurisdiction}
           onSelectJurisdiction={handleSelectJurisdiction}
           searchQuery={searchQuery}
           setSearchQuery={(q) => {
             setSearchQuery(q);
-            if (q.trim()) setActiveTab('catalog');
+            if (q.trim()) {
+              setActiveTab('catalog');
+              document.getElementById('directory-section')?.scrollIntoView({ behavior: 'smooth' });
+            }
           }}
           onSelectCalculator={handleOpenCalculator}
           onOpenCompare={() => setIsCompareModalOpen(true)}
         />
 
-        {/* Dynamic View: Flagship Real Estate Simulator vs Full Directory */}
-        {activeTab === 'simulator' ? (
-          <div>
-            <RentalPropertyCalculator
-              currentJurisdiction={currentJurisdiction}
-              currentCurrency={currentCurrency}
-              onOpenAiAuditModal={() => setIsAiAuditModalOpen(true)}
-            />
+        {/* Section 01: Overview & Philosophy (Lenval 2-Column Travertine Section) */}
+        <OverviewSection
+          currentJurisdiction={currentJurisdiction}
+          currentCurrency={currentCurrency}
+          onOpenCompare={() => setIsCompareModalOpen(true)}
+          onScrollToCalculator={scrollToCalculator}
+        />
 
-            {/* Quick Preview of Other 44 Calculators below the simulator */}
-            <div className="border-t border-[#2E2421]/80 mt-16">
-              <CalculatorDirectory
-                currentJurisdiction={currentJurisdiction}
-                currentCurrency={currentCurrency}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                onOpenCalculator={handleOpenCalculator}
-              />
-            </div>
-          </div>
-        ) : (
-          <CalculatorDirectory
-            currentJurisdiction={currentJurisdiction}
-            currentCurrency={currentCurrency}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onOpenCalculator={handleOpenCalculator}
-          />
-        )}
+        {/* Section 02: The Simulator (The Master Suite) */}
+        <RentalPropertyCalculator
+          currentJurisdiction={currentJurisdiction}
+          currentCurrency={currentCurrency}
+          onOpenAiAuditModal={() => setIsAiAuditModalOpen(true)}
+        />
+
+        {/* Section 03: What's Inside (Lenval Architectural Cards) */}
+        <WhatsInsideSection
+          onScrollToCalculator={scrollToCalculator}
+          onOpenDirectory={() => {
+            setActiveTab('catalog');
+            document.getElementById('directory-section')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onOpenCompare={() => setIsCompareModalOpen(true)}
+        />
+
+        {/* Section 04: The 45 Institutional Calculators Directory */}
+        <CalculatorDirectory
+          currentJurisdiction={currentJurisdiction}
+          currentCurrency={currentCurrency}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onOpenCalculator={handleOpenCalculator}
+        />
 
       </main>
 
-      {/* Luxury Footer */}
+      {/* Section 05: Speak Directly / Footer */}
       <Footer
         currentJurisdiction={currentJurisdiction}
         onSelectJurisdiction={handleSelectJurisdiction}

@@ -109,82 +109,79 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-5xl bg-[#171211] border border-[#D4AF37]/40 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between">
+      <div className="relative w-full max-w-5xl bg-[#191514] border border-[#302826] rounded-3xl p-6 sm:p-9 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
         
-        {/* Ambient Gold Glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.12),transparent_70%)] pointer-events-none" />
-
         {/* Topbar */}
-        <div className="flex items-start justify-between pb-4 border-b border-[#2E2421]">
+        <div className="flex items-start justify-between pb-5 border-b border-[#302826]">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] mb-1">
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1">
               Global Wealth Arbitrage · Sovereign Tax Comparison
             </div>
-            <h3 className="font-serif text-2xl sm:text-3xl font-medium text-white tracking-tight">
+            <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#FAF7F2] tracking-tight">
               Cross-Border Real Estate &amp; Yield Matrix
             </h3>
-            <p className="text-xs text-[#A39E98] mt-1 max-w-2xl">
+            <p className="text-xs text-[#A39E98] mt-1 max-w-2xl font-sans font-light">
               Compare acquisition friction, rental yield retention, statutory tax shelters, and net holding IRR across premier international investment destinations.
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#1C1615] border border-[#2E2421] hover:border-[#D4AF37] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
+            className="w-9 h-9 rounded-full bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Matrix Table */}
-        <div className="py-5 overflow-y-auto space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="py-6 overflow-y-auto space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {comparisonData.map((c) => (
               <div
                 key={c.code}
-                className="bg-[#1C1615] border border-[#2E2421] hover:border-[#D4AF37]/60 rounded-2xl p-5 flex flex-col justify-between transition-all group"
+                className="bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] rounded-3xl p-6 flex flex-col justify-between transition-all group"
               >
                 <div>
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2.5">
                       <span className="text-2xl">{c.flag}</span>
                       <div>
-                        <h4 className="font-serif text-base font-semibold text-white group-hover:text-[#D4AF37] transition-colors">
+                        <h4 className="font-serif text-lg font-normal text-[#FAF7F2] group-hover:text-[#B88A58] transition-colors">
                           {c.name}
                         </h4>
                         <span className="text-[10px] font-mono text-[#8C857E]">{c.currency} Sovereign</span>
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-[#2B1B13] border border-[#D4AF37]/30 text-[#D4AF37]">
+                    <span className="text-[9px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#191514] border border-[#302826] text-[#B88A58]">
                       {c.highlight}
                     </span>
                   </div>
 
-                  <p className="text-xs text-[#B9B5AF] mb-4 font-sans line-clamp-1">{c.tagline}</p>
+                  <p className="text-xs text-[#A39E98] mb-4 font-sans font-light line-clamp-1">{c.tagline}</p>
 
-                  <div className="space-y-2 text-xs font-mono">
-                    <div className="flex justify-between py-1 border-b border-[#251D1B]">
+                  <div className="space-y-2.5 text-xs font-mono">
+                    <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
                       <span className="text-[#8C857E]">Prime Yield:</span>
                       <span className="text-emerald-400 font-semibold">{c.typicalYield}</span>
                     </div>
 
-                    <div className="flex justify-between py-1 border-b border-[#251D1B]">
+                    <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
                       <span className="text-[#8C857E]">Acquisition Tax:</span>
-                      <span className="text-[#EAE6E1]">{c.upfrontTax}</span>
+                      <span className="text-[#FAF7F2]">{c.upfrontTax}</span>
                     </div>
 
-                    <div className="flex justify-between py-1 border-b border-[#251D1B]">
+                    <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
                       <span className="text-[#8C857E]">Exit CGT Law:</span>
-                      <span className="text-[#D4AF37]">{c.exitCgt}</span>
+                      <span className="text-[#B88A58]">{c.exitCgt}</span>
                     </div>
 
-                    <div className="flex justify-between py-1 border-b border-[#251D1B]">
+                    <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
                       <span className="text-[#8C857E]">Projected IRR:</span>
                       <span className="text-white font-bold">{c.projectedIrr}</span>
                     </div>
 
-                    <div className="flex justify-between py-1">
+                    <div className="flex justify-between py-1.5">
                       <span className="text-[#8C857E]">Residency / Visa:</span>
                       <span className="text-emerald-400 truncate max-w-[130px]">{c.visaBenefit}</span>
                     </div>
@@ -196,7 +193,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
                     onSelectJurisdiction(c.code);
                     onClose();
                   }}
-                  className="mt-5 w-full py-2 rounded-xl bg-[#251D1B] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-[#140F0E] font-medium text-xs border border-[#2E2421] hover:border-[#D4AF37] transition-all flex items-center justify-center gap-1.5"
+                  className="mt-6 w-full py-2.5 rounded-full bg-[#191514] hover:bg-[#FAF7F2] text-[#FAF7F2] hover:text-[#191514] font-medium text-xs font-sans uppercase tracking-[0.1em] border border-[#302826] hover:border-[#FAF7F2] transition-all flex items-center justify-center gap-2"
                 >
                   <Scale className="w-3.5 h-3.5" />
                   <span>Simulate in {c.name}</span>
@@ -207,11 +204,11 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="pt-4 border-t border-[#2E2421] flex items-center justify-between text-xs text-[#8C857E] font-mono">
-          <span>*Yields and tax figures reflect 2026/2027 statutory legislation and market surveys.</span>
+        <div className="pt-4 border-t border-[#302826] flex items-center justify-between text-xs text-[#8C857E] font-mono">
+          <span>*Yields reflect 2026/2027 statutory legal schedules.</span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-[#D4AF37] text-[#140F0E] font-semibold text-xs hover:bg-[#E5C07B] transition-all"
+            className="px-5 py-2 rounded-full bg-[#FAF7F2] text-[#191514] font-medium text-xs font-sans uppercase tracking-[0.1em] hover:bg-[#FAF7F2]/90 transition-all"
           >
             Close Matrix
           </button>

@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
-import {
-  Globe,
-  Coins,
-  ShieldCheck,
-  Menu,
-  X,
-  Sparkles,
-  Layers,
-  ArrowRight,
-  TrendingUp,
-} from 'lucide-react';
+import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp } from 'lucide-react';
 
 interface NavbarProps {
   currentJurisdiction: JurisdictionCode;
@@ -34,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAiAudit,
   onOpenCompare,
 }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
@@ -43,36 +33,79 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#140F0E]/90 border-b border-[#2E2421]/80 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#191514]/85 border-b border-[#302826] transition-all">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 h-20 flex items-center justify-between gap-6">
           
-          {/* Brand Logo & Editorial Title */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          {/* Left: Lenval-style Two-Dot Menu Trigger */}
+          <div className="flex items-center gap-6">
             <button
-              onClick={() => setActiveTab('simulator')}
-              className="text-left group flex items-center gap-3.5 focus:outline-none"
+              onClick={() => setDrawerOpen(true)}
+              className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] font-sans text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors focus:outline-none group"
             >
-              <div className="w-10 h-10 rounded-full border border-[#D4AF37]/40 bg-gradient-to-br from-[#26100D] to-[#140F0E] flex items-center justify-center text-[#D4AF37] font-serif font-bold text-lg shadow-[0_0_15px_rgba(212,175,55,0.15)] group-hover:border-[#D4AF37] transition-all">
-                A
+              <div className="w-6 h-6 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[#FAF7F2] group-hover:scale-110 transition-transform">
+                  <circle cx="7" cy="12" r="2.2" fill="currentColor" />
+                  <circle cx="17" cy="12" r="2.2" fill="currentColor" />
+                </svg>
               </div>
-              <div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-xl sm:text-2xl font-semibold tracking-tight text-white group-hover:text-[#D4AF37] transition-colors">
-                    ARIEL
-                  </span>
-                  <span className="text-[10px] tracking-[0.2em] uppercase font-mono text-[#D4AF37] border-l border-[#2E2421] pl-2 hidden sm:inline">
-                    Returns Calculator
-                  </span>
-                </div>
-                <p className="text-[11px] text-[#A39E98] tracking-wide font-sans hidden md:block">
-                  Ariel Returns Calculator · Private Wealth &amp; Real Estate Intelligence
-                </p>
-              </div>
+              <span className="font-medium hidden sm:inline">Menu</span>
+            </button>
+
+            {/* Brand Logo in Lenval Editorial Serif */}
+            <button
+              onClick={() => {
+                setActiveTab('simulator');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-left focus:outline-none flex items-baseline gap-3 group"
+            >
+              <span className="font-serif text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
+                ARIEL
+              </span>
+              <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-3 hidden md:inline">
+                Returns Calculator
+              </span>
             </button>
           </div>
 
-          {/* Navigation Controls: Country, Currency, Navigation Tabs & AI */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Center Navigation Links (Lenval Editorial Menu) */}
+          <nav className="hidden lg:flex items-center gap-8 text-xs font-sans tracking-[0.15em] uppercase text-[#A39E98]">
+            <button
+              onClick={() => {
+                setActiveTab('simulator');
+                const el = document.getElementById('overview-section');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="hover:text-[#FAF7F2] transition-colors"
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('simulator');
+                const el = document.getElementById('calculator-section');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`transition-colors ${activeTab === 'simulator' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
+            >
+              The Simulator
+            </button>
+            <button
+              onClick={() => setActiveTab('catalog')}
+              className={`transition-colors ${activeTab === 'catalog' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
+            >
+              All 45 Tools
+            </button>
+            <button
+              onClick={onOpenCompare}
+              className="hover:text-[#FAF7F2] transition-colors flex items-center gap-1.5"
+            >
+              <span>Cross-Border</span>
+            </button>
+          </nav>
+
+          {/* Right Action Cluster: Country Selector, Currency & Lenval Pill Button */}
+          <div className="flex items-center gap-3">
             
             {/* Country Jurisdiction Selector */}
             <div className="relative">
@@ -81,18 +114,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setShowCountryDropdown(!showCountryDropdown);
                   setShowCurrencyDropdown(false);
                 }}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#2E2421] bg-[#1C1615] hover:border-[#D4AF37]/50 text-xs text-[#EAE6E1] transition-all"
-                title="Select localized legal & tax jurisdiction"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all"
               >
-                <span className="text-sm">{activeJur.flag}</span>
-                <span className="font-medium">{activeJur.name}</span>
-                <span className="text-[10px] text-[#D4AF37] font-mono">Tax Rules</span>
+                <span>{activeJur.flag}</span>
+                <span className="font-medium hidden sm:inline">{activeJur.name}</span>
+                <span className="text-[10px] font-mono text-[#8C857E]">Tax Rules</span>
               </button>
 
               {showCountryDropdown && (
-                <div className="absolute top-full mt-2 w-64 right-0 bg-[#1A1413] border border-[#2E2421] rounded-xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
-                  <div className="text-[10px] uppercase font-mono text-[#8C857E] px-2 py-1 tracking-wider border-b border-[#2E2421] mb-1">
-                    Select Jurisdiction & Tax Laws
+                <div className="absolute top-full mt-2 w-64 right-0 bg-[#211A19] border border-[#302826] rounded-2xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
+                  <div className="text-[10px] uppercase font-mono text-[#8C857E] px-3 py-1.5 tracking-wider border-b border-[#302826] mb-1">
+                    Select Jurisdiction &amp; Tax Laws
                   </div>
                   <div className="max-h-72 overflow-y-auto space-y-1">
                     {Object.values(JURISDICTIONS).map((j) => (
@@ -102,10 +134,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onSelectJurisdiction(j.code);
                           setShowCountryDropdown(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors ${
                           j.code === currentJurisdiction
-                            ? 'bg-[#2E2421] text-[#D4AF37] font-medium'
-                            : 'text-[#EAE6E1] hover:bg-[#251D1B]'
+                            ? 'bg-[#302826] text-[#FAF7F2] font-medium'
+                            : 'text-[#D9D3CE] hover:bg-[#2B2220]'
                         }`}
                       >
                         <span className="flex items-center gap-2.5">
@@ -127,18 +159,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setShowCurrencyDropdown(!showCurrencyDropdown);
                   setShowCountryDropdown(false);
                 }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#2E2421] bg-[#1C1615] hover:border-[#D4AF37]/50 text-xs text-[#EAE6E1] transition-all"
-                title="Select display currency"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-mono text-[#FAF7F2] transition-all"
               >
-                <Coins className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span className="font-mono font-medium">{activeCurr.code}</span>
-                <span className="text-[10px] text-[#A39E98]">({activeCurr.symbol})</span>
+                <span>{activeCurr.code}</span>
+                <span className="text-[11px] text-[#8C857E]">({activeCurr.symbol})</span>
               </button>
 
               {showCurrencyDropdown && (
-                <div className="absolute top-full mt-2 w-52 right-0 bg-[#1A1413] border border-[#2E2421] rounded-xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
-                  <div className="text-[10px] uppercase font-mono text-[#8C857E] px-2 py-1 tracking-wider border-b border-[#2E2421] mb-1">
-                    Global Currencies
+                <div className="absolute top-full mt-2 w-52 right-0 bg-[#211A19] border border-[#302826] rounded-2xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
+                  <div className="text-[10px] uppercase font-mono text-[#8C857E] px-3 py-1.5 tracking-wider border-b border-[#302826] mb-1">
+                    Currencies
                   </div>
                   <div className="max-h-72 overflow-y-auto space-y-1">
                     {Object.values(CURRENCIES).map((c) => (
@@ -148,15 +178,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onSelectCurrency(c.code);
                           setShowCurrencyDropdown(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs transition-colors ${
+                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-mono transition-colors ${
                           c.code === currentCurrency
-                            ? 'bg-[#2E2421] text-[#D4AF37] font-medium'
-                            : 'text-[#EAE6E1] hover:bg-[#251D1B]'
+                            ? 'bg-[#302826] text-[#FAF7F2] font-semibold'
+                            : 'text-[#D9D3CE] hover:bg-[#2B2220]'
                         }`}
                       >
                         <span className="flex items-center gap-2">
                           <span>{c.flag}</span>
-                          <span className="font-mono">{c.code}</span>
+                          <span>{c.code}</span>
                         </span>
                         <span className="text-[#8C857E]">{c.symbol}</span>
                       </button>
@@ -166,168 +196,116 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Cross-Border Comparison Trigger */}
-            <button
-              onClick={onOpenCompare}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#2E2421] bg-[#1C1615] hover:border-[#D4AF37]/60 text-xs text-[#EAE6E1] transition-all"
-            >
-              <TrendingUp className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>Cross-Border Yields</span>
-            </button>
-
-            {/* Tab switch: Simulator vs Full 45-Calculator Directory */}
-            <div className="flex items-center bg-[#1C1615] p-1 rounded-full border border-[#2E2421]">
-              <button
-                onClick={() => setActiveTab('simulator')}
-                className={`px-3.5 py-1 rounded-full text-xs font-medium transition-all ${
-                  activeTab === 'simulator'
-                    ? 'bg-[#D4AF37] text-[#140F0E] shadow-sm'
-                    : 'text-[#A39E98] hover:text-white'
-                }`}
-              >
-                Real Estate IRR
-              </button>
-              <button
-                onClick={() => setActiveTab('catalog')}
-                className={`px-3.5 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
-                  activeTab === 'catalog'
-                    ? 'bg-[#D4AF37] text-[#140F0E] shadow-sm'
-                    : 'text-[#A39E98] hover:text-white'
-                }`}
-              >
-                <Layers className="w-3 h-3" />
-                <span>All 45 Calculators</span>
-              </button>
-            </div>
-
-            {/* AI Investment Copilot Button */}
+            {/* Lenval-style "Private Audit / Let's Talk" Magnetic Pill Button */}
             <button
               onClick={onOpenAiAudit}
-              className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#2B1B13] via-[#3D2619] to-[#2B1B13] border border-[#D4AF37]/50 hover:border-[#D4AF37] text-xs font-semibold text-[#FDFBF7] shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] transition-all"
+              className="flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full border border-[#FAF7F2]/40 bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans tracking-[0.1em] uppercase font-medium shadow-sm transition-all group"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] animate-pulse" />
-              <span>Ariel AI Audit</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#191514] group-hover:scale-125 transition-transform" />
+              <span>Private Audit</span>
             </button>
           </div>
 
-          {/* Privacy & Mobile Menu Controls */}
-          <div className="flex items-center gap-2">
-            
-            {/* Zero Data Guarantee Pill */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-900/60 bg-emerald-950/20 text-emerald-400 text-[11px] font-mono">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>100% Client-Side · No Tracking</span>
-            </div>
-
-            {/* Mobile Menu Toggle Button (Lenval Style Magnetic Circle) */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden w-10 h-10 rounded-full border border-[#2E2421] bg-[#1C1615] flex items-center justify-center text-[#EAE6E1] hover:border-[#D4AF37] transition-colors"
-              aria-label="Toggle navigation menu"
-            >
-              {menuOpen ? <X className="w-5 h-5 text-[#D4AF37]" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
         </div>
+      </header>
 
-        {/* Mobile Fullscreen Navigation Drawer (Lenval Properties Style) */}
-        {menuOpen && (
-          <div className="lg:hidden bg-[#140F0E] border-b border-[#2E2421] px-5 py-6 space-y-5 animate-in slide-in-from-top duration-300">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-mono uppercase text-[#8C857E] mb-1">
-                  Jurisdiction & Laws
-                </label>
-                <select
-                  value={currentJurisdiction}
-                  onChange={(e) => onSelectJurisdiction(e.target.value as JurisdictionCode)}
-                  className="w-full bg-[#1C1615] border border-[#2E2421] rounded-lg px-3 py-2 text-xs text-[#EAE6E1] font-sans focus:outline-none focus:border-[#D4AF37]"
-                >
-                  {Object.values(JURISDICTIONS).map((j) => (
-                    <option key={j.code} value={j.code}>
-                      {j.flag} {j.name} ({j.currency})
-                    </option>
-                  ))}
-                </select>
-              </div>
+      {/* Lenval Fullscreen Overlay Drawer Menu */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 bg-[#191514] text-[#FAF7F2] flex flex-col justify-between p-8 sm:p-14 animate-in fade-in duration-300">
+          
+          {/* Top Bar inside Drawer */}
+          <div className="flex items-center justify-between border-b border-[#302826] pb-8">
+            <span className="font-serif text-3xl tracking-[0.05em]">ARIEL</span>
+            <button
+              onClick={() => setDrawerOpen(false)}
+              className="flex items-center gap-2.5 text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors"
+            >
+              <span>Close</span>
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-              <div>
-                <label className="block text-[10px] font-mono uppercase text-[#8C857E] mb-1">
-                  Display Currency
-                </label>
-                <select
-                  value={currentCurrency}
-                  onChange={(e) => onSelectCurrency(e.target.value as CurrencyCode)}
-                  className="w-full bg-[#1C1615] border border-[#2E2421] rounded-lg px-3 py-2 text-xs text-[#EAE6E1] font-mono focus:outline-none focus:border-[#D4AF37]"
-                >
-                  {Object.values(CURRENCIES).map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.flag} {c.code} ({c.symbol})
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 pt-2">
+          {/* Center Huge Editorial Links */}
+          <div className="py-12 space-y-8 max-w-2xl">
+            <div className="border-b border-[#302826] pb-6">
               <button
                 onClick={() => {
                   setActiveTab('simulator');
-                  setMenuOpen(false);
+                  setDrawerOpen(false);
+                  const el = document.getElementById('overview-section');
+                  el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'simulator'
-                    ? 'bg-[#2E2421] text-[#D4AF37]'
-                    : 'text-[#EAE6E1] hover:bg-[#1C1615]'
-                }`}
+                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
               >
-                Real Estate Investment & IRR Simulator
+                01. Overview &amp; Philosophy
               </button>
+            </div>
 
+            <div className="border-b border-[#302826] pb-6">
+              <button
+                onClick={() => {
+                  setActiveTab('simulator');
+                  setDrawerOpen(false);
+                  const el = document.getElementById('calculator-section');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
+              >
+                02. The Investment Simulator
+              </button>
+            </div>
+
+            <div className="border-b border-[#302826] pb-6">
               <button
                 onClick={() => {
                   setActiveTab('catalog');
-                  setMenuOpen(false);
+                  setDrawerOpen(false);
                 }}
-                className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'catalog'
-                    ? 'bg-[#2E2421] text-[#D4AF37]'
-                    : 'text-[#EAE6E1] hover:bg-[#1C1615]'
-                }`}
+                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
               >
-                Browse All 45 Financial Calculators
+                03. The 45 Institutional Calculators
               </button>
+            </div>
 
+            <div className="border-b border-[#302826] pb-6">
               <button
                 onClick={() => {
                   onOpenCompare();
-                  setMenuOpen(false);
+                  setDrawerOpen(false);
                 }}
-                className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-[#EAE6E1] hover:bg-[#1C1615] flex items-center justify-between"
+                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
               >
-                <span>Cross-Border Yield Comparison</span>
-                <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+                04. Cross-Border Sovereign Matrix
               </button>
+            </div>
 
+            <div className="pb-6">
               <button
                 onClick={() => {
                   onOpenAiAudit();
-                  setMenuOpen(false);
+                  setDrawerOpen(false);
                 }}
-                className="w-full py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B98A3D] text-[#140F0E] font-semibold text-sm flex items-center justify-center gap-2 shadow-lg"
+                className="font-serif text-4xl sm:text-6xl text-left text-[#8C5E3C] hover:text-[#FAF7F2] transition-colors"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Launch Ariel AI Deal Audit</span>
+                05. Launch Ariel AI Audit
               </button>
             </div>
+          </div>
 
-            <div className="pt-2 border-t border-[#2E2421] flex items-center justify-between text-[11px] font-mono text-[#8C857E]">
-              <span>No signup · No cookie tracking</span>
+          {/* Bottom Drawer Footer */}
+          <div className="border-t border-[#302826] pt-8 flex flex-col sm:flex-row items-baseline justify-between text-xs font-mono text-[#8C857E] gap-4">
+            <div>
+              © {new Date().getFullYear()} Ariel Properties · Private Wealth Intelligence.
+            </div>
+            <div className="flex items-center gap-6">
+              <span>Zero-Storage Privacy</span>
+              <span>No Cookies / No Tracking</span>
               <span className="text-emerald-400">● 100% Client-Side</span>
             </div>
           </div>
-        )}
-      </header>
+
+        </div>
+      )}
     </>
   );
 };

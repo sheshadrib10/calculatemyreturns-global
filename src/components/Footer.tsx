@@ -1,7 +1,7 @@
 import React from 'react';
-import { CurrencyCode, JurisdictionCode } from '../types';
+import { JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
-import { ShieldCheck, Printer, ArrowUp } from 'lucide-react';
+import { Printer, ArrowUp, Lock } from 'lucide-react';
 
 interface FooterProps {
   currentJurisdiction: JurisdictionCode;
@@ -17,47 +17,46 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="border-t border-[#2E2421] bg-[#120E0D] text-[#8C857E] pt-14 pb-12 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#14100F] text-[#FAF7F2] pt-24 pb-16 border-t border-[#302826] font-sans">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
         
-        {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-[#251D1B]">
+        {/* Lenval-style "Speak Directly / Get in Touch" Block */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-20 border-b border-[#302826]">
           
-          {/* Brand & Manifesto */}
-          <div className="md:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full border border-[#D4AF37]/40 bg-[#26100D] flex items-center justify-center text-[#D4AF37] font-serif font-bold text-base">
-                A
-              </div>
-              <span className="font-serif text-xl font-semibold text-white tracking-tight">
-                Ariel Returns Calculator
-              </span>
+          <div className="lg:col-span-7 space-y-6">
+            <div className="text-xs uppercase tracking-[0.25em] text-[#8C857E]">
+              05 / Private Consultation
             </div>
 
-            <p className="text-xs text-[#A39E98] leading-relaxed max-w-md font-sans">
-              Precision private wealth and real estate return engines. Built to reflect genuine cross-border property tax laws, tiered stamp duty schedules, and wealth compounding dynamics across premier international markets.
+            <h2 className="font-serif text-4xl sm:text-6xl font-normal tracking-tight text-[#FAF7F2]">
+              Speak Directly
+            </h2>
+
+            <p className="text-base sm:text-lg text-[#B9B5AF] max-w-xl font-light leading-relaxed">
+              For private placement advisory, institutional portfolio underwriting, or custom cross-border tax matrices — we welcome direct conversation. All computations and models are processed in complete confidentiality.
             </p>
 
-            <div className="flex items-center gap-2 text-[11px] font-mono text-emerald-400">
-              <ShieldCheck className="w-4 h-4" />
-              <span>100% Client-Side Privacy · No Tracking · No Sign-Up</span>
+            <div className="pt-2 flex items-center gap-3 text-xs font-mono text-emerald-400">
+              <Lock className="w-4 h-4" />
+              <span>100% Client-Side Computation · Zero Data Tracked · No Signup</span>
             </div>
           </div>
 
-          {/* Quick Jurisdictions */}
-          <div className="md:col-span-4 space-y-3">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#D4AF37]">
-              Localized Tax Engines
+          {/* Quick Jurisdictions & PDF Export */}
+          <div className="lg:col-span-5 space-y-6 lg:pl-10">
+            <div className="text-xs uppercase tracking-[0.2em] text-[#8C857E]">
+              Active Legal Jurisdictions
             </div>
+
             <div className="grid grid-cols-2 gap-2 text-xs">
               {Object.values(JURISDICTIONS).map((j) => (
                 <button
                   key={j.code}
                   onClick={() => onSelectJurisdiction(j.code)}
-                  className={`text-left px-2.5 py-1.5 rounded-lg border text-[11px] transition-colors flex items-center gap-2 ${
+                  className={`text-left px-3 py-2 rounded-xl border text-[11px] transition-colors flex items-center gap-2 ${
                     j.code === currentJurisdiction
-                      ? 'border-[#D4AF37] bg-[#2E2421] text-[#D4AF37]'
-                      : 'border-transparent text-[#A39E98] hover:text-white hover:bg-[#1C1615]'
+                      ? 'border-[#8C5E3C] bg-[#211A19] text-[#FAF7F2]'
+                      : 'border-[#261E1C] text-[#8C857E] hover:text-[#FAF7F2] hover:bg-[#1E1716]'
                   }`}
                 >
                   <span>{j.flag}</span>
@@ -65,41 +64,36 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               ))}
             </div>
-          </div>
 
-          {/* Institutional Compliance & Actions */}
-          <div className="md:col-span-3 space-y-3">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#D4AF37]">
-              Export &amp; Access
-            </div>
-            <div className="space-y-2">
+            <div className="pt-4 flex items-center gap-4">
               <button
                 onClick={() => window.print()}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-[#1C1615] border border-[#2E2421] text-xs text-[#EAE6E1] hover:border-[#D4AF37] transition-all"
+                className="px-5 py-2.5 rounded-full border border-[#302826] bg-[#191514] hover:border-[#8C5E3C] text-xs uppercase tracking-[0.1em] text-[#FAF7F2] transition-all flex items-center gap-2"
               >
-                <span>Print / Save as PDF</span>
-                <Printer className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <Printer className="w-3.5 h-3.5 text-[#B88A58]" />
+                <span>Save Memorandum (PDF)</span>
               </button>
 
               <button
                 onClick={scrollToTop}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-[#1C1615] border border-[#2E2421] text-xs text-[#EAE6E1] hover:border-[#D4AF37] transition-all"
+                className="w-10 h-10 rounded-full border border-[#302826] bg-[#191514] hover:border-[#8C5E3C] flex items-center justify-center text-[#FAF7F2] transition-all"
+                title="Back to top"
               >
-                <span>Back to Top</span>
-                <ArrowUp className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <ArrowUp className="w-4 h-4" />
               </button>
             </div>
           </div>
 
         </div>
 
-        {/* Disclaimer & Bottom Bar */}
-        <div className="mt-8 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#736B65]">
-          <p className="max-w-3xl leading-relaxed text-center sm:text-left">
-            These calculators and AI audits are provided for educational and illustrative purposes only. They do not constitute formal legal, taxation, or investment advice. No financial data is transmitted or retained.
+        {/* Bottom Legal Notice */}
+        <div className="mt-12 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-mono text-[#8C857E]">
+          <p className="max-w-2xl leading-relaxed font-light text-[11px]">
+            Ariel Returns Calculator provides illustrative simulations for private capital and investment evaluation. No financial data is transmitted or retained. Excluded from GDPR/PDPA compliance obligations by design.
           </p>
+
           <div className="whitespace-nowrap">
-            © {new Date().getFullYear()} Ariel Returns Calculator · All rights reserved.
+            © {new Date().getFullYear()} Ariel Properties · All rights reserved.
           </div>
         </div>
 

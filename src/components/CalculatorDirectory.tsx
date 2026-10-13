@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
 import { CalculatorCategory, CalculatorItem, CurrencyCode, JurisdictionCode } from '../types';
 import { CALCULATORS_CATALOG } from '../data/calculatorsList';
-import {
-  Search,
-  ArrowRight,
-  TrendingUp,
-  Building2,
-  DollarSign,
-  Briefcase,
-  Layers,
-  Sparkles,
-  ShieldCheck,
-  Scale,
-  Clock,
-  Landmark,
-  Coins,
-  Percent,
-} from 'lucide-react';
+import { ArrowRight, Search } from 'lucide-react';
 
 interface CalculatorDirectoryProps {
   currentJurisdiction: JurisdictionCode;
@@ -37,7 +22,6 @@ export const CalculatorDirectory: React.FC<CalculatorDirectoryProps> = ({
 
   const categories = ['All', ...CALCULATORS_CATALOG.map((c) => c.name)];
 
-  // Filter items
   const filteredCatalog: CalculatorCategory[] = CALCULATORS_CATALOG.map((cat) => {
     const matchingItems = cat.items.filter((item) => {
       const matchesSearch =
@@ -57,109 +41,109 @@ export const CalculatorDirectory: React.FC<CalculatorDirectoryProps> = ({
     };
   }).filter((cat) => cat.items.length > 0);
 
-  const totalCalculatorsCount = CALCULATORS_CATALOG.reduce((acc, cat) => acc + cat.items.length, 0);
+  const totalCount = CALCULATORS_CATALOG.reduce((acc, cat) => acc + cat.items.length, 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      
-      {/* Directory Title & Overview */}
-      <div className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#D4AF37]/30 bg-[#1C1615] text-[11px] font-mono text-[#D4AF37] mb-3">
-          <span>Complete Suite</span>
-          <span>·</span>
-          <span>{totalCalculatorsCount} Specialized Financial Calculators</span>
-          <span>·</span>
-          <span>No Signup</span>
-        </div>
-        <h2 className="font-serif text-3xl sm:text-4xl font-medium text-white tracking-tight">
-          Comprehensive Wealth &amp; Investment Directory
-        </h2>
-        <p className="mt-2 text-sm text-[#A39E98]">
-          Institutional-grade calculators spanning real estate, systematic wealth compounding, retirement solvency, cross-border FX, and statutory tax shields.
-        </p>
-      </div>
-
-      {/* Category Pills Filter */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-        {categories.map((catName) => (
-          <button
-            key={catName}
-            onClick={() => setSelectedCategory(catName)}
-            className={`px-4 py-2 rounded-full text-xs whitespace-nowrap transition-all font-sans ${
-              selectedCategory === catName
-                ? 'bg-[#D4AF37] text-[#140F0E] font-semibold shadow-md'
-                : 'bg-[#171211] border border-[#2E2421] text-[#A39E98] hover:text-white hover:border-[#3D2E2A]'
-            }`}
-          >
-            {catName}
-          </button>
-        ))}
-      </div>
-
-      {/* Categorized Calculators Grid */}
-      <div className="space-y-12">
-        {filteredCatalog.map((category) => (
-          <div key={category.name} className="space-y-4">
-            
-            {/* Category Header */}
-            <div className="flex items-baseline justify-between border-b border-[#2E2421]/80 pb-3">
-              <div>
-                <h3 className="font-serif text-xl sm:text-2xl font-medium text-white">
-                  {category.name}
-                </h3>
-                <p className="text-xs text-[#8C857E] mt-0.5 font-sans">
-                  {category.description}
-                </p>
-              </div>
-              <span className="text-xs font-mono text-[#D4AF37]">
-                {category.items.length} {category.items.length === 1 ? 'tool' : 'tools'}
-              </span>
+    <section id="directory-section" className="bg-[#FAF7F2] text-[#211A19] py-24 sm:py-32 border-b border-[#E8E2D8]">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+        
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#E8E2D8]">
+          <div>
+            <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2">
+              04 / The Complete Collection
             </div>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#211A19]">
+              The 45 Institutional Calculators
+            </h2>
+          </div>
 
-            {/* Grid of Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {category.items.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => onOpenCalculator(item.id)}
-                  className="group cursor-pointer bg-[#171211] hover:bg-[#1E1716] border border-[#2E2421] hover:border-[#D4AF37]/60 rounded-2xl p-5 transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.08)] relative"
-                >
-                  {item.isFlagship && (
-                    <span className="absolute top-4 right-4 text-[9px] font-mono tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#2B1B13] border border-[#D4AF37]/50 text-[#D4AF37]">
-                      Flagship
-                    </span>
-                  )}
+          <p className="text-xs sm:text-sm text-[#7D7571] max-w-md font-sans font-light leading-relaxed">
+            Replicating and expanding the entire calculatemyreturns financial library across 10 specialized wealth modules. No signup required.
+          </p>
+        </div>
 
-                  <div>
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[#251D1B] border border-[#2E2421] flex items-center justify-center text-[#D4AF37] group-hover:border-[#D4AF37]/50 transition-colors">
-                        <TrendingUp className="w-4 h-4" />
+        {/* Filter Pills (Lenval Style) */}
+        <div className="mt-10 flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none">
+          {categories.map((catName) => (
+            <button
+              key={catName}
+              onClick={() => setSelectedCategory(catName)}
+              className={`px-5 py-2.5 rounded-full text-xs font-sans uppercase tracking-[0.1em] whitespace-nowrap transition-all ${
+                selectedCategory === catName
+                  ? 'bg-[#211A19] text-[#FAF7F2] font-medium'
+                  : 'bg-[#F5EFEB] border border-[#E8E2D8] text-[#7D7571] hover:text-[#211A19] hover:border-[#8C5E3C]'
+              }`}
+            >
+              {catName}
+            </button>
+          ))}
+        </div>
+
+        {/* Catalog Categories */}
+        <div className="mt-14 space-y-16">
+          {filteredCatalog.map((category) => (
+            <div key={category.name} className="space-y-6">
+              
+              <div className="flex items-baseline justify-between border-b border-[#E8E2D8] pb-4">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#211A19]">
+                    {category.name}
+                  </h3>
+                  <p className="text-xs text-[#8C857E] mt-1 font-sans font-light">
+                    {category.description}
+                  </p>
+                </div>
+                <span className="text-xs font-mono text-[#8C5E3C]">
+                  {category.items.length} {category.items.length === 1 ? 'tool' : 'tools'}
+                </span>
+              </div>
+
+              {/* Grid of Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.items.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => onOpenCalculator(item.id)}
+                    className="group cursor-pointer bg-[#F5EFEB] hover:bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#8C5E3C] rounded-3xl p-7 transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[10px] font-mono text-[#8C857E] tracking-wider uppercase">
+                          {item.category}
+                        </span>
+                        {item.isFlagship && (
+                          <span className="text-[9px] font-sans uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#211A19] text-[#FAF7F2]">
+                            Flagship
+                          </span>
+                        )}
                       </div>
-                      <h4 className="font-serif text-base font-semibold text-white group-hover:text-[#D4AF37] transition-colors">
+
+                      <h4 className="font-serif text-xl font-medium text-[#211A19] group-hover:text-[#8C5E3C] transition-colors">
                         {item.name}
                       </h4>
+
+                      <p className="mt-2 text-xs text-[#5C5550] leading-relaxed line-clamp-2 font-sans font-light">
+                        {item.desc}
+                      </p>
                     </div>
 
-                    <p className="text-xs text-[#A39E98] leading-relaxed line-clamp-2 font-sans mb-3">
-                      {item.desc}
-                    </p>
+                    <div className="mt-6 pt-4 border-t border-[#E8E2D8] flex items-center justify-between text-xs font-sans uppercase tracking-[0.1em] text-[#8C857E] group-hover:text-[#211A19] transition-colors">
+                      <span className="truncate max-w-[200px] text-[10px] font-mono lowercase">{item.formulaSummary}</span>
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <span>Launch</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  <div className="pt-3 border-t border-[#251D1B] flex items-center justify-between text-[11px] font-mono text-[#8C857E]">
-                    <span className="truncate max-w-[200px]">{item.formulaSummary}</span>
-                    <span className="text-[#D4AF37] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      <span>Launch</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              ))}
             </div>
+          ))}
+        </div>
 
-          </div>
-        ))}
       </div>
-
-    </div>
+    </section>
   );
 };

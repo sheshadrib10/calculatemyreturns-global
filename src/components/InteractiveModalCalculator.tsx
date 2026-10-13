@@ -97,28 +97,25 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-2xl bg-[#171211] border border-[#D4AF37]/40 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col justify-between">
+      <div className="relative w-full max-w-2xl bg-[#191514] border border-[#302826] rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col justify-between text-[#FAF7F2]">
         
-        {/* Subtle Ambient Gold Glow */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.15),transparent_70%)] pointer-events-none" />
-
         {/* Topbar: Title and Close */}
-        <div className="flex items-start justify-between pb-4 border-b border-[#2E2421]">
+        <div className="flex items-start justify-between pb-4 border-b border-[#302826]">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] mb-1">
-              {item.category} · {jur.name} Engine
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1">
+              {item.category} · {jur.name}
             </div>
-            <h3 className="font-serif text-2xl font-medium text-white tracking-tight">
+            <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#FAF7F2] tracking-tight">
               {item.name}
             </h3>
-            <p className="text-xs text-[#A39E98] mt-1">{item.desc}</p>
+            <p className="text-xs text-[#A39E98] mt-1 font-sans font-light">{item.desc}</p>
           </div>
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#1C1615] border border-[#2E2421] hover:border-[#D4AF37] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
+            className="w-9 h-9 rounded-full bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -128,14 +125,14 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
         <div className="py-6 space-y-6 overflow-y-auto">
           
           {/* Result Banner */}
-          <div className="bg-[#1C1615] border border-[#2E2421] rounded-2xl p-5 text-center">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-[#D4AF37]">
+          <div className="bg-[#211A19] border border-[#302826] rounded-2xl p-6 text-center">
+            <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
               {result.headlineLabel}
             </span>
-            <div className="mt-1 font-mono text-3xl sm:text-4xl font-bold text-gold-gradient">
+            <div className="mt-2 font-serif text-3xl sm:text-5xl font-normal text-[#FAF7F2]">
               {result.headlineValue}
             </div>
-            <p className="mt-2 text-xs text-[#A39E98] max-w-lg mx-auto leading-relaxed">
+            <p className="mt-3 text-xs text-[#A39E98] max-w-lg mx-auto leading-relaxed font-sans font-light">
               {result.summaryText}
             </p>
           </div>
@@ -143,9 +140,9 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
           {/* Details Table */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {result.details.map((d, i) => (
-              <div key={i} className="p-3 rounded-xl bg-[#140F0E] border border-[#2E2421]">
+              <div key={i} className="p-3.5 rounded-xl bg-[#211A19] border border-[#302826]">
                 <div className="text-[10px] font-mono text-[#8C857E]">{d.label}</div>
-                <div className="text-sm font-mono font-semibold text-white mt-0.5">{d.value}</div>
+                <div className="text-sm font-mono font-medium text-[#FAF7F2] mt-0.5">{d.value}</div>
               </div>
             ))}
           </div>
