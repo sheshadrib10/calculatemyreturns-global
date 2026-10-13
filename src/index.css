@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .bg-radial-luxury {
+    background: radial-gradient(circle at 50% 0%, rgba(27, 67, 50, 0.35) 0%, rgba(8, 12, 10, 0.95) 70%, #080C0A 100%);
+  }
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, #F3E7C4 0%, #D4AF37 50%, #9A7B2C 100%);
+  }
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #FDFBF7 0%, #E5C07B 40%, #C5A059 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .gold-glow {
+    box-shadow: 0 0 35px -5px rgba(212, 175, 55, 0.15);
+  }
+  .emerald-glow {
+    box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.12);
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-clean {
+    border-color: #e5e7eb !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+}
