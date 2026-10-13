@@ -39,13 +39,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-40 backdrop-blur-md bg-[#191514]/90 border-b border-[#302826] transition-all">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-3">
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-3">
           
           {/* Left: Classic Luxury Hamburger Menu Trigger & Brand Logo */}
-          <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex items-center gap-2 sm:gap-6 flex-shrink-0">
             <button
               onClick={() => setDrawerOpen(true)}
-              className="flex items-center gap-2 p-2 -ml-2 rounded-xl text-[#FAF7F2] hover:bg-white/5 transition-colors focus:outline-none group"
+              className="flex items-center gap-2 p-1.5 -ml-1 sm:p-2 sm:-ml-2 rounded-xl text-[#FAF7F2] hover:bg-white/5 transition-colors focus:outline-none group"
               aria-label="Open navigation menu"
             >
               <Menu className="w-5 h-5 text-[#FAF7F2] group-hover:scale-105 transition-transform" />
@@ -57,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setActiveTab('simulator');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="text-left focus:outline-none flex items-center gap-2 group"
+              className="text-left focus:outline-none flex items-center gap-2 group flex-shrink-0"
             >
               <ArielLogo size="sm" showSubtitle={false} />
               <span className="font-serif text-base sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap hidden sm:inline">
@@ -103,20 +103,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Action Cluster: Country Selector & Direct Contact */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             
             {/* Country Jurisdiction Selector */}
             <div className="relative">
               <button
                 onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all flex-shrink-0"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all flex-shrink-0"
                 aria-label="Select Sovereign Jurisdiction"
               >
-                <CountryFlag code={activeJur.code} size="sm" />
+                <CountryFlag code={activeJur.code} size="xs" />
                 <span className="font-medium text-xs hidden sm:inline">{activeJur.name}</span>
-                <span className="font-medium text-xs sm:hidden">{activeJur.code}</span>
+                <span className="font-medium text-[11px] hidden min-[440px]:inline sm:hidden">{activeJur.code}</span>
                 <span className="text-[10px] text-[#8C857E] font-mono hidden md:inline">({activeJur.currency})</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#B88A58]" />
+                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#B88A58]" />
               </button>
 
               {showCountryDropdown && (
@@ -150,14 +150,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Direct Enquiry with Mr. Babu James (Desktop only, mobile accesses via Menu drawer) */}
+            {/* Direct Enquiry with Mr. Babu James (Always Visible on Mobile & Desktop) */}
             <button
               onClick={onOpenPrincipalContact}
-              className="hidden md:flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm flex-shrink-0"
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm flex-shrink-0 active:scale-95"
               title="Direct Enquiry with Mr. Babu James (Owner & Managing Director)"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
-              <span>Contact Mr. Babu James</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58] animate-pulse flex-shrink-0" />
+              <span className="hidden min-[360px]:inline whitespace-nowrap">
+                Contact Mr. Babu James
+              </span>
+              <span className="min-[360px]:hidden whitespace-nowrap">
+                Contact
+              </span>
             </button>
           </div>
         </div>
