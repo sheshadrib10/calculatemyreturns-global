@@ -43,32 +43,35 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
   ];
 
   return (
-    <section className="bg-[#FAF7F2] text-[#211A19] py-24 sm:py-32 border-b border-[#E8E2D8]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+    <section className="relative bg-[#191514] text-[#FAF7F2] py-24 sm:py-32 border-b border-[#302826] overflow-hidden">
+      {/* Ambient Liquid Caustic Glow */}
+      <div className="absolute top-1/3 -right-32 w-96 h-96 bg-[#8C5E3C]/10 rounded-full blur-[160px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10">
         
         {/* Section Heading (Lenval Style) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#E8E2D8]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
           <div>
             <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2">
               03 / Architecture of the Suite
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#211A19]">
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
               What&apos;s Inside
             </h2>
           </div>
 
-          <p className="text-xs sm:text-sm text-[#7D7571] max-w-md font-sans font-light leading-relaxed">
-            Every module unites the gravitas of traditional private wealth management with modern computational precision.
+          <p className="text-xs sm:text-sm text-[#A39E98] max-w-md font-sans font-light leading-relaxed">
+            Every module unites the gravitas of multi-asset private wealth management with modern liquid-glass computational precision.
           </p>
         </div>
 
-        {/* 3 Module Cards with Lenval Architectural Imagery */}
+        {/* 3 Module Cards with Liquid Glass & Architectural Imagery */}
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
           {modules.map((m) => (
             <div
               key={m.number}
               onClick={m.onClick}
-              className="group cursor-pointer bg-[#F5EFEB] border border-[#E8E2D8] hover:border-[#8C5E3C] rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between"
+              className="group cursor-pointer liquid-glass-card rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5"
             >
               <div>
                 {/* Image Container with Subtle Hover Zoom */}
@@ -76,20 +79,20 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
                   <img
                     src={m.img}
                     alt={m.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90"
                   />
-                  <div className="absolute top-4 left-4 text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-[#191514]/75 backdrop-blur-md text-[#FAF7F2]">
+                  <div className="absolute top-4 left-4 text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-[#191514]/85 backdrop-blur-md text-[#FAF7F2] border border-white/10">
                     {m.category}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-8">
-                  <div className="text-xs font-mono text-[#8C857E] mb-2">{m.number}</div>
-                  <h3 className="font-serif text-2xl font-normal text-[#211A19] group-hover:text-[#8C5E3C] transition-colors">
+                  <div className="text-xs font-mono text-[#B88A58] mb-2">{m.number}</div>
+                  <h3 className="font-serif text-2xl font-normal text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
                     {m.title}
                   </h3>
-                  <p className="mt-3 text-xs text-[#5C5550] leading-relaxed font-sans font-light">
+                  <p className="mt-3 text-xs text-[#A39E98] leading-relaxed font-sans font-light">
                     {m.desc}
                   </p>
                 </div>
@@ -97,7 +100,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
 
               {/* Bottom Action Line */}
               <div className="p-8 pt-0">
-                <div className="pt-4 border-t border-[#E8E2D8] flex items-center justify-between text-xs font-sans uppercase tracking-[0.15em] text-[#211A19] group-hover:text-[#8C5E3C] transition-colors">
+                <div className="pt-4 border-t border-[#302826] flex items-center justify-between text-xs font-sans uppercase tracking-[0.15em] text-[#D9D3CE] group-hover:text-[#FAF7F2] transition-colors">
                   <span>{m.actionLabel}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                 </div>

@@ -109,16 +109,16 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-5xl bg-[#191514] border border-[#302826] rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
+      <div className="relative w-full max-w-5xl liquid-glass-elevated rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
         
         {/* Topbar */}
-        <div className="flex items-start justify-between pb-5 border-b border-[#302826]">
+        <div className="flex items-start justify-between pb-5 border-b border-white/10">
           <div>
             <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1">
-              Global Wealth Arbitrage · Sovereign Tax Comparison
+              Global Wealth Arbitrage · Sovereign Multi-Asset Tax Matrix
             </div>
             <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#FAF7F2] tracking-tight">
-              Cross-Border Real Estate &amp; Yield Matrix
+              Cross-Border Multi-Asset Yield Matrix
             </h3>
             <p className="text-xs text-[#A39E98] mt-1 max-w-2xl font-sans font-light">
               Compare acquisition friction, rental yield retention, statutory tax shelters, and net holding IRR across premier international investment destinations.
@@ -127,7 +127,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
+            className="w-9 h-9 rounded-full liquid-glass-pill hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -139,7 +139,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
             {comparisonData.map((c) => (
               <div
                 key={c.code}
-                className="bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] rounded-3xl p-6 flex flex-col justify-between transition-all group"
+                className="liquid-glass-card rounded-3xl p-6 flex flex-col justify-between transition-all group hover:-translate-y-1"
               >
                 <div>
                   <div className="flex items-start justify-between mb-3">

@@ -36,11 +36,11 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
             </h2>
 
             <p className="text-base sm:text-lg text-[#5C5550] leading-relaxed font-sans font-light max-w-2xl">
-              At Ariel, when we model an investment, we believe capital allocation must transcend generic rules of thumb. Every real property asset is governed by its sovereign tax code: tiered stamp duties, residency surcharges, debt amortization schedules, and capital gains exemptions.
+              At Ariel Investments, capital allocation encompasses global equities, prime real estate, sovereign debt, and structured private assets. We believe portfolio underwritings must transcend generic rules of thumb — rigorously evaluating compounding curves, localized stamp duties, depreciation shields, currency inflation, and capital gains exemptions across sovereign jurisdictions.
             </p>
 
             <p className="text-sm text-[#7D7571] leading-relaxed font-sans max-w-2xl">
-              By combining verified statutory logic with institutional cash-flow engines, Ariel gives family offices, high-net-worth investors, and property principals the exact unvarnished numbers before signing a contract.
+              By combining verified statutory logic with institutional multi-asset cash-flow engines, Ariel Investments gives family offices, high-net-worth investors, and principals mathematical certainty before deploying capital.
             </p>
 
             <div className="pt-4 flex items-center gap-6">

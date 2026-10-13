@@ -18,6 +18,13 @@ import {
   Scale,
   Clock,
   ArrowRight,
+  PieChart,
+  Coins,
+  Wallet,
+  BarChart3,
+  LineChart,
+  Layers,
+  RefreshCw,
 } from 'lucide-react';
 
 interface RentalPropertyCalculatorProps {
@@ -58,6 +65,36 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
   const [vacancyWeeksPerYear, setVacancyWeeksPerYear] = useState<number>(2);
   const [buyerStatus, setBuyerStatus] = useState<BuyerStatus>('citizen');
   const [propertyCount, setPropertyCount] = useState<number>(1);
+
+  // Asset Class Mode Switcher (Real Estate, Equities/SIP, Multi-Asset Blend, SWP/Preservation)
+  type AssetClassMode = 'real-estate' | 'equity-sip' | 'multi-asset' | 'capital-preservation';
+  const [assetMode, setAssetMode] = useState<AssetClassMode>('real-estate');
+
+  // Equity SIP State
+  const [monthlySipStr, setMonthlySipStr] = useState<string>(() =>
+    String(jur.currency === curr.code ? Math.round(curr.defaultRent * 0.6) : 2500)
+  );
+  const [equityCagrStr, setEquityCagrStr] = useState<string>('12.0');
+  const [sipYearsStr, setSipYearsStr] = useState<string>('15');
+  const [stepUpPercentStr, setStepUpPercentStr] = useState<string>('10.0');
+
+  // Multi-Asset Portfolio Allocation State
+  const [portfolioCapitalStr, setPortfolioCapitalStr] = useState<string>(() =>
+    String(jur.currency === curr.code ? Math.round(curr.defaultPrice * 0.35) : 500000)
+  );
+  const [portfolioYearsStr, setPortfolioYearsStr] = useState<string>('15');
+  const [equityWeight, setEquityWeight] = useState<number>(50);
+  const [realEstateWeight, setRealEstateWeight] = useState<number>(30);
+  const [debtWeight, setDebtWeight] = useState<number>(10);
+  const [goldWeight, setGoldWeight] = useState<number>(10);
+
+  // Capital Preservation & SWP State
+  const [corpusStr, setCorpusStr] = useState<string>(() =>
+    String(jur.currency === curr.code ? curr.defaultPrice : 2000000)
+  );
+  const [safeWithdrawalRateStr, setSafeWithdrawalRateStr] = useState<string>('4.0');
+  const [fixedYieldStr, setFixedYieldStr] = useState<string>('5.5');
+  const [inflationRateStr, setInflationRateStr] = useState<string>('3.0');
 
   // Sync illustrative defaults when jurisdiction or currency changes
   React.useEffect(() => {
@@ -196,30 +233,133 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
     };
   }, [results, inputs.propertyCost]);
 
+  // Equity Step-Up SIP Calculations
+  const equitySipResults = useMemo(() => {
+    let monthly = parseSafe(monthlySipStr, 2500);
+    const annualCagr = parseSafe(equityCagrStr, 12);
+    const monthlyRate = annualCagr / 100 / 12;
+    const years = Math.max(1, parseSafe(sipYearsStr, 15));
+    const annualStepUp = parseSafe(stepUpPercentStr, 10) / 100;
+
+    let totalInvested = 0;
+    let corpus = 0;
+    const yearlyPoints: { year: number; corpus: number; invested: number }[] = [];
+
+    for (let y = 1; y <= years; y++) {
+      for (let m = 1; m <= 12; m++) {
+        corpus = (corpus + monthly) * (1 + monthlyRate);
+        totalInvested += monthly;
+      }
+      yearlyPoints.push({
+        year: y,
+        corpus: Math.round(corpus),
+        invested: Math.round(totalInvested),
+      });
+      monthly *= (1 + annualStepUp);
+    }
+
+    const gain = Math.max(0, corpus - totalInvested);
+    const multiple = totalInvested > 0 ? corpus / totalInvested : 1;
+
+    return {
+      totalInvested,
+      corpus: Math.round(corpus),
+      gain: Math.round(gain),
+      multiple,
+      finalMonthlyContribution: Math.round(monthly / (1 + annualStepUp)),
+      yearlyPoints,
+    };
+  }, [monthlySipStr, equityCagrStr, sipYearsStr, stepUpPercentStr]);
+
+  // Multi-Asset Portfolio Allocation Calculations
+  const portfolioResults = useMemo(() => {
+    const capital = parseSafe(portfolioCapitalStr, 500000);
+    const years = Math.max(1, parseSafe(portfolioYearsStr, 15));
+
+    // Blended CAGR based on allocation weights:
+    // Equities: 12%, Real Estate: 8%, Fixed Income: 5.5%, Gold/Commodities: 7%
+    const blendedCagr =
+      (equityWeight * 12 + realEstateWeight * 8 + debtWeight * 5.5 + goldWeight * 7) / 100;
+    const futureVal = capital * Math.pow(1 + blendedCagr / 100, years);
+    const gain = Math.max(0, futureVal - capital);
+    const multiple = capital > 0 ? futureVal / capital : 1;
+
+    const yearlyPoints: { year: number; value: number }[] = [];
+    for (let y = 0; y <= years; y++) {
+      yearlyPoints.push({
+        year: y,
+        value: Math.round(capital * Math.pow(1 + blendedCagr / 100, y)),
+      });
+    }
+
+    return {
+      capital,
+      years,
+      blendedCagr,
+      futureVal: Math.round(futureVal),
+      gain: Math.round(gain),
+      multiple,
+      yearlyPoints,
+      equityVal: Math.round((capital * (equityWeight / 100)) * Math.pow(1.12, years)),
+      realEstateVal: Math.round((capital * (realEstateWeight / 100)) * Math.pow(1.08, years)),
+      debtVal: Math.round((capital * (debtWeight / 100)) * Math.pow(1.055, years)),
+      goldVal: Math.round((capital * (goldWeight / 100)) * Math.pow(1.07, years)),
+    };
+  }, [portfolioCapitalStr, portfolioYearsStr, equityWeight, realEstateWeight, debtWeight, goldWeight]);
+
+  // Capital Preservation & SWP Calculations
+  const preservationResults = useMemo(() => {
+    const corpus = parseSafe(corpusStr, 2000000);
+    const swr = parseSafe(safeWithdrawalRateStr, 4.0);
+    const yieldRate = parseSafe(fixedYieldStr, 5.5);
+    const inflation = parseSafe(inflationRateStr, 3.0);
+
+    const annualWithdrawal = corpus * (swr / 100);
+    const monthlyWithdrawal = annualWithdrawal / 12;
+    const realYield = yieldRate - inflation;
+    const netCashflowSpread = (corpus * (yieldRate / 100)) - annualWithdrawal;
+    const isPerpetual = yieldRate >= swr;
+    const runwayYears = isPerpetual ? 'Perpetual Runway' : `${Math.round(corpus / Math.abs(netCashflowSpread))} Years`;
+
+    return {
+      corpus,
+      annualWithdrawal: Math.round(annualWithdrawal),
+      monthlyWithdrawal: Math.round(monthlyWithdrawal),
+      realYield,
+      netCashflowSpread: Math.round(netCashflowSpread),
+      isPerpetual,
+      runwayYears,
+    };
+  }, [corpusStr, safeWithdrawalRateStr, fixedYieldStr, inflationRateStr]);
+
   return (
-    <section id="calculator-section" className="bg-[#191514] text-[#FAF7F2] py-20 sm:py-28 border-b border-[#302826]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+    <section id="calculator-section" className="relative bg-[#191514] text-[#FAF7F2] py-20 sm:py-28 border-b border-[#302826] overflow-hidden">
+      {/* Ambient Liquid Caustic Glows */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#8C5E3C]/12 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 -right-32 w-96 h-96 bg-[#FAF7F2]/5 rounded-full blur-[160px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10">
         
         {/* Section Header (Lenval Editorial Styling) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-10 border-b border-[#302826]">
           <div>
             <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2 flex items-center gap-2">
               <span>03 / The Master Suite ·</span>
               <span className="text-base">{jur.flag}</span>
-              <span>{jur.name}</span>
+              <span>{jur.name} Multi-Asset Hub</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
-              Real Estate Return &amp; IRR Simulator
+              The Multi-Asset Wealth Simulator
             </h2>
             <p className="mt-3 text-sm text-[#A39E98] max-w-2xl font-sans font-light">
-              Underwrite acquisitions accounting for localized stamp duty ({jur.stampDutyName}), debt amortization, rental escalation, and exit capital gains rules.
+              Underwrite acquisitions across Prime Real Estate, Disciplined Equity SIPs, Multi-Asset Portfolios, and Capital Preservation Runways with verified localized tax codes.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => window.print()}
-              className="px-4 py-2 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] transition-all flex items-center gap-2"
+              className="px-4 py-2 rounded-full border border-[#302826] liquid-glass-pill hover:border-[#8C5E3C] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] transition-all flex items-center gap-2"
             >
               <Printer className="w-3.5 h-3.5 text-[#B88A58]" />
               <span>Print Memorandum</span>
@@ -227,7 +367,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
             <button
               onClick={onOpenAiAuditModal}
-              className="px-5 py-2 rounded-full bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans uppercase tracking-[0.1em] font-medium transition-all flex items-center gap-2"
+              className="px-5 py-2 rounded-full bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans uppercase tracking-[0.1em] font-medium transition-all flex items-center gap-2 shadow-lg"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Executive AI Audit</span>
@@ -235,11 +375,39 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
           </div>
         </div>
 
-        {/* Main Grid: Form Ledger (Left) vs Real-Time Results & Ledger (Right) */}
-        <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
-          {/* LEFT COLUMN: Input Form Ledger */}
-          <div className="lg:col-span-5 bg-[#211A19] border border-[#302826] rounded-3xl p-8 sm:p-9 space-y-8">
+        {/* Liquid Glass Asset Class Mode Switcher */}
+        <div className="mt-8 flex items-center gap-2.5 p-1.5 rounded-full liquid-glass-elevated max-w-fit overflow-x-auto">
+          {[
+            { id: 'real-estate', label: 'Prime Real Estate & Yield', icon: Building2 },
+            { id: 'equity-sip', label: 'Equities & Step-Up SIP', icon: TrendingUp },
+            { id: 'multi-asset', label: 'Multi-Asset Portfolio', icon: PieChart },
+            { id: 'capital-preservation', label: 'Preservation & SWP', icon: ShieldCheck },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = assetMode === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setAssetMode(tab.id as AssetClassMode)}
+                className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-sans uppercase tracking-[0.1em] transition-all flex items-center gap-2 whitespace-nowrap ${
+                  isActive
+                    ? 'bg-[#FAF7F2] text-[#191514] font-semibold shadow-lg'
+                    : 'text-[#A39E98] hover:text-[#FAF7F2] hover:bg-white/5'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Main Grid 01: Real Estate Investment & Statutory IRR */}
+        {assetMode === 'real-estate' && (
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            {/* LEFT COLUMN: Input Form Ledger */}
+            <div className="lg:col-span-5 liquid-glass-elevated rounded-3xl p-8 sm:p-9 space-y-8 relative overflow-hidden">
             
             {/* Buyer Residency Status */}
             <div>
@@ -884,6 +1052,628 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
           </div>
 
         </div>
+        )}
+
+        {/* Main Grid 02: Equities & Disciplined Step-Up SIP */}
+        {assetMode === 'equity-sip' && (
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* LEFT: Inputs */}
+            <div className="lg:col-span-5 liquid-glass-elevated rounded-3xl p-8 sm:p-9 space-y-7 relative overflow-hidden">
+              <div className="border-b border-white/10 pb-4">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                  Systematic Equity Compounding
+                </span>
+                <h3 className="text-xl sm:text-2xl font-serif text-[#FAF7F2] mt-1">
+                  Disciplined Step-Up Accumulation
+                </h3>
+              </div>
+
+              {/* Monthly Contribution */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Monthly Contribution</label>
+                  <span className="font-mono text-[#FAF7F2]">{formatCurrency(parseSafe(monthlySipStr, 2500), currentCurrency)}</span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#8C857E]">
+                    {curr.symbol}
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={monthlySipStr}
+                    placeholder="e.g. 2,500"
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === '' || /^[\d,]*\.?\d*$/.test(v)) setMonthlySipStr(v);
+                    }}
+                    className="w-full liquid-glass-input rounded-2xl pl-10 pr-10 py-3 text-base sm:text-sm text-[#FAF7F2] font-mono focus:outline-none"
+                  />
+                  {monthlySipStr && (
+                    <button
+                      type="button"
+                      onClick={() => setMonthlySipStr('')}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C857E] hover:text-[#FAF7F2] p-1 focus:outline-none"
+                      title="Clear"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+                {/* Presets */}
+                <div className="flex gap-2 mt-2">
+                  {[1000, 2500, 5000, 10000].map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setMonthlySipStr(String(amt))}
+                      className="liquid-glass-pill px-2.5 py-1 rounded-lg text-[10px] font-mono text-[#A39E98] hover:text-white"
+                    >
+                      +{formatCurrency(amt, currentCurrency, true)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Expected Equity CAGR */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Expected Equity CAGR (%)</label>
+                  <span className="font-mono text-emerald-400 font-semibold">{equityCagrStr}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={4}
+                  max={25}
+                  step={0.5}
+                  value={parseSafe(equityCagrStr, 12)}
+                  onChange={(e) => setEquityCagrStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-[#8C857E] font-mono mt-1">
+                  <span>Conservative (8%)</span>
+                  <span>Index Historic (12%)</span>
+                  <span>Alpha Growth (16%+)</span>
+                </div>
+              </div>
+
+              {/* Annual Step-Up % */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Annual Contribution Step-Up (%)</label>
+                  <span className="font-mono text-[#FAF7F2] font-semibold">{stepUpPercentStr}% / yr</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={25}
+                  step={1}
+                  value={parseSafe(stepUpPercentStr, 10)}
+                  onChange={(e) => setStepUpPercentStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+                <span className="text-[10px] text-[#8C857E] font-sans block mt-1">
+                  Increases monthly deployment annually matching income raises.
+                </span>
+              </div>
+
+              {/* Investment Horizon */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Investment Horizon</label>
+                  <span className="font-mono text-[#B88A58] font-semibold">{sipYearsStr} Years</span>
+                </div>
+                <input
+                  type="range"
+                  min={3}
+                  max={35}
+                  step={1}
+                  value={parseSafe(sipYearsStr, 15)}
+                  onChange={(e) => setSipYearsStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+              </div>
+
+              {/* Local Tax Context */}
+              <div className="p-4 rounded-2xl liquid-glass border border-white/5 text-xs text-[#A39E98] space-y-1">
+                <span className="text-[#FAF7F2] font-medium flex items-center gap-1.5">
+                  <span>{jur.flag}</span>
+                  <span>{jur.name} Sovereign Equity Tax Law:</span>
+                </span>
+                <p className="text-[11px] text-[#8C857E]">
+                  {currentJurisdiction === 'SG' || currentJurisdiction === 'AE'
+                    ? '0% Exit Capital Gains Tax & 0% Dividend Withholding on qualified equity holdings.'
+                    : currentJurisdiction === 'IN'
+                    ? '12.5% Long-Term Capital Gains (LTCG) with ₹1.25L annual exemption threshold under Budget 2024.'
+                    : currentJurisdiction === 'US'
+                    ? '0%, 15%, or 20% Federal Long-Term Capital Gains rate depending on taxable income brackets.'
+                    : 'Statutory capital gains rates apply with localized indexation or retirement tax shelters.'}
+                </p>
+              </div>
+            </div>
+
+            {/* RIGHT: Results & Liquid Glass Cards */}
+            <div className="lg:col-span-7 space-y-8">
+              {/* Hero Liquid Glass Corpus Display */}
+              <div className="liquid-glass-elevated rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-white/10 pb-6">
+                  <div>
+                    <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                      Projected Portfolio Corpus Value
+                    </span>
+                    <div className="mt-2 flex items-baseline gap-4">
+                      <span className="font-serif text-5xl sm:text-7xl font-normal text-[#FAF7F2] tracking-tight">
+                        {formatCurrency(equitySipResults.corpus, currentCurrency, true)}
+                      </span>
+                      <span className="text-xs font-mono text-emerald-400 font-semibold">
+                        {equitySipResults.multiple.toFixed(2)}x Growth
+                      </span>
+                    </div>
+                  </div>
+                  <div className="px-3.5 py-1.5 rounded-full liquid-glass-pill text-[#FAF7F2] text-xs font-mono">
+                    Horizon: {sipYearsStr} Years
+                  </div>
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Total Invested</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      {formatCurrency(equitySipResults.totalInvested, currentCurrency, true)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Principal Saved</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Compounded Gain</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                      +{formatCurrency(equitySipResults.gain, currentCurrency, true)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Market Return</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Final Monthly SIP</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#B88A58]">
+                      {formatCurrency(equitySipResults.finalMonthlyContribution, currentCurrency)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">After {stepUpPercentStr}% Step-Ups</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Wealth Ratio</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      {((equitySipResults.gain / (equitySipResults.totalInvested || 1)) * 100).toFixed(0)}%
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Gain to Principal</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Milestone Waterfall Ledger */}
+              <div className="liquid-glass rounded-3xl p-8 space-y-4">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2] block pb-3 border-b border-white/10">
+                  Systematic Compounding Milestones
+                </span>
+                <div className="space-y-3">
+                  {equitySipResults.yearlyPoints
+                    .filter((p) => p.year === 3 || p.year === 5 || p.year === 10 || p.year === Math.round(Number(sipYearsStr)))
+                    .map((pt) => (
+                      <div key={pt.year} className="flex justify-between items-center text-xs py-2 border-b border-white/5 font-mono">
+                        <span className="text-[#A39E98]">End of Year {pt.year}</span>
+                        <div className="flex items-center gap-4">
+                          <span className="text-[#8C857E]">Invested: {formatCurrency(pt.invested, currentCurrency, true)}</span>
+                          <span className="text-emerald-400 font-semibold">Corpus: {formatCurrency(pt.corpus, currentCurrency, true)}</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Grid 03: Multi-Asset Portfolio Allocation */}
+        {assetMode === 'multi-asset' && (
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* LEFT: Inputs */}
+            <div className="lg:col-span-5 liquid-glass-elevated rounded-3xl p-8 sm:p-9 space-y-7 relative overflow-hidden">
+              <div className="border-b border-white/10 pb-4">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                  Multi-Asset Architecture
+                </span>
+                <h3 className="text-xl sm:text-2xl font-serif text-[#FAF7F2] mt-1">
+                  Institutional Asset Allocation
+                </h3>
+              </div>
+
+              {/* Initial Capital */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Total Investable Capital</label>
+                  <span className="font-mono text-[#FAF7F2]">{formatCurrency(portfolioResults.capital, currentCurrency)}</span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#8C857E]">
+                    {curr.symbol}
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={portfolioCapitalStr}
+                    placeholder="e.g. 500,000"
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === '' || /^[\d,]*\.?\d*$/.test(v)) setPortfolioCapitalStr(v);
+                    }}
+                    className="w-full liquid-glass-input rounded-2xl pl-10 pr-10 py-3 text-base sm:text-sm text-[#FAF7F2] font-mono focus:outline-none"
+                  />
+                  {portfolioCapitalStr && (
+                    <button
+                      type="button"
+                      onClick={() => setPortfolioCapitalStr('')}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C857E] hover:text-[#FAF7F2] p-1"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Horizon */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Compounding Horizon</label>
+                  <span className="font-mono text-[#B88A58] font-semibold">{portfolioYearsStr} Years</span>
+                </div>
+                <input
+                  type="range"
+                  min={3}
+                  max={30}
+                  step={1}
+                  value={parseSafe(portfolioYearsStr, 15)}
+                  onChange={(e) => setPortfolioYearsStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+              </div>
+
+              {/* 4 Asset Sliders */}
+              <div className="space-y-4 pt-2 border-t border-white/10">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E] block">
+                  Asset Weights (% of Portfolio)
+                </span>
+
+                <div>
+                  <div className="flex justify-between text-xs text-[#A39E98] mb-1">
+                    <span>📈 Global Equities &amp; ETFs</span>
+                    <span className="font-mono text-emerald-400 font-semibold">{equityWeight}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={equityWeight}
+                    onChange={(e) => setEquityWeight(Number(e.target.value))}
+                    className="w-full accent-emerald-400 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs text-[#A39E98] mb-1">
+                    <span>🏛️ Prime Real Estate &amp; REITs</span>
+                    <span className="font-mono text-[#B88A58] font-semibold">{realEstateWeight}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={realEstateWeight}
+                    onChange={(e) => setRealEstateWeight(Number(e.target.value))}
+                    className="w-full accent-[#8C5E3C] cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs text-[#A39E98] mb-1">
+                    <span>🛡️ Sovereign Debt &amp; Fixed Income</span>
+                    <span className="font-mono text-cyan-400 font-semibold">{debtWeight}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={debtWeight}
+                    onChange={(e) => setDebtWeight(Number(e.target.value))}
+                    className="w-full accent-cyan-400 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs text-[#A39E98] mb-1">
+                    <span>🪙 Physical Gold &amp; Commodities</span>
+                    <span className="font-mono text-amber-300 font-semibold">{goldWeight}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={goldWeight}
+                    onChange={(e) => setGoldWeight(Number(e.target.value))}
+                    className="w-full accent-amber-300 cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT: Multi-Asset Results */}
+            <div className="lg:col-span-7 space-y-8">
+              {/* Hero Liquid Glass Terminal Value */}
+              <div className="liquid-glass-elevated rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-white/10 pb-6">
+                  <div>
+                    <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                      Projected Portfolio Terminal Value
+                    </span>
+                    <div className="mt-2 flex items-baseline gap-4">
+                      <span className="font-serif text-5xl sm:text-7xl font-normal text-[#FAF7F2] tracking-tight">
+                        {formatCurrency(portfolioResults.futureVal, currentCurrency, true)}
+                      </span>
+                      <span className="text-xs font-mono text-emerald-400 font-semibold">
+                        {portfolioResults.multiple.toFixed(2)}x Multiple
+                      </span>
+                    </div>
+                  </div>
+                  <div className="px-3.5 py-1.5 rounded-full liquid-glass-pill text-[#FAF7F2] text-xs font-mono">
+                    Blended CAGR: {portfolioResults.blendedCagr.toFixed(2)}%
+                  </div>
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Deployed Capital</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      {formatCurrency(portfolioResults.capital, currentCurrency, true)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Base Allocation</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Total Gain</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                      +{formatCurrency(portfolioResults.gain, currentCurrency, true)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Portfolio Appreciation</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Blended Yield</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#B88A58]">
+                      {portfolioResults.blendedCagr.toFixed(2)}%
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Weighted Annual Rate</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Horizon</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      {portfolioYearsStr} Years
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Compounding Duration</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Asset Class Terminal Breakdown */}
+              <div className="liquid-glass rounded-3xl p-8 space-y-4">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2] block pb-3 border-b border-white/10">
+                  Terminal Asset Class Breakdown
+                </span>
+                <div className="space-y-3 font-mono text-xs">
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[#A39E98] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>Global Equities ({equityWeight}%)</span>
+                    </span>
+                    <span className="text-emerald-400 font-semibold">{formatCurrency(portfolioResults.equityVal, currentCurrency, true)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[#A39E98] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#B88A58]" />
+                      <span>Prime Real Estate ({realEstateWeight}%)</span>
+                    </span>
+                    <span className="text-[#B88A58] font-semibold">{formatCurrency(portfolioResults.realEstateVal, currentCurrency, true)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[#A39E98] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                      <span>Sovereign Fixed Income ({debtWeight}%)</span>
+                    </span>
+                    <span className="text-cyan-400 font-semibold">{formatCurrency(portfolioResults.debtVal, currentCurrency, true)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[#A39E98] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-amber-300" />
+                      <span>Gold &amp; Commodities ({goldWeight}%)</span>
+                    </span>
+                    <span className="text-amber-300 font-semibold">{formatCurrency(portfolioResults.goldVal, currentCurrency, true)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Grid 04: Capital Preservation & SWP Cashflow */}
+        {assetMode === 'capital-preservation' && (
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* LEFT: Inputs */}
+            <div className="lg:col-span-5 liquid-glass-elevated rounded-3xl p-8 sm:p-9 space-y-7 relative overflow-hidden">
+              <div className="border-b border-white/10 pb-4">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                  Preservation &amp; Cashflow
+                </span>
+                <h3 className="text-xl sm:text-2xl font-serif text-[#FAF7F2] mt-1">
+                  Systematic Withdrawal Plan (SWP)
+                </h3>
+              </div>
+
+              {/* Nest Egg Corpus */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Total Accumulated Nest Egg</label>
+                  <span className="font-mono text-[#FAF7F2]">{formatCurrency(preservationResults.corpus, currentCurrency)}</span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#8C857E]">
+                    {curr.symbol}
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={corpusStr}
+                    placeholder="e.g. 2,000,000"
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === '' || /^[\d,]*\.?\d*$/.test(v)) setCorpusStr(v);
+                    }}
+                    className="w-full liquid-glass-input rounded-2xl pl-10 pr-10 py-3 text-base sm:text-sm text-[#FAF7F2] font-mono focus:outline-none"
+                  />
+                  {corpusStr && (
+                    <button
+                      type="button"
+                      onClick={() => setCorpusStr('')}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C857E] hover:text-[#FAF7F2] p-1"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Safe Withdrawal Rate */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Safe Withdrawal Rate (SWR %)</label>
+                  <span className="font-mono text-[#B88A58] font-semibold">{safeWithdrawalRateStr}% / yr</span>
+                </div>
+                <input
+                  type="range"
+                  min={2.0}
+                  max={8.0}
+                  step={0.25}
+                  value={parseSafe(safeWithdrawalRateStr, 4.0)}
+                  onChange={(e) => setSafeWithdrawalRateStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-[#8C857E] font-mono mt-1">
+                  <span>Trinity Rule (3.5%-4.0%)</span>
+                  <span>Moderate (5.0%)</span>
+                  <span>Aggressive (6.5%+)</span>
+                </div>
+              </div>
+
+              {/* Fixed Income Yield */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Fixed Income Coupon / Yield (%)</label>
+                  <span className="font-mono text-emerald-400 font-semibold">{fixedYieldStr}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={2.0}
+                  max={10.0}
+                  step={0.25}
+                  value={parseSafe(fixedYieldStr, 5.5)}
+                  onChange={(e) => setFixedYieldStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+              </div>
+
+              {/* Inflation */}
+              <div>
+                <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
+                  <label>Inflation Drag (%)</label>
+                  <span className="font-mono text-rose-300 font-semibold">{inflationRateStr}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={1.0}
+                  max={8.0}
+                  step={0.25}
+                  value={parseSafe(inflationRateStr, 3.0)}
+                  onChange={(e) => setInflationRateStr(e.target.value)}
+                  className="w-full accent-[#8C5E3C] cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* RIGHT: SWP Results */}
+            <div className="lg:col-span-7 space-y-8">
+              {/* Hero Monthly Passive Cashflow Card */}
+              <div className="liquid-glass-elevated rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-white/10 pb-6">
+                  <div>
+                    <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
+                      Monthly Inflation-Hedged Cashflow
+                    </span>
+                    <div className="mt-2 flex items-baseline gap-4">
+                      <span className="font-serif text-5xl sm:text-7xl font-normal text-emerald-400 tracking-tight">
+                        {formatCurrency(preservationResults.monthlyWithdrawal, currentCurrency)}
+                      </span>
+                      <span className="text-xs font-mono text-[#FAF7F2]">
+                        per month
+                      </span>
+                    </div>
+                  </div>
+                  <div className="px-3.5 py-1.5 rounded-full liquid-glass-pill text-[#FAF7F2] text-xs font-mono">
+                    {preservationResults.isPerpetual ? '● Perpetual Runway' : preservationResults.runwayYears}
+                  </div>
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Annual Distribution</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      {formatCurrency(preservationResults.annualWithdrawal, currentCurrency, true)}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Yearly Cashflow</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Real Net Yield</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                      +{preservationResults.realYield.toFixed(2)}%
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Yield minus Inflation</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Runway Status</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#B88A58]">
+                      {preservationResults.isPerpetual ? 'Infinite' : preservationResults.runwayYears}
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Capital Longevity</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Capital Shield</div>
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
+                      100% Client-Side
+                    </div>
+                    <div className="text-[10px] text-[#736B65]">Zero Storage</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </section>

@@ -44,35 +44,39 @@ export const CalculatorDirectory: React.FC<CalculatorDirectoryProps> = ({
   const totalCount = CALCULATORS_CATALOG.reduce((acc, cat) => acc + cat.items.length, 0);
 
   return (
-    <section id="directory-section" className="bg-[#FAF7F2] text-[#211A19] py-24 sm:py-32 border-b border-[#E8E2D8]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+    <section id="directory-section" className="relative bg-[#14100F] text-[#FAF7F2] py-24 sm:py-32 border-b border-[#302826] overflow-hidden">
+      {/* Ambient Liquid Refraction Caustics */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-[#8C5E3C]/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-[#FAF7F2]/5 rounded-full blur-[160px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#E8E2D8]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
           <div>
             <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2">
-              04 / The Complete Collection
+              04 / Multi-Asset Catalog · Sovereign Suite
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#211A19]">
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
               The 45 Institutional Calculators
             </h2>
           </div>
 
-          <p className="text-xs sm:text-sm text-[#7D7571] max-w-md font-sans font-light leading-relaxed">
-            Replicating and expanding the entire calculatemyreturns financial library across 10 specialized wealth modules. No signup required.
+          <p className="text-xs sm:text-sm text-[#A39E98] max-w-md font-sans font-light leading-relaxed">
+            Spanning multi-asset wealth compounding, systematic equities, prime real estate, sovereign debt, and cross-border tax shields.
           </p>
         </div>
 
-        {/* Filter Pills (Lenval Style) */}
-        <div className="mt-10 flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none">
+        {/* Liquid Glass Filter Pills */}
+        <div className="mt-10 flex items-center gap-2.5 overflow-x-auto pb-4 scrollbar-none">
           {categories.map((catName) => (
             <button
               key={catName}
               onClick={() => setSelectedCategory(catName)}
               className={`px-5 py-2.5 rounded-full text-xs font-sans uppercase tracking-[0.1em] whitespace-nowrap transition-all ${
                 selectedCategory === catName
-                  ? 'bg-[#211A19] text-[#FAF7F2] font-medium'
-                  : 'bg-[#F5EFEB] border border-[#E8E2D8] text-[#7D7571] hover:text-[#211A19] hover:border-[#8C5E3C]'
+                  ? 'bg-[#FAF7F2] text-[#191514] font-semibold shadow-lg'
+                  : 'liquid-glass-pill text-[#A39E98] hover:text-[#FAF7F2]'
               }`}
             >
               {catName}
@@ -85,27 +89,27 @@ export const CalculatorDirectory: React.FC<CalculatorDirectoryProps> = ({
           {filteredCatalog.map((category) => (
             <div key={category.name} className="space-y-6">
               
-              <div className="flex items-baseline justify-between border-b border-[#E8E2D8] pb-4">
+              <div className="flex items-baseline justify-between border-b border-[#302826] pb-4">
                 <div>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#211A19]">
+                  <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#FAF7F2]">
                     {category.name}
                   </h3>
                   <p className="text-xs text-[#8C857E] mt-1 font-sans font-light">
                     {category.description}
                   </p>
                 </div>
-                <span className="text-xs font-mono text-[#8C5E3C]">
+                <span className="text-xs font-mono text-[#B88A58]">
                   {category.items.length} {category.items.length === 1 ? 'tool' : 'tools'}
                 </span>
               </div>
 
-              {/* Grid of Cards */}
+              {/* Grid of Liquid Glass Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {category.items.map((item) => (
                   <div
                     key={item.id}
                     onClick={() => onOpenCalculator(item.id)}
-                    className="group cursor-pointer bg-[#F5EFEB] hover:bg-[#FAF7F2] border border-[#E8E2D8] hover:border-[#8C5E3C] rounded-3xl p-7 transition-all duration-300 flex flex-col justify-between"
+                    className="group cursor-pointer liquid-glass-card rounded-3xl p-7 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
@@ -113,23 +117,23 @@ export const CalculatorDirectory: React.FC<CalculatorDirectoryProps> = ({
                           {item.category}
                         </span>
                         {item.isFlagship && (
-                          <span className="text-[9px] font-sans uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#211A19] text-[#FAF7F2]">
+                          <span className="text-[9px] font-sans uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#FAF7F2] text-[#191514] font-semibold">
                             Flagship
                           </span>
                         )}
                       </div>
 
-                      <h4 className="font-serif text-xl font-medium text-[#211A19] group-hover:text-[#8C5E3C] transition-colors">
+                      <h4 className="font-serif text-xl font-normal text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
                         {item.name}
                       </h4>
 
-                      <p className="mt-2 text-xs text-[#5C5550] leading-relaxed line-clamp-2 font-sans font-light">
+                      <p className="mt-2 text-xs text-[#A39E98] leading-relaxed line-clamp-2 font-sans font-light">
                         {item.desc}
                       </p>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-[#E8E2D8] flex items-center justify-between text-xs font-sans uppercase tracking-[0.1em] text-[#8C857E] group-hover:text-[#211A19] transition-colors">
-                      <span className="truncate max-w-[200px] text-[10px] font-mono lowercase">{item.formulaSummary}</span>
+                    <div className="mt-6 pt-4 border-t border-[#302826] flex items-center justify-between text-xs font-sans uppercase tracking-[0.1em] text-[#8C857E] group-hover:text-[#FAF7F2] transition-colors">
+                      <span className="truncate max-w-[200px] text-[10px] font-mono lowercase text-[#B88A58]">{item.formulaSummary}</span>
                       <div className="flex items-center gap-1.5 font-medium">
                         <span>Launch</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

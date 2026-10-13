@@ -61,10 +61,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="text-left focus:outline-none flex items-baseline gap-2.5 group"
               >
-                <span className="font-serif text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
-                  ARIEL
+                <span className="font-serif text-xl sm:text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap">
+                  ARIEL INVESTMENTS
                 </span>
-                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden md:inline">
+                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden xl:inline whitespace-nowrap">
                   Returns Calculator
                 </span>
               </button>
@@ -245,7 +245,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           
           {/* Top Bar inside Drawer */}
           <div className="flex items-center justify-between border-b border-[#302826] pb-8">
-            <span className="font-serif text-3xl tracking-[0.05em]">ARIEL</span>
+            <span className="font-serif text-2xl sm:text-3xl tracking-[0.05em]">ARIEL INVESTMENTS</span>
             <button
               onClick={() => setDrawerOpen(false)}
               className="flex items-center gap-2.5 text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors"

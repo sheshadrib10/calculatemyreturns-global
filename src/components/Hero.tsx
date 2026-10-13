@@ -71,16 +71,19 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Huge Lenval Editorial Headline */}
         <h1 className="mt-4 sm:mt-5 font-serif text-4xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-[#FAF7F2] leading-[1.08] sm:leading-[1.05]">
-          Ariel Returns Calculator
+          Ariel Investments
         </h1>
+        <p className="mt-2 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#B88A58]">
+          Returns Calculator &amp; Private Wealth Suite
+        </p>
 
         {/* Subtitle */}
         <p className="mt-4 sm:mt-6 font-serif italic text-lg sm:text-2xl lg:text-3xl text-[#E5DFD9] font-light max-w-3xl mx-auto leading-relaxed">
-          A Space Where Capital Compounds Across Generations.
+          A Space Where Multi-Asset Capital Compounds Across Generations.
         </p>
 
         <p className="mt-3 sm:mt-4 text-xs sm:text-sm font-sans text-[#B9B5AF] max-w-2xl mx-auto leading-relaxed font-light px-2">
-          Institutional financial modeling for prime real estate acquisitions, cross-border tax shields, and private wealth — engineered with actual statutory laws, tiered stamp duty schedules, and zero data tracking.
+          Institutional financial modeling for multi-asset wealth allocation — systematic equities, prime real estate, sovereign debt, and cross-border tax shields — engineered with verified statutory mathematics and zero data tracking.
         </p>
 
         {/* Action Buttons: Simulator & All 45 Calculators */}

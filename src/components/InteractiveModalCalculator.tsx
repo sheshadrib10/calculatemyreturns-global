@@ -252,10 +252,10 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#191514] border border-[#302826] rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
+      <div className="relative w-full max-w-xl liquid-glass-elevated rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
         
         {/* Topbar: Title and Close */}
-        <div className="flex items-start justify-between pb-4 border-b border-[#302826]">
+        <div className="flex items-start justify-between pb-4 border-b border-white/10">
           <div className="pr-4">
             <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1 flex items-center gap-1.5">
               <span>{item.category} ·</span>
@@ -270,7 +270,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors flex-shrink-0"
+            className="w-9 h-9 rounded-full liquid-glass-pill hover:border-[#8C5E3C] flex items-center justify-center text-[#B9B5AF] hover:text-white transition-colors flex-shrink-0"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -281,7 +281,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
         <div className="py-5 space-y-6 overflow-y-auto">
           
           {/* Result Banner */}
-          <div className="bg-[#211A19] border border-[#302826] rounded-2xl p-5 text-center">
+          <div className="liquid-glass rounded-2xl p-5 text-center">
             <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
               {result.headlineLabel}
             </span>
@@ -296,7 +296,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
           {/* Details Table */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {result.details.map((d, i) => (
-              <div key={i} className="p-3 rounded-xl bg-[#211A19] border border-[#302826]">
+              <div key={i} className="p-3 rounded-xl liquid-glass-card">
                 <div className="text-[10px] font-mono text-[#8C857E] truncate">{d.label}</div>
                 <div className="text-xs sm:text-sm font-mono font-medium text-[#FAF7F2] mt-0.5 truncate">{d.value}</div>
               </div>
@@ -305,7 +305,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
 
           {/* Interactive Parameters Controls */}
           <div className="space-y-4 pt-1">
-            <div className="text-[11px] font-mono uppercase tracking-wider text-[#8C5E3C]">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#B88A58]">
               Adjust Financial Variables
             </div>
 
@@ -337,7 +337,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
                       const v = e.target.value;
                       if (v === '' || /^[\d,]*\.?\d*$/.test(v)) setP1Str(v);
                     }}
-                    className="w-full bg-[#211A19] border border-[#302826] rounded-xl px-2.5 py-1.5 text-right pr-6 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                    className="w-full liquid-glass-input rounded-xl px-2.5 py-1.5 text-right pr-6 text-xs text-[#FAF7F2] font-mono focus:outline-none"
                   />
                   {p1Str && (
                     <button

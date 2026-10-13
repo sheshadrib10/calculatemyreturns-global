@@ -138,7 +138,7 @@ export const Footer: React.FC<FooterProps> = ({
           </p>
 
           <div className="whitespace-nowrap">
-            © {new Date().getFullYear()} Ariel Properties · Powered &amp; Built by{' '}
+            © {new Date().getFullYear()} Ariel Investments · Powered &amp; Built by{' '}
             <a href="https://shulo.xyz/novero" target="_blank" rel="noopener noreferrer" className="text-[#FAF7F2] hover:underline font-bold">
               NOVERO
             </a>

@@ -21,45 +21,45 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
   const pillars = [
     {
       num: '01',
-      title: 'The Opportunity',
+      title: 'Asset Origination',
       icon: Compass,
-      desc: 'Identifying prime freehold corridors and off-market opportunities with sustainable rental growth and enduring capital appreciation potential.',
+      desc: 'Identifying prime real estate corridors, disciplined equity funds, and structured private debt with enduring capital appreciation potential.',
       tag: 'Origination',
       action: 'Explore Markets',
       onClick: onOpenCompare,
     },
     {
       num: '02',
-      title: 'Investment Analysis',
+      title: 'Underwriting & IRR',
       icon: LineChart,
-      desc: 'Conducting rigorous multi-year IRR simulations, debt amortization schedules, vacancy stress tests, and net rental yield underwritings.',
-      tag: 'Underwriting',
+      desc: 'Conducting rigorous multi-asset simulations: Newton-Raphson property IRR, Step-up SIP equity compounding, and cashflow stress tests.',
+      tag: 'Analytics',
       action: 'Launch Simulator',
       onClick: onScrollToCalculator,
     },
     {
       num: '03',
-      title: 'Tax Structuring',
+      title: 'Sovereign Tax Structuring',
       icon: Scale,
-      desc: `Navigating sovereign stamp duty schedules (${jur.flag} ${jur.stampDutyName}), 27.5-year depreciation shields, and localized capital gains exit exemptions.`,
+      desc: `Navigating sovereign stamp duty schedules (${jur.flag} ${jur.stampDutyName}), 0% capital gains havens, and localized depreciation shields.`,
       tag: 'Sovereign Law',
       action: 'Verify Tax Rules',
       onClick: onScrollToCalculator,
     },
     {
       num: '04',
-      title: 'Cashflow & Debt',
+      title: 'Cashflow & Leverage',
       icon: Wallet,
-      desc: 'Optimizing mortgage leverage (LTV), interest rate hedging, debt service coverage (DSCR), and monthly net operational cash distribution.',
+      desc: 'Balancing mortgage amortization, safe withdrawal rates (SWR), dividend yields, and liquidity buffers for maximum family security.',
       tag: 'Engineering',
       action: 'Test Amortization',
       onClick: onScrollToCalculator,
     },
     {
       num: '05',
-      title: 'Exit Execution',
+      title: 'Generational Transfer',
       icon: TrendingUp,
-      desc: 'Formulating strategic disposal timing, terminal capitalization rates, and after-tax equity distributions to maximize generational family wealth.',
+      desc: 'Formulating strategic disposal timing, terminal portfolio capitalization, and after-tax equity distributions to preserve generational wealth.',
       tag: 'Realization',
       action: 'View All 45 Tools',
       onClick: onOpenDirectory,
@@ -67,14 +67,17 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
   ];
 
   return (
-    <section className="bg-[#191514] text-[#FAF7F2] py-20 sm:py-28 border-b border-[#302826]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+    <section className="relative bg-[#191514] text-[#FAF7F2] py-20 sm:py-28 border-b border-[#302826] overflow-hidden">
+      {/* Ambient Liquid Caustic Glow */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#8C5E3C]/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
         
         {/* Section Header (Lenval Editorial Styling) */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
           <div>
             <div className="text-[11px] sm:text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2">
-              02 / The Lenval Methodology · Sovereign Framework
+              02 / The Institutional Framework · Multi-Asset Precision
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
               The Five Pillars of Capital Underwriting
@@ -82,11 +85,11 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-[#A39E98] max-w-md font-sans font-light leading-relaxed">
-            Every transaction is scrutinized through five distinct disciplines to eliminate speculative optimism and preserve downside principal.
+            Every deployment across equities, real property, and fixed income is scrutinized through five distinct disciplines to eliminate speculation.
           </p>
         </div>
 
-        {/* 5-Column Grid (Lenval Architectural Cards) */}
+        {/* 5-Column Grid (Liquid Glass Architectural Cards) */}
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 sm:gap-6">
           {pillars.map((p) => {
             const Icon = p.icon;
@@ -94,7 +97,7 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
               <div
                 key={p.num}
                 onClick={p.onClick}
-                className="group cursor-pointer bg-[#211A19] border border-[#302826] hover:border-[#8C5E3C] rounded-3xl p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1"
+                className="group cursor-pointer liquid-glass-card rounded-3xl p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
@@ -134,7 +137,7 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
             &ldquo;Integrity is the foundation of every underwriting decision. From identifying opportunities to executing exits, we are guided by transparency and mathematical accountability.&rdquo;
           </p>
           <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mt-3 block">
-            — Ariel Private Wealth Charter
+            — Ariel Investments Charter
           </span>
         </div>
 
