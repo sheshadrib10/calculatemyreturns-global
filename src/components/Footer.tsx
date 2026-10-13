@@ -2,6 +2,7 @@ import React from 'react';
 import { JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
 import { Printer, ArrowUp, Lock } from 'lucide-react';
+import { NoveroLogo } from './NoveroLogo';
 
 interface FooterProps {
   currentJurisdiction: JurisdictionCode;
@@ -17,8 +18,8 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="bg-[#14100F] text-[#FAF7F2] pt-24 pb-16 border-t border-[#302826] font-sans">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
+    <footer className="bg-[#14100F] text-[#FAF7F2] pt-20 sm:pt-24 pb-14 sm:pb-16 border-t border-[#302826] font-sans">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-10">
         
         {/* Lenval-style "Speak Directly / Get in Touch" Block */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-20 border-b border-[#302826]">
@@ -86,14 +87,61 @@ export const Footer: React.FC<FooterProps> = ({
 
         </div>
 
+        {/* Prominent Novero Attribution & Client Acquisition Card */}
+        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-[#191514] border border-[#302826] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4 text-center md:text-left">
+            <NoveroLogo size="md" />
+            <div>
+              <div className="text-xs text-[#FAF7F2] font-medium">
+                Powered &amp; Built by{' '}
+                <a
+                  href="https://shulo.xyz/novero"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-[#B88A58] transition-colors font-bold tracking-wider"
+                >
+                  NOVERO
+                </a>
+              </div>
+              <div className="text-[11px] text-[#8C857E] font-light mt-0.5 font-sans">
+                Marketing, Customer Experience &amp; Growth Firm · Creative Technology &amp; AI
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="https://shulo.xyz/novero#brief"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-full bg-[#FAF7F2] text-[#191514] hover:bg-white text-xs font-sans uppercase tracking-[0.1em] font-medium transition-all flex items-center gap-1.5 shadow-md"
+            >
+              <span>Enquire with Novero</span>
+              <ArrowUp className="w-3.5 h-3.5 rotate-45" />
+            </a>
+
+            <a
+              href="https://shulo.xyz/novero"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] transition-all flex items-center gap-1.5"
+            >
+              <span>Agency Portfolio</span>
+            </a>
+          </div>
+        </div>
+
         {/* Bottom Legal Notice */}
-        <div className="mt-12 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-mono text-[#8C857E]">
+        <div className="mt-10 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-mono text-[#8C857E]">
           <p className="max-w-2xl leading-relaxed font-light text-[11px]">
             Ariel Returns Calculator provides illustrative simulations for private capital and investment evaluation. No financial data is transmitted or retained. Excluded from GDPR/PDPA compliance obligations by design.
           </p>
 
           <div className="whitespace-nowrap">
-            © {new Date().getFullYear()} Ariel Properties · All rights reserved.
+            © {new Date().getFullYear()} Ariel Properties · Powered &amp; Built by{' '}
+            <a href="https://shulo.xyz/novero" target="_blank" rel="noopener noreferrer" className="text-[#FAF7F2] hover:underline font-bold">
+              NOVERO
+            </a>
           </div>
         </div>
 

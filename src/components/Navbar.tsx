@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
-import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp } from 'lucide-react';
+import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { NoveroLogo } from './NoveroLogo';
 
 interface NavbarProps {
   currentJurisdiction: JurisdictionCode;
@@ -51,21 +52,37 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="font-medium hidden sm:inline">Menu</span>
             </button>
 
-            {/* Brand Logo in Lenval Editorial Serif */}
-            <button
-              onClick={() => {
-                setActiveTab('simulator');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-left focus:outline-none flex items-baseline gap-3 group"
-            >
-              <span className="font-serif text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
-                ARIEL
-              </span>
-              <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-3 hidden md:inline">
-                Returns Calculator
-              </span>
-            </button>
+            {/* Brand Logo in Lenval Editorial Serif + Novero Attribution */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setActiveTab('simulator');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-left focus:outline-none flex items-baseline gap-2.5 group"
+              >
+                <span className="font-serif text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors">
+                  ARIEL
+                </span>
+                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden md:inline">
+                  Returns Calculator
+                </span>
+              </button>
+
+              <a
+                href="https://shulo.xyz/novero"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Powered & Built by Novero"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#211A19]/90 border border-[#302826] hover:border-[#8C5E3C] text-[10px] font-mono tracking-wider text-[#A39E98] hover:text-[#FAF7F2] transition-colors group"
+              >
+                <span className="text-[9px] uppercase tracking-widest text-[#8C857E] group-hover:text-[#FAF7F2] hidden sm:inline">
+                  Powered &amp; Built by
+                </span>
+                <NoveroLogo size="xs" />
+                <ArrowUpRight className="w-3 h-3 text-[#B88A58] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+            </div>
           </div>
 
           {/* Center Navigation Links (Lenval Editorial Menu) */}
@@ -74,7 +91,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => {
                 setActiveTab('simulator');
                 const el = document.getElementById('overview-section');
-                el?.scrollIntoView({ behavior: 'smooth' });
+                if (el) {
+                  const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
               }}
               className="hover:text-[#FAF7F2] transition-colors"
             >
@@ -84,14 +104,24 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => {
                 setActiveTab('simulator');
                 const el = document.getElementById('calculator-section');
-                el?.scrollIntoView({ behavior: 'smooth' });
+                if (el) {
+                  const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
               }}
               className={`transition-colors ${activeTab === 'simulator' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
             >
               The Simulator
             </button>
             <button
-              onClick={() => setActiveTab('catalog')}
+              onClick={() => {
+                setActiveTab('catalog');
+                const el = document.getElementById('directory-section');
+                if (el) {
+                  const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }}
               className={`transition-colors ${activeTab === 'catalog' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
             >
               All 45 Tools
@@ -226,48 +256,66 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Center Huge Editorial Links */}
-          <div className="py-12 space-y-8 max-w-2xl">
-            <div className="border-b border-[#302826] pb-6">
+          <div className="py-8 sm:py-12 space-y-6 sm:space-y-8 max-w-2xl overflow-y-auto">
+            <div className="border-b border-[#302826] pb-4 sm:pb-6">
               <button
                 onClick={() => {
                   setActiveTab('simulator');
                   setDrawerOpen(false);
-                  const el = document.getElementById('overview-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
+                  setTimeout(() => {
+                    const el = document.getElementById('overview-section');
+                    if (el) {
+                      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }, 100);
                 }}
-                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
+                className="font-serif text-2xl sm:text-5xl text-left hover:text-[#8C5E3C] transition-colors"
               >
                 01. Overview &amp; Philosophy
               </button>
             </div>
 
-            <div className="border-b border-[#302826] pb-6">
+            <div className="border-b border-[#302826] pb-4 sm:pb-6">
               <button
                 onClick={() => {
                   setActiveTab('simulator');
                   setDrawerOpen(false);
-                  const el = document.getElementById('calculator-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
+                  setTimeout(() => {
+                    const el = document.getElementById('calculator-section');
+                    if (el) {
+                      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }, 100);
                 }}
-                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
+                className="font-serif text-2xl sm:text-5xl text-left hover:text-[#8C5E3C] transition-colors"
               >
                 02. The Investment Simulator
               </button>
             </div>
 
-            <div className="border-b border-[#302826] pb-6">
+            <div className="border-b border-[#302826] pb-4 sm:pb-6">
               <button
                 onClick={() => {
                   setActiveTab('catalog');
                   setDrawerOpen(false);
+                  setTimeout(() => {
+                    const el = document.getElementById('directory-section');
+                    if (el) {
+                      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }, 100);
                 }}
-                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
+                className="font-serif text-2xl sm:text-5xl text-left hover:text-[#8C5E3C] transition-colors flex items-center justify-between w-full"
               >
-                03. The 45 Institutional Calculators
+                <span>03. The 45 Institutional Calculators</span>
+                <span className="text-xs font-mono text-[#8C5E3C] uppercase tracking-wider hidden sm:inline">Explore All</span>
               </button>
             </div>
 
-            <div className="border-b border-[#302826] pb-6">
+            <div className="border-b border-[#302826] pb-4 sm:pb-6">
               <button
                 onClick={() => {
                   onOpenCompare();
@@ -292,10 +340,44 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
+          {/* Novero Agency Block inside Drawer */}
+          <div className="bg-[#211A19] border border-[#302826] rounded-2xl p-4 sm:p-5 my-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <NoveroLogo size="md" />
+              <div>
+                <div className="text-[10px] uppercase font-mono tracking-widest text-[#8C857E]">
+                  Digital Product Architecture
+                </div>
+                <div className="text-xs text-[#FAF7F2] font-medium">
+                  Powered &amp; Built by NOVERO
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <a
+                href="https://shulo.xyz/novero#brief"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 sm:flex-none text-center px-4 py-2 rounded-full bg-[#FAF7F2] text-[#191514] text-xs font-sans uppercase tracking-[0.1em] font-semibold hover:bg-white transition-all flex items-center justify-center gap-1.5"
+              >
+                <span>Enquire with Novero</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://shulo.xyz/novero"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-full border border-[#302826] text-xs font-sans text-[#FAF7F2] hover:border-[#8C5E3C] transition-all"
+              >
+                Studio ↗
+              </a>
+            </div>
+          </div>
+
           {/* Bottom Drawer Footer */}
-          <div className="border-t border-[#302826] pt-8 flex flex-col sm:flex-row items-baseline justify-between text-xs font-mono text-[#8C857E] gap-4">
+          <div className="border-t border-[#302826] pt-6 flex flex-col sm:flex-row items-baseline justify-between text-xs font-mono text-[#8C857E] gap-4">
             <div>
-              © {new Date().getFullYear()} Ariel Properties · Private Wealth Intelligence.
+              © {new Date().getFullYear()} Ariel Properties · Engineered by <a href="https://shulo.xyz/novero" target="_blank" rel="noopener noreferrer" className="text-[#FAF7F2] underline font-bold">NOVERO</a>
             </div>
             <div className="flex items-center gap-6">
               <span>Zero-Storage Privacy</span>

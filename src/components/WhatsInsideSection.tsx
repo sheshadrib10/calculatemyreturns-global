@@ -18,7 +18,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       title: 'The Flagship Property IRR Engine',
       category: 'Real Estate & Leverage',
       desc: 'Combines dynamic rental yield, mortgage debt amortization, holding cost escalation, and country-specific acquisition stamp duties (ABSD, MOT, DLD) into an exact annualized IRR on invested capital.',
-      img: 'https://cdn.prod.website-files.com/69e15aa1d45aa73e62a536a8/6a778c79962c0290fc4badd1_the-den-6.webp',
+      img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Launch Simulator',
       onClick: onScrollToCalculator,
     },
@@ -26,8 +26,8 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       number: '02',
       title: 'Statutory Tax Shields & Cross-Border Jurisdictions',
       category: 'Sovereign Tax Law',
-      desc: 'Precision localized logic across Singapore (0% CGT), Malaysia (0% RPGT after 5 yrs), Dubai (0% tax & Golden Visa), US (27.5-yr depreciation & 1031 Exchange), and India (Budget 2024 unified LTCG).',
-      img: 'https://cdn.prod.website-files.com/69e15aa1d45aa73e62a536a8/6a778c91f4e3c41569a4f01f_the-den-15.webp',
+      desc: 'Precision localized logic across 🇸🇬 Singapore (0% CGT), 🇲🇾 Malaysia (0% RPGT after 5 yrs), 🇦🇪 Dubai (0% tax & Golden Visa), 🇺🇸 United States (27.5-yr depreciation & 1031 Exchange), and 🇮🇳 India (Budget 2024 unified LTCG).',
+      img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Compare Jurisdictions',
       onClick: onOpenCompare,
     },
@@ -36,7 +36,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       title: 'The 45-Calculator Wealth & Solvency Suite',
       category: 'Comprehensive Wealth',
       desc: 'From systematic equity compounding (SIP, Step-up SIP, CAGR, XIRR) to retirement runway solvency (4% rule, corpus solver), debt-to-income (DTI), and take-home compensation engineering.',
-      img: 'https://cdn.prod.website-files.com/69e15aa1d45aa73e62a536a8/6a778e4c2e5bff50f4334371_the-den-21.webp',
+      img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Browse All 45 Tools',
       onClick: onOpenDirectory,
     },
@@ -110,3 +110,4 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
     </section>
   );
 };
+

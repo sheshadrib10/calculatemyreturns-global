@@ -24,32 +24,32 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
   const jur = JURISDICTIONS[currentJurisdiction] || JURISDICTIONS.SG;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-4xl bg-[#191514] border border-[#302826] rounded-3xl p-6 sm:p-10 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
+      <div className="relative w-full max-w-4xl bg-[#191514] border border-[#302826] rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
         
         {/* Top Header */}
-        <div className="flex items-start justify-between pb-6 border-b border-[#302826]">
-          <div>
+        <div className="flex items-start justify-between pb-5 border-b border-[#302826]">
+          <div className="pr-3">
             <div className="flex items-center gap-2 text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#B88A58]" />
-              <span>Ariel AI Investment Intelligence · Private Placement Memorandum</span>
+              <span className="truncate">Ariel AI · Private Placement Memorandum</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#FAF7F2] tracking-tight">
               {auditReport.headline}
             </h3>
             <p className="text-xs text-[#A39E98] mt-1 font-sans font-light">
-              Algorithmic institutional review for {jur.name} real estate acquisition. Verified 100% mathematical integrity.
+              Algorithmic institutional review for {jur.flag} {jur.name} real estate acquisition. Verified 100% mathematical integrity.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => window.print()}
-              className="px-4 py-2 rounded-full border border-[#302826] bg-[#211A19] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] hover:border-[#8C5E3C] flex items-center gap-2 transition-all"
+              className="hidden sm:flex px-3.5 py-1.5 rounded-full border border-[#302826] bg-[#211A19] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] hover:border-[#8C5E3C] items-center gap-2 transition-all"
             >
               <Printer className="w-3.5 h-3.5 text-[#B88A58]" />
-              <span>Print Memorandum</span>
+              <span>Print</span>
             </button>
             <button
               onClick={onClose}
@@ -96,7 +96,7 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
           <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-6 sm:p-7 space-y-2">
             <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E] flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Jurisdiction Tax Shield &amp; Optimization Strategy ({jur.name})</span>
+              <span>Jurisdiction Tax Shield &amp; Optimization Strategy ({jur.flag} {jur.name})</span>
             </div>
             <p className="text-xs text-[#FAF7F2] leading-relaxed font-sans font-light">
               {auditReport.taxStrategy}

@@ -6,12 +6,16 @@ import { generateDeterministicAiAudit } from './utils/aiAdvisory';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { OverviewSection } from './components/OverviewSection';
+import { MethodologySection } from './components/MethodologySection';
 import { RentalPropertyCalculator } from './components/RentalPropertyCalculator';
 import { WhatsInsideSection } from './components/WhatsInsideSection';
 import { CalculatorDirectory } from './components/CalculatorDirectory';
 import { InteractiveModalCalculator } from './components/InteractiveModalCalculator';
 import { CountryComparisonModal } from './components/CountryComparisonModal';
 import { AiAuditModal } from './components/AiAuditModal';
+import { ArrowUpRight } from 'lucide-react';
+import { NoveroShowcase } from './components/NoveroShowcase';
+import { NoveroLogo } from './components/NoveroLogo';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
@@ -37,19 +41,31 @@ export const App: React.FC = () => {
     }
   };
 
-  // Open a specific calculator
-  const handleOpenCalculator = (calcId: string) => {
-    if (calcId === 'rental-property' || calcId === 'stamp-duty-global') {
-      setActiveTab('simulator');
-      document.getElementById('calculator-section')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      setActiveModalCalcId(calcId);
+  const scrollToCalculator = () => {
+    setActiveTab('simulator');
+    const el = document.getElementById('calculator-section');
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
-  const scrollToCalculator = () => {
-    setActiveTab('simulator');
-    document.getElementById('calculator-section')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToDirectory = () => {
+    setActiveTab('catalog');
+    const el = document.getElementById('directory-section');
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  // Open a specific calculator
+  const handleOpenCalculator = (calcId: string) => {
+    if (calcId === 'rental-property' || calcId === 'stamp-duty-global') {
+      scrollToCalculator();
+    } else {
+      setActiveModalCalcId(calcId);
+    }
   };
 
   // Baseline property simulation inputs for AI audit modal
@@ -116,24 +132,29 @@ export const App: React.FC = () => {
           onScrollToCalculator={scrollToCalculator}
         />
 
-        {/* Section 02: The Simulator (The Master Suite) */}
+        {/* Section 02: Lenval 5-Pillar Investment Methodology */}
+        <MethodologySection
+          currentJurisdiction={currentJurisdiction}
+          onScrollToCalculator={scrollToCalculator}
+          onOpenCompare={() => setIsCompareModalOpen(true)}
+          onOpenDirectory={scrollToDirectory}
+        />
+
+        {/* Section 03: The Simulator (The Master Suite) */}
         <RentalPropertyCalculator
           currentJurisdiction={currentJurisdiction}
           currentCurrency={currentCurrency}
           onOpenAiAuditModal={() => setIsAiAuditModalOpen(true)}
         />
 
-        {/* Section 03: What's Inside (Lenval Architectural Cards) */}
+        {/* Section 04: What's Inside (Lenval Architectural Cards) */}
         <WhatsInsideSection
           onScrollToCalculator={scrollToCalculator}
-          onOpenDirectory={() => {
-            setActiveTab('catalog');
-            document.getElementById('directory-section')?.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onOpenDirectory={scrollToDirectory}
           onOpenCompare={() => setIsCompareModalOpen(true)}
         />
 
-        {/* Section 04: The 45 Institutional Calculators Directory */}
+        {/* Section 05: The 45 Institutional Calculators Directory */}
         <CalculatorDirectory
           currentJurisdiction={currentJurisdiction}
           currentCurrency={currentCurrency}
@@ -142,13 +163,47 @@ export const App: React.FC = () => {
           onOpenCalculator={handleOpenCalculator}
         />
 
+        {/* Section 06: Pre-Footer Studio Showcase (Powered & Built by Novero) */}
+        <NoveroShowcase />
+
       </main>
 
-      {/* Section 05: Speak Directly / Footer */}
+      {/* Section 07: Speak Directly / Footer */}
       <Footer
         currentJurisdiction={currentJurisdiction}
         onSelectJurisdiction={handleSelectJurisdiction}
       />
+
+      {/* Floating Badge: Powered & Built by Novero */}
+      <aside
+        aria-label="Powered & Built by Novero"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40"
+      >
+        <div className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#191514]/95 backdrop-blur-xl border border-[#302826] hover:border-[#8C5E3C] shadow-2xl transition-all group hover:scale-[1.02]">
+          <a
+            href="https://shulo.xyz/novero"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-widest text-[#8C857E] group-hover:text-[#D9D3CE] transition-colors">
+              Powered &amp; Built by
+            </span>
+            <NoveroLogo size="xs" />
+          </a>
+          <span className="text-[#302826]">|</span>
+          <a
+            href="https://shulo.xyz/novero#brief"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] sm:text-xs font-sans font-medium uppercase tracking-wider text-[#B88A58] hover:text-[#FAF7F2] transition-colors whitespace-nowrap flex items-center gap-1"
+          >
+            <span>Enquire</span>
+            <ArrowUpRight className="w-3 h-3" />
+          </a>
+        </div>
+      </aside>
 
       {/* Modal: Interactive Calculator Runner */}
       {activeModalCalcId && (

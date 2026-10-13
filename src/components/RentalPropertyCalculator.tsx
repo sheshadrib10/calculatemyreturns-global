@@ -34,24 +34,62 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
   const jur = JURISDICTIONS[currentJurisdiction] || JURISDICTIONS.SG;
   const curr = CURRENCIES[currentCurrency] || CURRENCIES.USD;
 
-  // Initial State tailored to selected jurisdiction
-  const [propertyCost, setPropertyCost] = useState<number>(jur.currency === curr.code ? curr.defaultPrice : 1500000);
-  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(25);
-  const [loanRate, setLoanRate] = useState<number>(
-    currentJurisdiction === 'SG' ? 3.4 : currentJurisdiction === 'MY' ? 4.3 : currentJurisdiction === 'IN' ? 8.5 : currentJurisdiction === 'AE' ? 4.9 : 6.5
+  // String-backed input state allows users to backspace to completely empty/blank fields and type cleanly
+  const [propertyCostStr, setPropertyCostStr] = useState<string>(() =>
+    String(jur.currency === curr.code ? curr.defaultPrice : 1500000)
   );
-  const [loanTenure, setLoanTenure] = useState<number>(25);
-  const [holdingPeriod, setHoldingPeriod] = useState<number>(10);
-  const [appreciationRate, setAppreciationRate] = useState<number>(
-    currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5
+  const [downPaymentPercentStr, setDownPaymentPercentStr] = useState<string>('25');
+  const [loanRateStr, setLoanRateStr] = useState<string>(() =>
+    String(currentJurisdiction === 'SG' ? 3.4 : currentJurisdiction === 'MY' ? 4.3 : currentJurisdiction === 'IN' ? 8.5 : currentJurisdiction === 'AE' ? 4.9 : 6.5)
   );
-  const [monthlyRent, setMonthlyRent] = useState<number>(jur.currency === curr.code ? curr.defaultRent : 4500);
-  const [rentHike, setRentHike] = useState<number>(3.5);
-  const [monthlyMaintenance, setMonthlyMaintenance] = useState<number>(Math.round(monthlyRent * 0.12));
-  const [maintenanceHike, setMaintenanceHike] = useState<number>(3.0);
+  const [loanTenureStr, setLoanTenureStr] = useState<string>('25');
+  const [holdingPeriodStr, setHoldingPeriodStr] = useState<string>('10');
+  const [appreciationRateStr, setAppreciationRateStr] = useState<string>(() =>
+    String(currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5)
+  );
+  const [monthlyRentStr, setMonthlyRentStr] = useState<string>(() =>
+    String(jur.currency === curr.code ? curr.defaultRent : 4500)
+  );
+  const [rentHikeStr, setRentHikeStr] = useState<string>('3.5');
+  const [monthlyMaintenanceStr, setMonthlyMaintenanceStr] = useState<string>(() =>
+    String(Math.round((jur.currency === curr.code ? curr.defaultRent : 4500) * 0.12))
+  );
+  const [maintenanceHikeStr, setMaintenanceHikeStr] = useState<string>('3.0');
   const [vacancyWeeksPerYear, setVacancyWeeksPerYear] = useState<number>(2);
   const [buyerStatus, setBuyerStatus] = useState<BuyerStatus>('citizen');
   const [propertyCount, setPropertyCount] = useState<number>(1);
+
+  // Sync illustrative defaults when jurisdiction or currency changes
+  React.useEffect(() => {
+    const defaultP = jur.currency === curr.code ? curr.defaultPrice : 1500000;
+    const defaultR = jur.currency === curr.code ? curr.defaultRent : 4500;
+    const defaultRate = currentJurisdiction === 'SG' ? 3.4 : currentJurisdiction === 'MY' ? 4.3 : currentJurisdiction === 'IN' ? 8.5 : currentJurisdiction === 'AE' ? 4.9 : 6.5;
+    const defaultApprec = currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5;
+    setPropertyCostStr(String(defaultP));
+    setMonthlyRentStr(String(defaultR));
+    setLoanRateStr(String(defaultRate));
+    setAppreciationRateStr(String(defaultApprec));
+    setMonthlyMaintenanceStr(String(Math.round(defaultR * 0.12)));
+  }, [currentJurisdiction, currentCurrency]);
+
+  // Safe parsing helper that falls back gracefully when user temporarily clears an input
+  const parseSafe = (val: string, fallback: number = 0): number => {
+    if (!val || val.trim() === '') return fallback;
+    const cleaned = val.replace(/,/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? fallback : num;
+  };
+
+  const propertyCost = parseSafe(propertyCostStr, 0);
+  const downPaymentPercent = Math.min(100, Math.max(0, parseSafe(downPaymentPercentStr, 25)));
+  const loanRate = parseSafe(loanRateStr, 0);
+  const loanTenure = Math.max(1, parseSafe(loanTenureStr, 25));
+  const holdingPeriod = Math.max(1, parseSafe(holdingPeriodStr, 10));
+  const appreciationRate = parseSafe(appreciationRateStr, 0);
+  const monthlyRent = parseSafe(monthlyRentStr, 0);
+  const rentHike = parseSafe(rentHikeStr, 0);
+  const monthlyMaintenance = parseSafe(monthlyMaintenanceStr, 0);
+  const maintenanceHike = parseSafe(maintenanceHikeStr, 0);
 
   // Table expand state
   const [showFullTable, setShowFullTable] = useState<boolean>(false);
@@ -165,8 +203,10 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
         {/* Section Header (Lenval Editorial Styling) */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
           <div>
-            <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2">
-              02 / The Master Suite · {jur.name}
+            <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2 flex items-center gap-2">
+              <span>03 / The Master Suite ·</span>
+              <span className="text-base">{jur.flag}</span>
+              <span>{jur.name}</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
               Real Estate Return &amp; IRR Simulator
@@ -267,17 +307,32 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     {curr.symbol}
                   </span>
                   <input
-                    type="number"
-                    value={propertyCost}
-                    step={curr.priceStep}
-                    min={10000}
-                    onChange={(e) => setPropertyCost(Math.max(1000, Number(e.target.value)))}
-                    className="w-full bg-[#191514] border border-[#302826] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                    type="text"
+                    inputMode="numeric"
+                    value={propertyCostStr}
+                    placeholder={`e.g. ${curr.defaultPrice.toLocaleString()}`}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
+                        setPropertyCostStr(v);
+                      }
+                    }}
+                    className="w-full bg-[#191514] border border-[#302826] rounded-2xl pl-10 pr-10 py-3 text-base sm:text-sm text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C] transition-colors"
                   />
+                  {propertyCostStr && (
+                    <button
+                      type="button"
+                      onClick={() => setPropertyCostStr('')}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C857E] hover:text-[#FAF7F2] p-1 focus:outline-none"
+                      title="Clear price to type new value"
+                    >
+                      ×
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Down Payment Slider */}
+              {/* Down Payment Slider & Number */}
               <div>
                 <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
                   <label>Down Payment (%)</label>
@@ -285,15 +340,33 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     {downPaymentPercent}% ({formatCurrency(results.downPaymentAmount, currentCurrency, true)})
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={100}
-                  step={5}
-                  value={downPaymentPercent}
-                  onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
-                  className="w-full accent-[#8C5E3C] cursor-pointer"
-                />
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min={5}
+                    max={100}
+                    step={1}
+                    value={downPaymentPercent}
+                    onChange={(e) => setDownPaymentPercentStr(e.target.value)}
+                    className="flex-grow accent-[#8C5E3C] cursor-pointer"
+                  />
+                  <div className="relative w-20 flex-shrink-0">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={downPaymentPercentStr}
+                      placeholder="25"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^\d*$/.test(v)) {
+                          setDownPaymentPercentStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-xl px-2.5 py-1.5 text-center text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                    />
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#8C857E]">%</span>
+                  </div>
+                </div>
               </div>
 
               {/* Mortgage Rate & Tenure */}
@@ -302,13 +375,17 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Mortgage Rate (%)</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      step={0.1}
-                      min={0}
-                      max={20}
-                      value={loanRate}
-                      onChange={(e) => setLoanRate(Number(e.target.value))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="decimal"
+                      value={loanRateStr}
+                      placeholder="e.g. 3.4"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
+                          setLoanRateStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C857E]">%</span>
                   </div>
@@ -318,12 +395,17 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Loan Tenure</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      min={1}
-                      max={40}
-                      value={loanTenure}
-                      onChange={(e) => setLoanTenure(Number(e.target.value))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="numeric"
+                      value={loanTenureStr}
+                      placeholder="e.g. 25"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^\d*$/.test(v)) {
+                          setLoanTenureStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C857E]">yrs</span>
                   </div>
@@ -336,12 +418,17 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Holding Period</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      min={1}
-                      max={40}
-                      value={holdingPeriod}
-                      onChange={(e) => setHoldingPeriod(Number(e.target.value))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="numeric"
+                      value={holdingPeriodStr}
+                      placeholder="e.g. 10"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^\d*$/.test(v)) {
+                          setHoldingPeriodStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C857E]">yrs</span>
                   </div>
@@ -351,13 +438,17 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Appreciation Rate</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      step={0.5}
-                      min={-5}
-                      max={25}
-                      value={appreciationRate}
-                      onChange={(e) => setAppreciationRate(Number(e.target.value))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="decimal"
+                      value={appreciationRateStr}
+                      placeholder="e.g. 4.5"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^-?[\d,]*\.?\d*$/.test(v)) {
+                          setAppreciationRateStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C857E]">%</span>
                   </div>
@@ -382,13 +473,28 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     {curr.symbol}
                   </span>
                   <input
-                    type="number"
-                    value={monthlyRent}
-                    step={curr.rentStep}
-                    min={0}
-                    onChange={(e) => setMonthlyRent(Math.max(0, Number(e.target.value)))}
-                    className="w-full bg-[#191514] border border-[#302826] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                    type="text"
+                    inputMode="numeric"
+                    value={monthlyRentStr}
+                    placeholder={`e.g. ${curr.defaultRent.toLocaleString()}`}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
+                        setMonthlyRentStr(v);
+                      }
+                    }}
+                    className="w-full bg-[#191514] border border-[#302826] rounded-2xl pl-10 pr-10 py-3 text-base sm:text-sm text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C] transition-colors"
                   />
+                  {monthlyRentStr && (
+                    <button
+                      type="button"
+                      onClick={() => setMonthlyRentStr('')}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C857E] hover:text-[#FAF7F2] p-1 focus:outline-none"
+                      title="Clear rent to type new value"
+                    >
+                      ×
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -398,11 +504,17 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Rent Escalation (%)</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      step={0.5}
-                      value={rentHike}
-                      onChange={(e) => setRentHike(Number(e.target.value))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="decimal"
+                      value={rentHikeStr}
+                      placeholder="e.g. 3.5"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
+                          setRentHikeStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#8C857E]">%</span>
                   </div>
@@ -412,11 +524,28 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   <label className="block text-xs text-[#A39E98] mb-1">Monthly Maintenance</label>
                   <div className="relative">
                     <input
-                      type="number"
-                      value={monthlyMaintenance}
-                      onChange={(e) => setMonthlyMaintenance(Math.max(0, Number(e.target.value)))}
-                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
+                      type="text"
+                      inputMode="numeric"
+                      value={monthlyMaintenanceStr}
+                      placeholder="e.g. 500"
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
+                          setMonthlyMaintenanceStr(v);
+                        }
+                      }}
+                      className="w-full bg-[#191514] border border-[#302826] rounded-2xl pl-3 pr-8 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
                     />
+                    {monthlyMaintenanceStr && (
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyMaintenanceStr('')}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#8C857E] hover:text-[#FAF7F2] p-0.5 focus:outline-none"
+                        title="Clear"
+                      >
+                        ×
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -508,7 +637,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
             <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-8 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#302826]">
                 <div className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-[#8C5E3C]" />
+                  <span className="text-base">{jur.flag}</span>
                   <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2]">
                     {jur.name} Statutory Acquisition &amp; Tax Ledger
                   </span>
@@ -532,7 +661,10 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
               {/* Statutory Benefits Callout */}
               <div className="pt-3 border-t border-[#302826] text-xs text-[#A39E98] space-y-1 font-sans">
-                <span className="font-medium text-[#FAF7F2]">Statutory Advantages ({jur.name}):</span>
+                <span className="font-medium text-[#FAF7F2] flex items-center gap-1.5">
+                  <span>{jur.flag}</span>
+                  <span>Statutory Advantages ({jur.name}):</span>
+                </span>
                 <ul className="list-disc list-inside text-[11px] space-y-1 text-[#8C857E]">
                   {jur.keyBenefits.map((b, i) => (
                     <li key={i}>{b}</li>
@@ -690,9 +822,10 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => handleAskAi(`How does ${jur.name}'s tax structure and stamp duty affect my IRR?`)}
-                  className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors"
+                  className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                 >
-                  Analyze {jur.name} Stamp Duty Friction
+                  <span>{jur.flag}</span>
+                  <span>Analyze {jur.name} Stamp Duty</span>
                 </button>
                 <button
                   onClick={() => handleAskAi('What happens to monthly cash flow if interest rates rise by 200 bps?')}
@@ -703,17 +836,19 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                 {currentJurisdiction === 'AE' && (
                   <button
                     onClick={() => handleAskAi('Does this property meet the Dubai 10-year Golden Visa requirements?')}
-                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors"
+                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                   >
-                    Golden Visa Eligibility
+                    <span>🇦🇪</span>
+                    <span>Golden Visa Eligibility</span>
                   </button>
                 )}
                 {currentJurisdiction === 'SG' && (
                   <button
                     onClick={() => handleAskAi('How can I optimize ABSD in Singapore?')}
-                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors"
+                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                   >
-                    Optimize Singapore ABSD
+                    <span>🇸🇬</span>
+                    <span>Optimize Singapore ABSD</span>
                   </button>
                 )}
               </div>
@@ -725,7 +860,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   value={aiQuestion}
                   onChange={(e) => setAiQuestion(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                  placeholder={`Ask Ariel AI about this ${jur.name} deal...`}
+                  placeholder={`Ask Ariel AI about this ${jur.flag} ${jur.name} deal...`}
                   className="flex-1 bg-[#191514] border border-[#302826] rounded-2xl px-4 py-3 text-xs text-[#FAF7F2] placeholder-[#8C857E] focus:outline-none focus:border-[#8C5E3C]"
                 />
                 <button

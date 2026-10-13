@@ -367,36 +367,252 @@ export function executeQuickCalculator(calcId: string, params: Record<string, nu
       };
     }
 
-    case 'cagr': {
-      const initial = params.initial || 100000;
-      const finalVal = params.final || 250000;
-      const years = params.years || 5;
-      const cagr = (Math.pow(finalVal / initial, 1 / years) - 1) * 100;
+    case 'stepup-sip': {
+      let monthly = params.monthly || 2000;
+      const rate = (params.rate || 12) / 100 / 12;
+      const years = params.years || 15;
+      const annualStepUp = (params.stepUp || 10) / 100;
+      let totalInvested = 0;
+      let corpus = 0;
+      for (let y = 1; y <= years; y++) {
+        for (let m = 1; m <= 12; m++) {
+          corpus = (corpus + monthly) * (1 + rate);
+          totalInvested += monthly;
+        }
+        monthly *= (1 + annualStepUp);
+      }
       return {
-        headlineValue: `${cagr.toFixed(2)}%`,
-        headlineLabel: 'Compound Annual Growth Rate',
-        summaryText: `Growing capital from ${initial.toLocaleString()} to ${finalVal.toLocaleString()} across ${years} years represents an annualized CAGR of ${cagr.toFixed(2)}%.`,
+        headlineValue: Math.round(corpus).toLocaleString(),
+        headlineLabel: 'Step-Up Corpus Target',
+        summaryText: `Increasing contributions by ${params.stepUp || 10}% annually turns disciplined cashflow into an accelerated corpus of ${Math.round(corpus).toLocaleString()}.`,
         details: [
-          { label: 'Starting Capital', value: initial.toLocaleString() },
-          { label: 'Final Value', value: finalVal.toLocaleString() },
-          { label: 'Holding Tenure', value: `${years} years` },
+          { label: 'Cumulative Invested Capital', value: Math.round(totalInvested).toLocaleString() },
+          { label: 'Estimated Compounded Wealth Gain', value: Math.round(corpus - totalInvested).toLocaleString() },
+          { label: 'Final Monthly Contribution', value: Math.round(monthly / (1 + annualStepUp)).toLocaleString() },
         ],
       };
     }
 
-    case 'retirement': {
-      const monthlySpend = params.monthlyExpenses || 8000;
-      const annualSpend = monthlySpend * 12;
-      const swr = (params.swr || 3.5) / 100; // 3.5% safe withdrawal rate
-      const corpus = annualSpend / swr;
+    case 'lumpsum': {
+      const p = params.principal || 100000;
+      const r = (params.rate || 10) / 100;
+      const t = params.years || 10;
+      const fv = p * Math.pow(1 + r, t);
+      return {
+        headlineValue: Math.round(fv).toLocaleString(),
+        headlineLabel: 'Maturity Value',
+        summaryText: `Deploying ${p.toLocaleString()} at ${params.rate || 10}% per annum compounds to ${Math.round(fv).toLocaleString()} over ${t} years.`,
+        details: [
+          { label: 'Deployed Principal', value: p.toLocaleString() },
+          { label: 'Capital Gain Created', value: Math.round(fv - p).toLocaleString() },
+          { label: 'Total Growth Multiple', value: `${(fv / p).toFixed(2)}x` },
+        ],
+      };
+    }
+
+    case 'rent-vs-buy': {
+      const propertyPrice = params.propertyPrice || 1200000;
+      const rent = params.monthlyRent || 4000;
+      const years = params.years || 15;
+      const buyEquity = propertyPrice * Math.pow(1.04, years) - propertyPrice * 0.2; // approx 4% appreciation - remaining debt
+      const rentInvestedWealth = (propertyPrice * 0.25) * Math.pow(1.09, years); // invested downpayment at 9%
+      return {
+        headlineValue: buyEquity > rentInvestedWealth ? 'Buying Favored' : 'Renting + Investing Favored',
+        headlineLabel: 'Financial Advantage Decision',
+        summaryText: `Over a ${years}-year horizon, net projected wealth from acquiring real property is ${Math.round(buyEquity).toLocaleString()} vs ${Math.round(rentInvestedWealth).toLocaleString()} from renting and compounding the down payment in equities.`,
+        details: [
+          { label: 'Projected Net Property Equity', value: Math.round(buyEquity).toLocaleString() },
+          { label: 'Alternative Investment Portfolio', value: Math.round(rentInvestedWealth).toLocaleString() },
+          { label: 'Net Generational Spread', value: Math.abs(Math.round(buyEquity - rentInvestedWealth)).toLocaleString() },
+        ],
+      };
+    }
+
+    case 'home-affordability': {
+      const grossIncome = params.income || 15000;
+      const monthlyDebt = params.debt || 2500;
+      const rate = (params.rate || 5.5) / 100 / 12;
+      const maxMonthlyPayment = (grossIncome * 0.40) - monthlyDebt;
+      const n = (params.tenure || 25) * 12;
+      const maxLoan = maxMonthlyPayment > 0 ? maxMonthlyPayment * ((1 - Math.pow(1 + rate, -n)) / rate) : 0;
+      const maxProperty = maxLoan / 0.8; // 80% LTV
+      return {
+        headlineValue: Math.round(maxProperty).toLocaleString(),
+        headlineLabel: 'Maximum Property Purchase Budget',
+        summaryText: `Based on verified monthly earnings of ${grossIncome.toLocaleString()} and a 40% debt ceiling, you can underwrite property up to ${Math.round(maxProperty).toLocaleString()}.`,
+        details: [
+          { label: 'Maximum Mortgage Capacity', value: Math.round(maxLoan).toLocaleString() },
+          { label: 'Allowable Monthly Debt Service', value: Math.round(maxMonthlyPayment).toLocaleString() },
+          { label: 'Assumed Down Payment (20%)', value: Math.round(maxProperty * 0.2).toLocaleString() },
+        ],
+      };
+    }
+
+    case 'loan-refinance': {
+      const balance = params.loanAmount || 600000;
+      const currentRate = params.currentRate || 6.5;
+      const newRate = params.newRate || 4.5;
+      const years = params.tenure || 20;
+      const currentEmi = emiFormula(balance, currentRate, years);
+      const newEmi = emiFormula(balance, newRate, years);
+      const monthlySavings = currentEmi - newEmi;
+      const totalSavings = monthlySavings * years * 12;
+      return {
+        headlineValue: Math.round(totalSavings).toLocaleString(),
+        headlineLabel: 'Lifetime Interest Savings',
+        summaryText: `Refinancing from ${currentRate}% to ${newRate}% reduces monthly mortgage outflow by ${Math.round(monthlySavings).toLocaleString()}, saving ${Math.round(totalSavings).toLocaleString()} over ${years} years.`,
+        details: [
+          { label: 'Current Monthly Payment', value: Math.round(currentEmi).toLocaleString() },
+          { label: 'New Refinanced Payment', value: Math.round(newEmi).toLocaleString() },
+          { label: 'Monthly Cash Flow Surplus', value: Math.round(monthlySavings).toLocaleString() },
+        ],
+      };
+    }
+
+    case 'real-estate-tax-shield': {
+      const propertyValue = params.propertyValue || 1000000;
+      const buildingShare = 0.80; // 80% building, 20% land
+      const annualDepreciation = (propertyValue * buildingShare) / 27.5; // US residential schedule
+      const taxBracket = (params.taxBracket || 35) / 100;
+      const annualTaxSavings = annualDepreciation * taxBracket;
+      return {
+        headlineValue: Math.round(annualTaxSavings).toLocaleString(),
+        headlineLabel: 'Annual Depreciation Tax Shield',
+        summaryText: `Depreciating the improvement basis over 27.5 years shields ${Math.round(annualDepreciation).toLocaleString()} of rental income, delivering an estimated ${Math.round(annualTaxSavings).toLocaleString()} in annual tax savings.`,
+        details: [
+          { label: 'Depreciable Building Basis', value: Math.round(propertyValue * buildingShare).toLocaleString() },
+          { label: 'Annual Non-Cash Depreciation Write-Off', value: Math.round(annualDepreciation).toLocaleString() },
+          { label: 'Effective Marginal Tax Relief', value: `${(taxBracket * 100).toFixed(0)}%` },
+        ],
+      };
+    }
+
+    case 'inflation': {
+      const currentCost = params.amount || 100000;
+      const inflation = (params.rate || 4.5) / 100;
+      const years = params.years || 15;
+      const futureCost = currentCost * Math.pow(1 + inflation, years);
+      const purchasingPowerDrop = ((futureCost - currentCost) / futureCost) * 100;
+      return {
+        headlineValue: Math.round(futureCost).toLocaleString(),
+        headlineLabel: 'Future Adjusted Living Cost',
+        summaryText: `At an average annual inflation rate of ${params.rate || 4.5}%, purchasing power of ${currentCost.toLocaleString()} degrades, requiring ${Math.round(futureCost).toLocaleString()} in ${years} years.`,
+        details: [
+          { label: 'Current Purchasing Basket', value: currentCost.toLocaleString() },
+          { label: 'Cumulative Price Inflation', value: `+${(((futureCost / currentCost) - 1) * 100).toFixed(1)}%` },
+          { label: 'Purchasing Power Erosion', value: `-${purchasingPowerDrop.toFixed(1)}%` },
+        ],
+      };
+    }
+
+    case 'swp': {
+      const corpus = params.principal || 1500000;
+      const monthlyWithdrawal = params.monthly || 8000;
+      const returnRate = (params.rate || 8) / 100 / 12;
+      let balance = corpus;
+      let months = 0;
+      while (balance > 0 && months < 600) {
+        balance = (balance * (1 + returnRate)) - monthlyWithdrawal;
+        months++;
+      }
+      const yearsRunway = (months / 12).toFixed(1);
+      return {
+        headlineValue: months >= 600 ? 'Perpetual Runway' : `${yearsRunway} Years`,
+        headlineLabel: 'Portfolio Longevity Horizon',
+        summaryText: `Withdrawing ${monthlyWithdrawal.toLocaleString()} monthly from a ${corpus.toLocaleString()} portfolio compounding at ${params.rate || 8}% per annum provides ${months >= 600 ? 'perpetual solvency' : `${yearsRunway} years of dependable runway`}.`,
+        details: [
+          { label: 'Initial Investment Capital', value: corpus.toLocaleString() },
+          { label: 'Annual Cash Distribution', value: (monthlyWithdrawal * 12).toLocaleString() },
+          { label: 'Annualized Withdrawal Ratio', value: `${(((monthlyWithdrawal * 12) / corpus) * 100).toFixed(2)}%` },
+        ],
+      };
+    }
+
+    case 'fd-rd': {
+      const principal = params.principal || 500000;
+      const rate = (params.rate || 7.2) / 100;
+      const years = params.years || 5;
+      const maturity = principal * Math.pow(1 + rate / 4, years * 4); // Quarterly compounding
+      return {
+        headlineValue: Math.round(maturity).toLocaleString(),
+        headlineLabel: 'Guaranteed Maturity Value',
+        summaryText: `Locking in ${principal.toLocaleString()} at ${params.rate || 7.2}% with quarterly compounding yields ${Math.round(maturity).toLocaleString()} on maturity.`,
+        details: [
+          { label: 'Deposit Principal', value: principal.toLocaleString() },
+          { label: 'Total Interest Earned', value: Math.round(maturity - principal).toLocaleString() },
+          { label: 'Compounding Frequency', value: 'Quarterly Statutory Compound' },
+        ],
+      };
+    }
+
+    case 'gold-investment': {
+      const amount = params.amount || 250000;
+      const rate = (params.rate || 9.5) / 100;
+      const years = params.years || 10;
+      const finalVal = amount * Math.pow(1 + rate, years);
+      return {
+        headlineValue: Math.round(finalVal).toLocaleString(),
+        headlineLabel: 'Estimated Bullion Valuation',
+        summaryText: `Holding physical bullion or sovereign gold instruments of ${amount.toLocaleString()} at a historical ${params.rate || 9.5}% return yields ${Math.round(finalVal).toLocaleString()} in ${years} years.`,
+        details: [
+          { label: 'Acquisition Capital', value: amount.toLocaleString() },
+          { label: 'Inflation Hedge Surplus', value: Math.round(finalVal - amount).toLocaleString() },
+          { label: 'Historical Holding Period', value: `${years} years` },
+        ],
+      };
+    }
+
+    case 'salary-take-home': {
+      const grossSalary = params.salary || 120000;
+      const taxRate = (params.taxRate || 22) / 100;
+      const statutoryPension = grossSalary * 0.05; // 5% pension / CPF / provident fund
+      const taxes = grossSalary * taxRate;
+      const netTakeHome = grossSalary - taxes - statutoryPension;
+      return {
+        headlineValue: Math.round(netTakeHome / 12).toLocaleString(),
+        headlineLabel: 'Net Monthly In-Hand Compensation',
+        summaryText: `On an annual gross compensation of ${grossSalary.toLocaleString()}, after ${(taxRate * 100).toFixed(0)}% income tax and statutory contributions, monthly net distribution is ${Math.round(netTakeHome / 12).toLocaleString()}.`,
+        details: [
+          { label: 'Annual Gross Compensation', value: grossSalary.toLocaleString() },
+          { label: 'Annual Statutory Tax Liability', value: Math.round(taxes).toLocaleString() },
+          { label: 'Annual Net Disposable Income', value: Math.round(netTakeHome).toLocaleString() },
+        ],
+      };
+    }
+
+    case 'gratuity': {
+      const lastSalary = params.salary || 150000;
+      const serviceYears = params.years || 12;
+      const gratuity = Math.round((15 * lastSalary * serviceYears) / 26);
+      return {
+        headlineValue: gratuity.toLocaleString(),
+        headlineLabel: 'Statutory Gratuity Entitlement',
+        summaryText: `Under standard statutory employment guidelines, a tenure of ${serviceYears} completed years with a monthly basic salary of ${lastSalary.toLocaleString()} entitles you to ${gratuity.toLocaleString()}.`,
+        details: [
+          { label: 'Basic Monthly Salary', value: lastSalary.toLocaleString() },
+          { label: 'Completed Service Tenure', value: `${serviceYears} years` },
+          { label: 'Statutory Multiplier', value: '15/26 Days per Year of Service' },
+        ],
+      };
+    }
+
+    case 'provident-fund': {
+      const basic = params.salary || 8000;
+      const rate = 0.0815; // standard EPF/CPF ~ 8.15% - 2.5%
+      const years = params.years || 20;
+      const monthlyContribution = basic * 0.24; // 12% employee + 12% employer
+      let corpus = 0;
+      for (let m = 1; m <= years * 12; m++) {
+        corpus = (corpus + monthlyContribution) * (1 + rate / 12);
+      }
       return {
         headlineValue: Math.round(corpus).toLocaleString(),
-        headlineLabel: 'Target Independence Corpus',
-        summaryText: `To support an annual lifestyle budget of ${annualSpend.toLocaleString()} perpetually at a ${(swr * 100).toFixed(1)}% safe withdrawal rate, you require an accumulated liquid corpus of ${Math.round(corpus).toLocaleString()}.`,
+        headlineLabel: 'Retirement Provident Corpus',
+        summaryText: `Combined statutory provident fund contributions of ${Math.round(monthlyContribution).toLocaleString()} monthly over ${years} years build a retirement reserve of ${Math.round(corpus).toLocaleString()}.`,
         details: [
-          { label: 'Annual Lifestyle Expenditure', value: annualSpend.toLocaleString() },
-          { label: 'Safe Withdrawal Rate (SWR)', value: `${(swr * 100).toFixed(1)}%` },
-          { label: 'Perpetual Runway Longevity', value: 'Perpetual / Multi-Generational' },
+          { label: 'Monthly Combined Contribution', value: Math.round(monthlyContribution).toLocaleString() },
+          { label: 'Total Principal Deployed', value: Math.round(monthlyContribution * years * 12).toLocaleString() },
+          { label: 'Compound Interest Benefit', value: Math.round(corpus - monthlyContribution * years * 12).toLocaleString() },
         ],
       };
     }

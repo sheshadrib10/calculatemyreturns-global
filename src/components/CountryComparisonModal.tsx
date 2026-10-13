@@ -107,9 +107,9 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-5xl bg-[#191514] border border-[#302826] rounded-3xl p-6 sm:p-9 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
+      <div className="relative w-full max-w-5xl bg-[#191514] border border-[#302826] rounded-3xl p-5 sm:p-8 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col justify-between text-[#FAF7F2]">
         
         {/* Topbar */}
         <div className="flex items-start justify-between pb-5 border-b border-[#302826]">
@@ -196,7 +196,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
                   className="mt-6 w-full py-2.5 rounded-full bg-[#191514] hover:bg-[#FAF7F2] text-[#FAF7F2] hover:text-[#191514] font-medium text-xs font-sans uppercase tracking-[0.1em] border border-[#302826] hover:border-[#FAF7F2] transition-all flex items-center justify-center gap-2"
                 >
                   <Scale className="w-3.5 h-3.5" />
-                  <span>Simulate in {c.name}</span>
+                  <span>Simulate in {c.flag} {c.name}</span>
                 </button>
               </div>
             ))}
