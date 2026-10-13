@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
-import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp, ArrowUpRight, Phone, MessageSquare } from 'lucide-react';
+import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp, ArrowUpRight, Phone, MessageSquare, Menu, ChevronDown } from 'lucide-react';
 import { NoveroLogo } from './NoveroLogo';
 import { CountryFlag } from './CountryFlag';
 import { ArielLogo } from './ArielLogo';
@@ -39,22 +39,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-40 backdrop-blur-md bg-[#191514]/90 border-b border-[#302826] transition-all">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-4">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-3">
           
-          {/* Left: Discreet Menu Trigger & Brand Logo */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          {/* Left: Classic Luxury Hamburger Menu Trigger & Brand Logo */}
+          <div className="flex items-center gap-3 sm:gap-6">
             <button
               onClick={() => setDrawerOpen(true)}
-              className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-sans text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors focus:outline-none group p-1"
+              className="flex items-center gap-2 p-2 -ml-2 rounded-xl text-[#FAF7F2] hover:bg-white/5 transition-colors focus:outline-none group"
               aria-label="Open navigation menu"
             >
-              <div className="w-5 h-5 flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#FAF7F2] group-hover:scale-110 transition-transform">
-                  <circle cx="7" cy="12" r="2" fill="currentColor" />
-                  <circle cx="17" cy="12" r="2" fill="currentColor" />
-                </svg>
-              </div>
-              <span className="font-medium text-xs">Menu</span>
+              <Menu className="w-5 h-5 text-[#FAF7F2] group-hover:scale-105 transition-transform" />
+              <span className="font-medium text-xs hidden sm:inline uppercase tracking-[0.15em]">Menu</span>
             </button>
 
             <button
@@ -62,10 +57,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setActiveTab('simulator');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="text-left focus:outline-none flex items-center gap-2.5 group"
+              className="text-left focus:outline-none flex items-center gap-2 group"
             >
               <ArielLogo size="sm" showSubtitle={false} />
-              <span className="font-serif text-lg sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap">
+              <span className="font-serif text-base sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap hidden sm:inline">
                 Investments
               </span>
             </button>
@@ -114,12 +109,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative">
               <button
                 onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all flex-shrink-0"
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all flex-shrink-0"
                 aria-label="Select Sovereign Jurisdiction"
               >
                 <CountryFlag code={activeJur.code} size="sm" />
-                <span className="font-medium text-xs">{activeJur.name}</span>
-                <span className="text-[10px] text-[#8C857E] font-mono hidden sm:inline">({activeJur.currency})</span>
+                <span className="font-medium text-xs hidden sm:inline">{activeJur.name}</span>
+                <span className="font-medium text-xs sm:hidden">{activeJur.code}</span>
+                <span className="text-[10px] text-[#8C857E] font-mono hidden md:inline">({activeJur.currency})</span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#B88A58]" />
               </button>
 
               {showCountryDropdown && (
@@ -153,15 +150,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Direct Enquiry with Mr. Babu James */}
+            {/* Direct Enquiry with Mr. Babu James (Desktop only, mobile accesses via Menu drawer) */}
             <button
               onClick={onOpenPrincipalContact}
-              className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm flex-shrink-0"
+              className="hidden md:flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm flex-shrink-0"
               title="Direct Enquiry with Mr. Babu James (Owner & Managing Director)"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
-              <span className="hidden sm:inline">Contact Mr. Babu James</span>
-              <span className="sm:hidden">Contact</span>
+              <span>Contact Mr. Babu James</span>
             </button>
           </div>
         </div>
@@ -249,7 +245,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onOpenCompare();
                   setDrawerOpen(false);
                 }}
-                className="font-serif text-4xl sm:text-6xl text-left hover:text-[#8C5E3C] transition-colors"
+                className="font-serif text-2xl sm:text-5xl text-left hover:text-[#8C5E3C] transition-colors"
               >
                 04. Cross-Border Sovereign Matrix
               </button>
@@ -261,7 +257,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onOpenAiAudit();
                   setDrawerOpen(false);
                 }}
-                className="font-serif text-4xl sm:text-6xl text-left text-[#8C5E3C] hover:text-[#FAF7F2] transition-colors"
+                className="font-serif text-2xl sm:text-5xl text-left text-[#8C5E3C] hover:text-[#FAF7F2] transition-colors"
               >
                 05. Private Underwriting Memorandum
               </button>

@@ -23,12 +23,20 @@
         --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         --font-mono: 'IBM Plex Mono', monospace;
       }
-      body {
+      html, body {
         margin: 0;
         background-color: #191514;
         color: #FAF7F2;
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
+      }
+      #root {
+        overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
       }
       .font-serif {
         font-family: var(--font-serif);

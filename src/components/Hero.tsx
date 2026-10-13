@@ -71,41 +71,16 @@ export const Hero: React.FC<HeroProps> = ({
           </label>
 
           <div className="relative group">
-            {/* Styled Luxury Custom Select Button */}
-            <div className="flex items-center justify-between w-full px-4 sm:px-5 py-3 rounded-2xl bg-[#211A19]/90 backdrop-blur-xl border border-[#FAF7F2]/25 group-hover:border-[#B88A58] transition-all shadow-xl">
-              <div className="flex items-center gap-3 truncate text-left">
+            {/* Clean Luxury Country Selector - Country Only */}
+            <div className="flex items-center justify-between w-full px-4 sm:px-5 py-3 rounded-full bg-[#211A19]/90 backdrop-blur-xl border border-[#FAF7F2]/25 group-hover:border-[#B88A58] transition-all shadow-xl">
+              <div className="flex items-center gap-2.5 truncate text-left">
                 <CountryFlag code={activeJur.code} size="sm" />
-                <div className="truncate">
-                  <div className="text-xs sm:text-sm font-medium text-[#FAF7F2] truncate flex items-center gap-2">
-                    <span>{activeJur.name}</span>
-                    <span className="text-[10px] font-mono text-[#B88A58] px-1.5 py-0.5 rounded bg-[#FAF7F2]/10">
-                      {activeJur.currency}
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-[#A39E98] font-mono truncate mt-0.5">
-                    {activeJur.code === 'SG'
-                      ? '0% Capital Gains · Progressive BSD'
-                      : activeJur.code === 'CH'
-                      ? 'Lex Koller Quotas · CHF Haven'
-                      : activeJur.code === 'AU'
-                      ? '50% CGT Discount · Transfer Duty'
-                      : activeJur.code === 'NZ'
-                      ? '0% Stamp Duty · Bright-Line 0% CGT'
-                      : activeJur.code === 'AE'
-                      ? '0% Income Tax · 4% DLD Transfer'
-                      : activeJur.code === 'LK'
-                      ? 'Inland Revenue Act · Colombo Port City'
-                      : activeJur.code === 'MY'
-                      ? 'Tiered Stamp Duty · 0% RPGT >5y'
-                      : activeJur.code === 'IN'
-                      ? 'Budget 2024 LTCG · Section 54'
-                      : activeJur.code === 'GB'
-                      ? 'SDLT Surcharges · Tapered Relief'
-                      : activeJur.code === 'US'
-                      ? '1031 Exchange · 27.5-Yr Shelter'
-                      : 'Sovereign Statutory Framework'}
-                  </div>
-                </div>
+                <span className="text-xs sm:text-sm font-medium text-[#FAF7F2] truncate">
+                  {activeJur.name}
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-[#B88A58] px-2 py-0.5 rounded-full bg-[#FAF7F2]/5">
+                  {activeJur.currency}
+                </span>
               </div>
 
               <ChevronDown className="w-4 h-4 text-[#B88A58] flex-shrink-0 group-hover:translate-y-0.5 transition-transform ml-2" />
