@@ -178,36 +178,7 @@ export const App: React.FC = () => {
         onOpenPrincipalContact={() => setIsPrincipalModalOpen(true)}
       />
 
-      {/* Floating Badge: Powered & Built by Novero */}
-      <aside
-        aria-label="Powered & Built by Novero"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40"
-      >
-        <div className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#191514]/95 backdrop-blur-xl border border-[#302826] hover:border-[#8C5E3C] shadow-2xl transition-all group hover:scale-[1.02]">
-          <a
-            href="https://shulo.xyz/novero"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
-            <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-widest text-[#8C857E] group-hover:text-[#D9D3CE] transition-colors">
-              Powered &amp; Built by
-            </span>
-            <NoveroLogo size="xs" />
-          </a>
-          <span className="text-[#302826]">|</span>
-          <a
-            href="https://shulo.xyz/novero#brief"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] sm:text-xs font-sans font-medium uppercase tracking-wider text-[#B88A58] hover:text-[#FAF7F2] transition-colors whitespace-nowrap flex items-center gap-1"
-          >
-            <span>Enquire</span>
-            <ArrowUpRight className="w-3 h-3" />
-          </a>
-        </div>
-      </aside>
+
 
       {/* Modal: Interactive Calculator Runner */}
       {activeModalCalcId && (

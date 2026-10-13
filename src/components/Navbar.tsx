@@ -38,73 +38,41 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#191514]/85 border-b border-[#302826] transition-all">
-        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 h-20 flex items-center justify-between gap-6">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#191514]/90 border-b border-[#302826] transition-all">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-4">
           
-          {/* Left: Lenval-style Two-Dot Menu Trigger */}
-          <div className="flex items-center gap-6">
+          {/* Left: Discreet Menu Trigger & Brand Logo */}
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => setDrawerOpen(true)}
-              className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] font-sans text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors focus:outline-none group"
+              className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-sans text-[#FAF7F2] hover:text-[#C4BCB5] transition-colors focus:outline-none group p-1"
+              aria-label="Open navigation menu"
             >
-              <div className="w-6 h-6 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[#FAF7F2] group-hover:scale-110 transition-transform">
-                  <circle cx="7" cy="12" r="2.2" fill="currentColor" />
-                  <circle cx="17" cy="12" r="2.2" fill="currentColor" />
+              <div className="w-5 h-5 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#FAF7F2] group-hover:scale-110 transition-transform">
+                  <circle cx="7" cy="12" r="2" fill="currentColor" />
+                  <circle cx="17" cy="12" r="2" fill="currentColor" />
                 </svg>
               </div>
-              <span className="font-medium hidden sm:inline">Menu</span>
+              <span className="font-medium text-xs">Menu</span>
             </button>
 
-            {/* Brand Logo in Lenval Editorial Serif + Novero Attribution */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => {
-                  setActiveTab('simulator');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="text-left focus:outline-none flex items-center gap-2.5 group"
-              >
-                <ArielLogo size="sm" showSubtitle={false} />
-                <span className="font-serif text-lg sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap hidden md:inline">
-                  Investments
-                </span>
-                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden 2xl:inline whitespace-nowrap">
-                  Returns Suite
-                </span>
-              </button>
-
-              <a
-                href="https://shulo.xyz/novero"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Powered & Built by Novero"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#211A19]/90 border border-[#302826] hover:border-[#8C5E3C] text-[10px] font-mono tracking-wider text-[#A39E98] hover:text-[#FAF7F2] transition-colors group"
-              >
-                <span className="text-[9px] uppercase tracking-widest text-[#8C857E] group-hover:text-[#FAF7F2] hidden sm:inline">
-                  Powered &amp; Built by
-                </span>
-                <NoveroLogo size="xs" />
-                <ArrowUpRight className="w-3 h-3 text-[#B88A58] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
-          </div>
-
-          {/* Center Navigation Links (Lenval Editorial Menu) */}
-          <nav className="hidden lg:flex items-center gap-8 text-xs font-sans tracking-[0.15em] uppercase text-[#A39E98]">
             <button
               onClick={() => {
                 setActiveTab('simulator');
-                const el = document.getElementById('overview-section');
-                if (el) {
-                  const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
-                  window.scrollTo({ top: y, behavior: 'smooth' });
-                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="hover:text-[#FAF7F2] transition-colors"
+              className="text-left focus:outline-none flex items-center gap-2.5 group"
             >
-              Overview
+              <ArielLogo size="sm" showSubtitle={false} />
+              <span className="font-serif text-lg sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap">
+                Investments
+              </span>
             </button>
+          </div>
+
+          {/* Center Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-sans tracking-[0.15em] uppercase text-[#A39E98]">
             <button
               onClick={() => {
                 setActiveTab('simulator');
@@ -114,9 +82,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   window.scrollTo({ top: y, behavior: 'smooth' });
                 }
               }}
-              className={`transition-colors ${activeTab === 'simulator' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
+              className={`hover:text-[#FAF7F2] transition-colors ${activeTab === 'simulator' ? 'text-[#FAF7F2] font-semibold' : ''}`}
             >
-              The Simulator
+              Simulator
+            </button>
+            <button
+              onClick={onOpenCompare}
+              className="hover:text-[#FAF7F2] transition-colors"
+            >
+              Sovereign Matrix
             </button>
             <button
               onClick={() => {
@@ -127,39 +101,31 @@ export const Navbar: React.FC<NavbarProps> = ({
                   window.scrollTo({ top: y, behavior: 'smooth' });
                 }
               }}
-              className={`transition-colors ${activeTab === 'catalog' ? 'text-[#FAF7F2] font-semibold' : 'hover:text-[#FAF7F2]'}`}
+              className={`hover:text-[#FAF7F2] transition-colors ${activeTab === 'catalog' ? 'text-[#FAF7F2] font-semibold' : ''}`}
             >
-              All 45 Tools
-            </button>
-            <button
-              onClick={onOpenCompare}
-              className="hover:text-[#FAF7F2] transition-colors flex items-center gap-1.5"
-            >
-              <span>Cross-Border</span>
+              45 Calculators
             </button>
           </nav>
 
-          {/* Right Action Cluster: Country Selector, Currency & Lenval Pill Button */}
-          <div className="flex items-center gap-3">
+          {/* Right Action Cluster: Country Selector & Direct Contact */}
+          <div className="flex items-center gap-2 sm:gap-3">
             
             {/* Country Jurisdiction Selector */}
             <div className="relative">
               <button
-                onClick={() => {
-                  setShowCountryDropdown(!showCountryDropdown);
-                  setShowCurrencyDropdown(false);
-                }}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all"
+                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all flex-shrink-0"
+                aria-label="Select Sovereign Jurisdiction"
               >
                 <CountryFlag code={activeJur.code} size="sm" />
-                <span className="font-medium hidden sm:inline">{activeJur.name}</span>
-                <span className="text-[10px] font-mono text-[#8C857E]">Tax Rules</span>
+                <span className="font-medium text-xs">{activeJur.name}</span>
+                <span className="text-[10px] text-[#8C857E] font-mono hidden sm:inline">({activeJur.currency})</span>
               </button>
 
               {showCountryDropdown && (
                 <div className="absolute top-full mt-2 w-64 right-0 bg-[#211A19] border border-[#302826] rounded-2xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
                   <div className="text-[10px] uppercase font-mono text-[#8C857E] px-3 py-1.5 tracking-wider border-b border-[#302826] mb-1">
-                    Select Jurisdiction &amp; Tax Laws
+                    Select Sovereign Market
                   </div>
                   <div className="max-h-72 overflow-y-auto space-y-1">
                     {Object.values(JURISDICTIONS).map((j) => (
@@ -187,71 +153,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Currency Selector */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowCurrencyDropdown(!showCurrencyDropdown);
-                  setShowCountryDropdown(false);
-                }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-mono text-[#FAF7F2] transition-all"
-              >
-                <CountryFlag code={activeCurr.code} size="xs" />
-                <span>{activeCurr.code}</span>
-                <span className="text-[11px] text-[#8C857E]">({activeCurr.symbol})</span>
-              </button>
-
-              {showCurrencyDropdown && (
-                <div className="absolute top-full mt-2 w-52 right-0 bg-[#211A19] border border-[#302826] rounded-2xl shadow-2xl p-2 z-50 backdrop-blur-2xl">
-                  <div className="text-[10px] uppercase font-mono text-[#8C857E] px-3 py-1.5 tracking-wider border-b border-[#302826] mb-1">
-                    Currencies
-                  </div>
-                  <div className="max-h-72 overflow-y-auto space-y-1">
-                    {Object.values(CURRENCIES).map((c) => (
-                      <button
-                        key={c.code}
-                        onClick={() => {
-                          onSelectCurrency(c.code);
-                          setShowCurrencyDropdown(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-mono transition-colors ${
-                          c.code === currentCurrency
-                            ? 'bg-[#302826] text-[#FAF7F2] font-semibold'
-                            : 'text-[#D9D3CE] hover:bg-[#2B2220]'
-                        }`}
-                      >
-                        <span className="flex items-center gap-2">
-                          <CountryFlag code={c.code} size="xs" />
-                          <span>{c.code}</span>
-                        </span>
-                        <span className="text-[#8C857E]">{c.symbol}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Direct Enquiry with Managing Director & Owner Mr. Babu James */}
+            {/* Direct Enquiry with Mr. Babu James */}
             <button
               onClick={onOpenPrincipalContact}
-              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] hover:bg-[#2A211E] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm"
+              className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm flex-shrink-0"
               title="Direct Enquiry with Mr. Babu James (Owner & Managing Director)"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
-              <span>Contact Mr. Babu James</span>
-            </button>
-
-            {/* Lenval-style "Private Audit / Let's Talk" Magnetic Pill Button */}
-            <button
-              onClick={onOpenAiAudit}
-              className="flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full border border-[#FAF7F2]/40 bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans tracking-[0.1em] uppercase font-medium shadow-sm transition-all group"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#191514] group-hover:scale-125 transition-transform" />
-              <span>Private Audit</span>
+              <span className="hidden sm:inline">Contact Mr. Babu James</span>
+              <span className="sm:hidden">Contact</span>
             </button>
           </div>
-
         </div>
       </header>
 

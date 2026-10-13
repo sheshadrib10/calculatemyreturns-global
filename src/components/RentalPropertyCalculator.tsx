@@ -392,44 +392,30 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
           </div>
         </div>
 
-        {/* Live Market Returns & Rates Sync Bar */}
-        <div className="mt-8 liquid-glass rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-[#B88A58]" />
-            <div>
-              <div className="text-xs font-mono text-[#FAF7F2] font-semibold flex items-center gap-2">
-                <span>Live Returns &amp; Sovereign Benchmark Rates Synced</span>
-                <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-[#FAF7F2]/10 text-[#C5A880]">
-                  Internet Feed
-                </span>
-              </div>
-              <div className="text-[11px] font-sans text-[#8C857E] mt-0.5">
-                {liveRates?.source || `${jur.name} Central Bank`} · Synced {rateSyncTime || 'Real-time'} · Fully adjustable by client
-              </div>
-            </div>
+        {/* Understated Sovereign Benchmark Note */}
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-[#8C857E] pb-4 border-b border-[#302826]/70">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
+            <span className="text-[#FAF7F2]">
+              {jur.name} Sovereign Benchmark Rates Active
+            </span>
+            <span className="text-[#8C857E] hidden md:inline">
+              · Mortgage {liveRates?.benchmarkMortgageRate.toFixed(2)}% · 10Y Sovereign {liveRates?.sovereign10YYield.toFixed(2)}% · CPI {liveRates?.headlineInflation.toFixed(2)}%
+            </span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
-              <span className="text-[#8C857E]">Live Mortgage:</span>
-              <span className="text-[#FAF7F2] font-semibold">{liveRates?.benchmarkMortgageRate.toFixed(2)}%</span>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
-              <span className="text-[#8C857E]">10Y Sovereign:</span>
-              <span className="text-[#FAF7F2] font-semibold">{liveRates?.sovereign10YYield.toFixed(2)}%</span>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
-              <span className="text-[#8C857E]">CPI Inflation:</span>
-              <span className="text-[#FAF7F2] font-semibold">{liveRates?.headlineInflation.toFixed(2)}%</span>
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] text-[#8C857E] hidden sm:inline">
+              Adjust any slider freely
+            </span>
             <button
               onClick={handleSyncLiveRates}
               disabled={isSyncingRates}
-              className="px-3.5 py-1.5 rounded-xl bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95 disabled:opacity-50"
-              title="Pull latest live returns and rates from the internet"
+              className="text-[11px] text-[#FAF7F2] hover:text-[#B88A58] underline underline-offset-4 flex items-center gap-1.5 transition-colors disabled:opacity-50"
+              title="Pull latest live returns and rates from internet"
             >
-              <RefreshCw className={`w-3.5 h-3.5 text-[#191514] ${isSyncingRates ? 'animate-spin' : ''}`} />
-              <span>{isSyncingRates ? 'Syncing...' : 'Sync Live Rates'}</span>
+              <RefreshCw className={`w-3 h-3 text-[#B88A58] ${isSyncingRates ? 'animate-spin' : ''}`} />
+              <span>{isSyncingRates ? 'Syncing...' : 'Sync Market Rates'}</span>
             </button>
           </div>
         </div>

@@ -180,50 +180,6 @@ export const Footer: React.FC<FooterProps> = ({
 
         </div>
 
-        {/* Prominent Novero Attribution & Client Acquisition Card */}
-        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-[#191514] border border-[#302826] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4 text-center md:text-left">
-            <NoveroLogo size="md" />
-            <div>
-              <div className="text-xs text-[#FAF7F2] font-medium">
-                Powered &amp; Built by{' '}
-                <a
-                  href="https://shulo.xyz/novero"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-[#B88A58] transition-colors font-bold tracking-wider"
-                >
-                  NOVERO
-                </a>
-              </div>
-              <div className="text-[11px] text-[#8C857E] font-light mt-0.5 font-sans">
-                Marketing, Customer Experience &amp; Growth Firm · Creative Technology &amp; Computational Design
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a
-              href="https://shulo.xyz/novero#brief"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-full bg-[#FAF7F2] text-[#191514] hover:bg-white text-xs font-sans uppercase tracking-[0.1em] font-medium transition-all flex items-center gap-1.5 shadow-md"
-            >
-              <span>Enquire with Novero</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-
-            <a
-              href="https://shulo.xyz/novero"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-full border border-[#302826] bg-[#211A19] hover:border-[#8C5E3C] text-xs font-sans uppercase tracking-[0.1em] text-[#FAF7F2] transition-all flex items-center gap-1.5"
-            >
-              <span>Agency Portfolio</span>
-            </a>
-          </div>
-        </div>
-
         {/* Bottom Legal Notice */}
         <div className="mt-10 flex flex-col sm:flex-row items-baseline justify-between gap-4 text-xs font-mono text-[#8C857E]">
           <p className="max-w-2xl leading-relaxed font-light text-[11px]">
