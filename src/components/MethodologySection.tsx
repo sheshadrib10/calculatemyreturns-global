@@ -41,7 +41,7 @@ export const MethodologySection: React.FC<MethodologySectionProps> = ({
       num: '03',
       title: 'Sovereign Tax Structuring',
       icon: Scale,
-      desc: `Navigating sovereign stamp duty schedules (${jur.flag} ${jur.stampDutyName}), 0% capital gains havens, and localized depreciation shields.`,
+      desc: `Navigating sovereign stamp duty schedules (${jur.name}: ${jur.stampDutyName}), 0% capital gains havens, and localized depreciation shields.`,
       tag: 'Sovereign Law',
       action: 'Verify Tax Rules',
       onClick: onScrollToCalculator,

@@ -2,6 +2,7 @@ import React from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
 import { ShieldCheck, Scale, ArrowRight, TrendingUp } from 'lucide-react';
+import { CountryFlag } from './CountryFlag';
 
 interface OverviewSectionProps {
   currentJurisdiction: JurisdictionCode;
@@ -70,8 +71,8 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
             <div className="space-y-4 text-xs font-sans">
               <div className="flex justify-between py-2 border-b border-[#E8E2D8]/80">
                 <span className="text-[#8C857E]">Target Sovereign Market</span>
-                <span className="font-serif text-base font-semibold text-[#211A19] flex items-center gap-1.5">
-                  <span>{jur.flag}</span>
+                <span className="font-serif text-base font-semibold text-[#211A19] flex items-center gap-2">
+                  <CountryFlag code={currentJurisdiction} size="sm" />
                   <span>{jur.name} ({jur.currency})</span>
                 </span>
               </div>

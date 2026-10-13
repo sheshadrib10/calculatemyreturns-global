@@ -2,6 +2,7 @@ import React from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
 import { X, TrendingUp, CheckCircle, ShieldAlert, Sparkles, Scale } from 'lucide-react';
+import { CountryFlag } from './CountryFlag';
 
 interface CountryComparisonModalProps {
   onClose: () => void;
@@ -144,7 +145,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
                 <div>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-2xl">{c.flag}</span>
+                      <CountryFlag code={c.code} size="md" />
                       <div>
                         <h4 className="font-serif text-lg font-normal text-[#FAF7F2] group-hover:text-[#B88A58] transition-colors">
                           {c.name}
@@ -195,8 +196,8 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
                   }}
                   className="mt-6 w-full py-2.5 rounded-full bg-[#191514] hover:bg-[#FAF7F2] text-[#FAF7F2] hover:text-[#191514] font-medium text-xs font-sans uppercase tracking-[0.1em] border border-[#302826] hover:border-[#FAF7F2] transition-all flex items-center justify-center gap-2"
                 >
-                  <Scale className="w-3.5 h-3.5" />
-                  <span>Simulate in {c.flag} {c.name}</span>
+                  <CountryFlag code={c.code} size="xs" />
+                  <span>Simulate in {c.name}</span>
                 </button>
               </div>
             ))}

@@ -3,6 +3,7 @@ import { CurrencyCode, JurisdictionCode } from '../types';
 import { JURISDICTIONS } from '../data/jurisdictions';
 import { Search, Sparkles, Lock, ArrowDown, ArrowUpRight } from 'lucide-react';
 import { NoveroLogo } from './NoveroLogo';
+import { CountryFlag } from './CountryFlag';
 
 interface HeroProps {
   currentJurisdiction: JurisdictionCode;
@@ -30,15 +31,15 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#191514] text-[#FAF7F2]">
       
-      {/* Cinematic Full-Bleed Architectural Background (Royalty-free Unsplash Modern Luxury Architecture) */}
+      {/* Cinematic Full-Bleed Background (Ultra-Luxury Private Aviation on Tarmac with Boarding Stairs) */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2160&q=80"
-          alt="Ariel Sovereign Architectural Residence"
-          className="w-full h-full object-cover object-center filter brightness-[0.42] contrast-[1.1] scale-105 animate-in fade-in duration-1000"
+          src="https://plus.unsplash.com/premium_photo-1754214178965-0d1dd64c934b?fm=jpg&w=2160&auto=format&fit=crop&q=80"
+          alt="Ariel Private Aviation and Sovereign Wealth"
+          className="w-full h-full object-cover object-center filter brightness-[0.44] contrast-[1.12] scale-105 animate-in fade-in duration-1000"
         />
         {/* Top and Bottom Lenval Gradient Fades */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#191514] via-[#191514]/40 to-[#191514]/80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#191514] via-[#191514]/45 to-[#191514]/85" />
       </div>
 
       {/* Top Padding */}
@@ -47,10 +48,20 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Hero Center Text (Exact Lenval Typography & Alignment) */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         
-        {/* Tracked Kicker */}
-        <p className="text-[11px] sm:text-xs font-sans uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[#D9D3CE] font-light">
-          🇸🇬 Singapore · 🇲🇾 Malaysia · 🇦🇪 Dubai · 🇬🇧 London · 🇺🇸 New York · 🇮🇳 Mumbai
-        </p>
+        {/* Sovereign Hubs with Authentic Vector Flags (No text acronyms) */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-sans uppercase tracking-[0.2em] text-[#E5DFD9] font-medium">
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="SG" size="xs" /> Singapore</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="MY" size="xs" /> Malaysia</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="AE" size="xs" /> Dubai</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="GB" size="xs" /> London</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="US" size="xs" /> New York</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="IN" size="xs" /> Mumbai</span>
+        </div>
 
         {/* Prominent Powered & Built by Novero Attribution */}
         <div className="mt-3 sm:mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#191514]/85 backdrop-blur-md border border-[#FAF7F2]/20 hover:border-[#8C5E3C] transition-all shadow-lg group">
@@ -151,8 +162,8 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="text-[9px] sm:text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
               Active Market
             </div>
-            <div className="font-serif text-base sm:text-lg text-[#FAF7F2] mt-1 flex items-center gap-1.5 truncate">
-              <span>{activeJur.flag}</span>
+            <div className="font-serif text-base sm:text-lg text-[#FAF7F2] mt-1 flex items-center gap-2 truncate">
+              <CountryFlag code={activeJur.code} size="sm" />
               <span className="truncate">{activeJur.name}</span>
             </div>
             <div className="text-[10px] sm:text-[11px] font-mono text-[#B9B5AF] mt-0.5">{activeJur.currency} Sovereign Rules</div>

@@ -3,6 +3,7 @@ import { BuyerStatus, CurrencyCode, JurisdictionCode, PropertyInputs } from '../
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
 import { formatCurrency, formatPercent, simulatePropertyInvestment } from '../utils/finance';
 import { generateDeterministicAiAudit, queryAuraAi } from '../utils/aiAdvisory';
+import { CountryFlag } from './CountryFlag';
 import {
   Building2,
   TrendingUp,
@@ -345,7 +346,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
           <div>
             <div className="text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-2 flex items-center gap-2">
               <span>03 / The Master Suite ·</span>
-              <span className="text-base">{jur.flag}</span>
+              <CountryFlag code={currentJurisdiction} size="sm" />
               <span>{jur.name} Multi-Asset Hub</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#FAF7F2]">
@@ -804,8 +805,8 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
             {/* Acquisition Friction & Localized Tax Breakdown */}
             <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-8 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[#302826]">
-                <div className="flex items-center gap-2">
-                  <span className="text-base">{jur.flag}</span>
+                <div className="flex items-center gap-2.5">
+                  <CountryFlag code={currentJurisdiction} size="sm" />
                   <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2]">
                     {jur.name} Statutory Acquisition &amp; Tax Ledger
                   </span>
@@ -829,8 +830,8 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
               {/* Statutory Benefits Callout */}
               <div className="pt-3 border-t border-[#302826] text-xs text-[#A39E98] space-y-1 font-sans">
-                <span className="font-medium text-[#FAF7F2] flex items-center gap-1.5">
-                  <span>{jur.flag}</span>
+                <span className="font-medium text-[#FAF7F2] flex items-center gap-2">
+                  <CountryFlag code={currentJurisdiction} size="xs" />
                   <span>Statutory Advantages ({jur.name}):</span>
                 </span>
                 <ul className="list-disc list-inside text-[11px] space-y-1 text-[#8C857E]">
@@ -992,7 +993,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   onClick={() => handleAskAi(`How does ${jur.name}'s tax structure and stamp duty affect my IRR?`)}
                   className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                 >
-                  <span>{jur.flag}</span>
+                  <CountryFlag code={currentJurisdiction} size="xs" />
                   <span>Analyze {jur.name} Stamp Duty</span>
                 </button>
                 <button
@@ -1006,7 +1007,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     onClick={() => handleAskAi('Does this property meet the Dubai 10-year Golden Visa requirements?')}
                     className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                   >
-                    <span>🇦🇪</span>
+                    <CountryFlag code="AE" size="xs" />
                     <span>Golden Visa Eligibility</span>
                   </button>
                 )}
@@ -1015,7 +1016,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     onClick={() => handleAskAi('How can I optimize ABSD in Singapore?')}
                     className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
                   >
-                    <span>🇸🇬</span>
+                    <CountryFlag code="SG" size="xs" />
                     <span>Optimize Singapore ABSD</span>
                   </button>
                 )}
@@ -1028,7 +1029,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   value={aiQuestion}
                   onChange={(e) => setAiQuestion(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                  placeholder={`Ask Ariel AI about this ${jur.flag} ${jur.name} deal...`}
+                  placeholder={`Ask Ariel AI about this ${jur.name} investment deal...`}
                   className="flex-1 bg-[#191514] border border-[#302826] rounded-2xl px-4 py-3 text-xs text-[#FAF7F2] placeholder-[#8C857E] focus:outline-none focus:border-[#8C5E3C]"
                 />
                 <button
@@ -1176,8 +1177,8 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
               {/* Local Tax Context */}
               <div className="p-4 rounded-2xl liquid-glass border border-white/5 text-xs text-[#A39E98] space-y-1">
-                <span className="text-[#FAF7F2] font-medium flex items-center gap-1.5">
-                  <span>{jur.flag}</span>
+                <span className="text-[#FAF7F2] font-medium flex items-center gap-2">
+                  <CountryFlag code={currentJurisdiction} size="xs" />
                   <span>{jur.name} Sovereign Equity Tax Law:</span>
                 </span>
                 <p className="text-[11px] text-[#8C857E]">

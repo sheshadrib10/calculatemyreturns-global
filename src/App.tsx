@@ -13,6 +13,7 @@ import { CalculatorDirectory } from './components/CalculatorDirectory';
 import { InteractiveModalCalculator } from './components/InteractiveModalCalculator';
 import { CountryComparisonModal } from './components/CountryComparisonModal';
 import { AiAuditModal } from './components/AiAuditModal';
+import { PrincipalContactModal } from './components/PrincipalContactModal';
 import { ArrowUpRight } from 'lucide-react';
 import { NoveroShowcase } from './components/NoveroShowcase';
 import { NoveroLogo } from './components/NoveroLogo';
@@ -31,6 +32,7 @@ export const App: React.FC = () => {
   const [activeModalCalcId, setActiveModalCalcId] = useState<string | null>(null);
   const [isAiAuditModalOpen, setIsAiAuditModalOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState<boolean>(false);
+  const [isPrincipalModalOpen, setIsPrincipalModalOpen] = useState<boolean>(false);
 
   // When jurisdiction changes, also default display currency to matching sovereign currency
   const handleSelectJurisdiction = (code: JurisdictionCode) => {
@@ -103,6 +105,7 @@ export const App: React.FC = () => {
         setActiveTab={setActiveTab}
         onOpenAiAudit={() => setIsAiAuditModalOpen(true)}
         onOpenCompare={() => setIsCompareModalOpen(true)}
+        onOpenPrincipalContact={() => setIsPrincipalModalOpen(true)}
       />
 
       {/* Main Page Flow (Lenval Rhythmic Transitions) */}
@@ -172,6 +175,7 @@ export const App: React.FC = () => {
       <Footer
         currentJurisdiction={currentJurisdiction}
         onSelectJurisdiction={handleSelectJurisdiction}
+        onOpenPrincipalContact={() => setIsPrincipalModalOpen(true)}
       />
 
       {/* Floating Badge: Powered & Built by Novero */}
@@ -234,6 +238,12 @@ export const App: React.FC = () => {
           currentCurrency={currentCurrency}
         />
       )}
+
+      {/* Modal: Managing Director Dr. Babu James Direct Enquiry */}
+      <PrincipalContactModal
+        isOpen={isPrincipalModalOpen}
+        onClose={() => setIsPrincipalModalOpen(false)}
+      />
 
     </div>
   );

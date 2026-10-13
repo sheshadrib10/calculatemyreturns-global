@@ -4,6 +4,7 @@ import { CALCULATORS_CATALOG } from '../data/calculatorsList';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
 import { executeQuickCalculator } from '../utils/finance';
 import { X, Copy, Check } from 'lucide-react';
+import { CountryFlag } from './CountryFlag';
 
 interface InteractiveModalCalculatorProps {
   calcId: string;
@@ -257,9 +258,9 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
         {/* Topbar: Title and Close */}
         <div className="flex items-start justify-between pb-4 border-b border-white/10">
           <div className="pr-4">
-            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1 flex items-center gap-1.5">
+            <div className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1 flex items-center gap-2">
               <span>{item.category} ·</span>
-              <span className="text-sm">{jur.flag}</span>
+              <CountryFlag code={currentJurisdiction} size="xs" />
               <span>{jur.name}</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#FAF7F2] tracking-tight">

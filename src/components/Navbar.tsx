@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
-import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { Globe, Coins, ShieldCheck, X, Sparkles, Layers, TrendingUp, ArrowUpRight, Phone, MessageSquare } from 'lucide-react';
 import { NoveroLogo } from './NoveroLogo';
+import { CountryFlag } from './CountryFlag';
+import { ArielLogo } from './ArielLogo';
 
 interface NavbarProps {
   currentJurisdiction: JurisdictionCode;
@@ -13,6 +15,7 @@ interface NavbarProps {
   setActiveTab: (tab: 'simulator' | 'catalog') => void;
   onOpenAiAudit: () => void;
   onOpenCompare: () => void;
+  onOpenPrincipalContact: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -24,6 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab,
   onOpenAiAudit,
   onOpenCompare,
+  onOpenPrincipalContact,
 }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
@@ -59,13 +63,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setActiveTab('simulator');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="text-left focus:outline-none flex items-baseline gap-2.5 group"
+                className="text-left focus:outline-none flex items-center gap-2.5 group"
               >
-                <span className="font-serif text-xl sm:text-2xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap">
-                  ARIEL INVESTMENTS
+                <ArielLogo size="sm" showSubtitle={false} />
+                <span className="font-serif text-lg sm:text-xl tracking-[0.05em] text-[#FAF7F2] group-hover:text-[#D9D3CE] transition-colors whitespace-nowrap hidden md:inline">
+                  Investments
                 </span>
-                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden xl:inline whitespace-nowrap">
-                  Returns Calculator
+                <span className="text-[10px] tracking-[0.25em] uppercase font-sans text-[#8C857E] border-l border-[#302826] pl-2.5 hidden 2xl:inline whitespace-nowrap">
+                  Returns Suite
                 </span>
               </button>
 
@@ -146,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-sans text-[#FAF7F2] transition-all"
               >
-                <span>{activeJur.flag}</span>
+                <CountryFlag code={activeJur.code} size="sm" />
                 <span className="font-medium hidden sm:inline">{activeJur.name}</span>
                 <span className="text-[10px] font-mono text-[#8C857E]">Tax Rules</span>
               </button>
@@ -171,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }`}
                       >
                         <span className="flex items-center gap-2.5">
-                          <span className="text-base">{j.flag}</span>
+                          <CountryFlag code={j.code} size="sm" />
                           <span>{j.name}</span>
                         </span>
                         <span className="text-[10px] font-mono text-[#8C857E]">{j.currency}</span>
@@ -189,8 +194,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setShowCurrencyDropdown(!showCurrencyDropdown);
                   setShowCountryDropdown(false);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-mono text-[#FAF7F2] transition-all"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#302826] bg-[#211A19]/80 hover:border-[#8C5E3C] text-xs font-mono text-[#FAF7F2] transition-all"
               >
+                <CountryFlag code={activeCurr.code} size="xs" />
                 <span>{activeCurr.code}</span>
                 <span className="text-[11px] text-[#8C857E]">({activeCurr.symbol})</span>
               </button>
@@ -215,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }`}
                       >
                         <span className="flex items-center gap-2">
-                          <span>{c.flag}</span>
+                          <CountryFlag code={c.code} size="xs" />
                           <span>{c.code}</span>
                         </span>
                         <span className="text-[#8C857E]">{c.symbol}</span>
@@ -225,6 +231,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Direct Enquiry with Managing Director Dr. Babu James */}
+            <button
+              onClick={onOpenPrincipalContact}
+              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-emerald-500/35 bg-emerald-950/30 hover:border-emerald-400 text-emerald-300 text-xs font-sans tracking-wide transition-all shadow-sm"
+              title="Direct Enquiry with Dr. B. James, PhD (Managing Director)"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Contact Dr. James</span>
+            </button>
 
             {/* Lenval-style "Private Audit / Let's Talk" Magnetic Pill Button */}
             <button
@@ -340,8 +356,44 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
+          {/* Dr. Babu James Managing Director Block inside Drawer */}
+          <div className="bg-[#1E1716] border border-[#302826] rounded-2xl p-4 sm:p-5 my-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <ArielLogo size="sm" showSubtitle={false} />
+              <div>
+                <div className="text-[10px] uppercase font-mono tracking-widest text-[#B88A58]">
+                  Managing Director · Ariel Group of Companies
+                </div>
+                <div className="text-sm text-[#FAF7F2] font-serif font-medium">
+                  Dr. B. James, PhD (Mr. Babu James)
+                </div>
+                <div className="text-[10px] text-[#8C857E] font-mono mt-0.5">
+                  Mobile: +65 9855 1924 · Office: +65 6908 4338 · Singapore
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <a
+                href="https://wa.me/6598551924?text=Hello%20Dr.%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 sm:flex-none text-center px-4 py-2 rounded-full bg-emerald-500 text-[#14100F] text-xs font-sans font-semibold hover:bg-emerald-400 transition-all flex items-center justify-center gap-1.5"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>WhatsApp Dr. James</span>
+              </a>
+              <a
+                href="tel:+6598551924"
+                className="px-3.5 py-2 rounded-full border border-[#302826] text-xs font-sans text-[#FAF7F2] hover:border-[#8C5E3C] transition-all flex items-center gap-1.5"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call</span>
+              </a>
+            </div>
+          </div>
+
           {/* Novero Agency Block inside Drawer */}
-          <div className="bg-[#211A19] border border-[#302826] rounded-2xl p-4 sm:p-5 my-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-[#211A19] border border-[#302826] rounded-2xl p-4 sm:p-5 my-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <NoveroLogo size="md" />
               <div>

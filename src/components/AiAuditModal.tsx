@@ -3,6 +3,7 @@ import { AiAuditReport, CurrencyCode, JurisdictionCode, PropertyInputs, Property
 import { JURISDICTIONS } from '../data/jurisdictions';
 import { formatCurrency, formatPercent } from '../utils/finance';
 import { X, Sparkles, Printer, ShieldCheck, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
+import { CountryFlag } from './CountryFlag';
 
 interface AiAuditModalProps {
   onClose: () => void;
@@ -38,8 +39,10 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
             <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#FAF7F2] tracking-tight">
               {auditReport.headline}
             </h3>
-            <p className="text-xs text-[#A39E98] mt-1 font-sans font-light">
-              Algorithmic institutional review for {jur.flag} {jur.name} real estate acquisition. Verified 100% mathematical integrity.
+            <p className="text-xs text-[#A39E98] mt-1 font-sans font-light flex items-center gap-1.5">
+              <span>Algorithmic institutional review for</span>
+              <CountryFlag code={currentJurisdiction} size="xs" />
+              <span>{jur.name} real estate acquisition. Verified 100% mathematical integrity.</span>
             </p>
           </div>
 
@@ -94,9 +97,11 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
 
           {/* Tax Strategy & Legal Framework */}
           <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-6 sm:p-7 space-y-2">
-            <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E] flex items-center gap-1.5">
+            <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E] flex items-center gap-2">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Jurisdiction Tax Shield &amp; Optimization Strategy ({jur.flag} {jur.name})</span>
+              <span>Jurisdiction Tax Shield &amp; Optimization Strategy</span>
+              <CountryFlag code={currentJurisdiction} size="xs" />
+              <span>({jur.name})</span>
             </div>
             <p className="text-xs text-[#FAF7F2] leading-relaxed font-sans font-light">
               {auditReport.taxStrategy}

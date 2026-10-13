@@ -26,8 +26,8 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       number: '02',
       title: 'Statutory Tax Shields & Cross-Border Jurisdictions',
       category: 'Sovereign Tax Law',
-      desc: 'Precision localized logic across 🇸🇬 Singapore (0% CGT), 🇲🇾 Malaysia (0% RPGT after 5 yrs), 🇦🇪 Dubai (0% tax & Golden Visa), 🇺🇸 United States (27.5-yr depreciation & 1031 Exchange), and 🇮🇳 India (Budget 2024 unified LTCG).',
-      img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+      desc: 'Precision localized logic across Singapore (0% CGT), Malaysia (0% RPGT after 5 yrs), Dubai (0% tax & Golden Visa), United States (27.5-yr depreciation & 1031 Exchange), and India (Budget 2024 unified LTCG).',
+      img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Compare Jurisdictions',
       onClick: onOpenCompare,
     },
@@ -36,7 +36,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
       title: 'The 45-Calculator Wealth & Solvency Suite',
       category: 'Comprehensive Wealth',
       desc: 'From systematic equity compounding (SIP, Step-up SIP, CAGR, XIRR) to retirement runway solvency (4% rule, corpus solver), debt-to-income (DTI), and take-home compensation engineering.',
-      img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
+      img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1200&q=80',
       actionLabel: 'Browse All 45 Tools',
       onClick: onOpenDirectory,
     },
@@ -44,7 +44,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
 
   return (
     <section className="relative bg-[#191514] text-[#FAF7F2] py-24 sm:py-32 border-b border-[#302826] overflow-hidden">
-      {/* Ambient Liquid Caustic Glow */}
+      {/* Ambient Caustic Glow */}
       <div className="absolute top-1/3 -right-32 w-96 h-96 bg-[#8C5E3C]/10 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10">
@@ -61,7 +61,7 @@ export const WhatsInsideSection: React.FC<WhatsInsideSectionProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-[#A39E98] max-w-md font-sans font-light leading-relaxed">
-            Every module unites the gravitas of multi-asset private wealth management with modern liquid-glass computational precision.
+            Every module unites the gravitas of multi-asset private wealth management with institutional computational precision and sovereign statutory rigor.
           </p>
         </div>
 
