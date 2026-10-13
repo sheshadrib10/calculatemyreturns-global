@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CurrencyCode, JurisdictionCode } from '../types';
 import { CALCULATORS_CATALOG } from '../data/calculatorsList';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
 import { executeQuickCalculator } from '../utils/finance';
-import { X, Copy, Check } from 'lucide-react';
+import { fetchLiveMarketRates, LiveMarketRates } from '../services/liveRatesService';
+import { X, Copy, Check, RefreshCw } from 'lucide-react';
 import { CountryFlag } from './CountryFlag';
 
 interface InteractiveModalCalculatorProps {
@@ -185,6 +186,40 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
   const [p3Str, setP3Str] = useState<string>(() => (config.p3 ? String(config.p3.defaultVal) : '10'));
   const [copied, setCopied] = useState(false);
 
+  // Live rate state pulled from internet
+  const [liveRates, setLiveRates] = useState<LiveMarketRates | null>(null);
+  const [isSyncingLive, setIsSyncingLive] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setIsSyncingLive(true);
+    fetchLiveMarketRates(currentJurisdiction)
+      .then((rates) => {
+        if (!isMounted) return;
+        setLiveRates(rates);
+        setIsSyncingLive(false);
+
+        // Prepopulate rate parameters if this calculator uses interest/returns
+        if (calcId === 'home-loan-emi' || calcId === 'car-loan' || calcId === 'loan-refinance') {
+          setP2Str(String(rates.benchmarkMortgageRate));
+        } else if (calcId === 'sip' || calcId === 'stepup-sip' || calcId === 'compound-interest') {
+          setP2Str(String(rates.equityBenchmarkCagr));
+        } else if (calcId === 'inflation') {
+          setP2Str(String(rates.headlineInflation));
+        } else if (calcId === 'fd-rd' || calcId === 'swp') {
+          if (calcId === 'swp') setP3Str(String(rates.sovereign10YYield));
+          else setP2Str(String(rates.sovereign10YYield));
+        }
+      })
+      .catch(() => {
+        if (isMounted) setIsSyncingLive(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [calcId, currentJurisdiction]);
+
   // Parse safe numbers with fallback
   const parseSafe = (val: string, fallback: number): number => {
     if (!val || val.trim() === '') return fallback;
@@ -302,6 +337,18 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
                 <div className="text-xs sm:text-sm font-mono font-medium text-[#FAF7F2] mt-0.5 truncate">{d.value}</div>
               </div>
             ))}
+          </div>
+
+          {/* Live Internet Sync Banner */}
+          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#191514] border border-[#302826] text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
+              <span className="text-[#FAF7F2] font-medium">Live Benchmark Rates Synced</span>
+              <span className="text-[#8C857E] hidden sm:inline">· {liveRates?.source || jur.name}</span>
+            </div>
+            <span className="text-[10px] text-[#A39E98]">
+              {isSyncingLive ? 'Syncing...' : 'Client Adjustable'}
+            </span>
           </div>
 
           {/* Interactive Parameters Controls */}
@@ -458,7 +505,7 @@ export const InteractiveModalCalculator: React.FC<InteractiveModalCalculatorProp
               onClick={handleCopy}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#302826] bg-[#211A19] text-xs text-[#FAF7F2] hover:border-[#8C5E3C] transition-all"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-[#B88A58]" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
 

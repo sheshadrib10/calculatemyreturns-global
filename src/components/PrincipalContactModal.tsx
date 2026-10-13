@@ -40,16 +40,16 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
           
           <div className="p-5 sm:p-6 rounded-2xl liquid-glass border border-white/10 space-y-2">
             <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#B88A58]">
-              Managing Director &amp; Founder
+              Owner &amp; Managing Director
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#FAF7F2] tracking-tight">
-              Dr. B. James, PhD
+              Mr. Babu James
             </h3>
             <p className="text-xs text-[#C4BCB5] font-sans font-light">
-              Managing Director · Ariel Group of Companies
+              Dr. B. James, PhD · Managing Director, Ariel Group of Companies
             </p>
             <p className="text-xs text-[#8C857E] pt-2 font-light leading-relaxed">
-              For private placement advisory, commercial asset underwriting, institutional capital allocation, or custom cross-border matrices, connect directly with our Managing Director.
+              For private wealth advisory, institutional capital allocation, sovereign asset underwriting, or cross-border portfolio structuring, connect directly with Mr. Babu James.
             </p>
           </div>
 
@@ -57,17 +57,17 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* WhatsApp */}
             <a
-              href="https://wa.me/6598551924?text=Hello%20Dr.%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments%20portfolio."
+              href="https://wa.me/6598551924?text=Hello%20Mr.%20Babu%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments%20portfolio."
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 hover:border-emerald-400 text-left transition-all group flex items-center gap-3.5"
+              className="p-4 rounded-2xl bg-[#211A19] border border-[#3E3330] hover:border-[#B88A58] text-left transition-all group flex items-center gap-3.5"
             >
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-[#2E2421] text-[#B88A58] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div className="truncate">
-                <div className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">
-                  Instant WhatsApp
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#B88A58]">
+                  Direct WhatsApp
                 </div>
                 <div className="text-xs sm:text-sm font-semibold text-[#FAF7F2] truncate mt-0.5">
                   +65 9855 1924
@@ -80,7 +80,7 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
               href="tel:+6598551924"
               className="p-4 rounded-2xl liquid-glass border border-white/10 hover:border-[#8C5E3C] text-left transition-all group flex items-center gap-3.5"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#2E2421] text-[#B88A58] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-[#2E2421] text-[#FAF7F2] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                 <Phone className="w-5 h-5" />
               </div>
               <div className="truncate">
@@ -122,7 +122,7 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
                   href="https://www.ariel.sg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                  className="font-mono text-[#B88A58] hover:underline flex items-center gap-1"
                 >
                   <span>www.ariel.sg</span>
                   <ExternalLink className="w-3 h-3" />
@@ -144,7 +144,7 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
           {/* Institutional Quality Accreditations */}
           <div>
             <div className="text-[10px] font-mono uppercase tracking-wider text-[#8C857E] mb-2 flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#B88A58]" />
               <span>Singapore &amp; International Accreditations</span>
             </div>
             <div className="flex flex-wrap gap-2 text-[10px] font-mono">
@@ -157,7 +157,7 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
               <span className="px-2.5 py-1 rounded-lg bg-[#211A19] border border-[#302826] text-[#FAF7F2]">
                 ISO 14001 Environmental
               </span>
-              <span className="px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 font-semibold">
+              <span className="px-2.5 py-1 rounded-lg bg-[#211A19] border border-[#3E3330] text-[#FAF7F2]">
                 bizSAFE Star Recognised
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-[#211A19] border border-[#302826] text-[#B88A58]">
@@ -179,13 +179,13 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
 
           <div className="flex items-center gap-2">
             <a
-              href="https://wa.me/6598551924?text=Hello%20Dr.%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments%20portfolio."
+              href="https://wa.me/6598551924?text=Hello%20Mr.%20Babu%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments%20portfolio."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#14100F] font-semibold text-xs font-sans transition-all flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-[#B88A58] hover:bg-[#C5A880] text-[#14100F] font-semibold text-xs font-sans transition-all flex items-center gap-1.5"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>WhatsApp Dr. James</span>
+              <span>WhatsApp Mr. Babu James</span>
             </a>
 
             <button
@@ -201,3 +201,4 @@ export const PrincipalContactModal: React.FC<PrincipalContactModalProps> = ({
     </div>
   );
 };
+

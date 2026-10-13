@@ -34,15 +34,15 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
           <div className="pr-3">
             <div className="flex items-center gap-2 text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E] mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#B88A58]" />
-              <span className="truncate">Ariel AI · Private Placement Memorandum</span>
+              <span className="truncate">Ariel Investments · Executive Placement Memorandum</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#FAF7F2] tracking-tight">
               {auditReport.headline}
             </h3>
             <p className="text-xs text-[#A39E98] mt-1 font-sans font-light flex items-center gap-1.5">
-              <span>Algorithmic institutional review for</span>
+              <span>Deterministic institutional review for</span>
               <CountryFlag code={currentJurisdiction} size="xs" />
-              <span>{jur.name} real estate acquisition. Verified 100% mathematical integrity.</span>
+              <span>{jur.name} real estate acquisition. Verified statutory tax and yield math.</span>
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
               </div>
               <div>
                 <span className="text-[10px] font-mono text-[#8C857E]">Annualized IRR</span>
-                <div className="text-xl font-serif text-emerald-400 mt-0.5">{formatPercent(results.irr)}</div>
+                <div className="text-xl font-serif text-[#C5A880] mt-0.5">{formatPercent(results.irr)}</div>
               </div>
               <div>
                 <span className="text-[10px] font-mono text-[#8C857E]">Equity Multiple</span>
@@ -98,7 +98,7 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
           {/* Tax Strategy & Legal Framework */}
           <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-6 sm:p-7 space-y-2">
             <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#8C857E] flex items-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#B88A58]" />
               <span>Jurisdiction Tax Shield &amp; Optimization Strategy</span>
               <CountryFlag code={currentJurisdiction} size="xs" />
               <span>({jur.name})</span>
@@ -137,14 +137,14 @@ export const AiAuditModal: React.FC<AiAuditModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {/* Key Advantages */}
             <div className="p-6 rounded-3xl bg-[#211A19] border border-[#302826] space-y-3">
-              <div className="text-xs font-sans uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-1.5">
+              <div className="text-xs font-sans uppercase tracking-[0.2em] text-[#B88A58] flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5" />
                 <span>Primary Deal Strengths</span>
               </div>
               <ul className="text-xs text-[#FAF7F2] space-y-2 font-light">
                 {auditReport.keyAdvantages.map((adv, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-emerald-400">✓</span>
+                    <span className="text-[#B88A58]">✓</span>
                     <span>{adv}</span>
                   </li>
                 ))}

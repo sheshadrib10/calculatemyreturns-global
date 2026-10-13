@@ -145,6 +145,30 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     defaultRent: 280000,
     rentStep: 5000,
   },
+  NZD: {
+    code: 'NZD',
+    symbol: 'NZ$',
+    name: 'New Zealand Dollar',
+    locale: 'en-NZ',
+    countryName: 'New Zealand',
+    flag: '🇳🇿',
+    defaultPrice: 850000,
+    priceStep: 25000,
+    defaultRent: 2800,
+    rentStep: 50,
+  },
+  LKR: {
+    code: 'LKR',
+    symbol: 'Rs ',
+    name: 'Sri Lankan Rupee',
+    locale: 'en-LK',
+    countryName: 'Sri Lanka',
+    flag: '🇱🇰',
+    defaultPrice: 45000000,
+    priceStep: 1000000,
+    defaultRent: 180000,
+    rentStep: 5000,
+  },
 };
 
 export const JURISDICTIONS: Record<JurisdictionCode, JurisdictionTaxRules> = {
@@ -657,6 +681,163 @@ export const JURISDICTIONS: Record<JurisdictionCode, JurisdictionTaxRules> = {
         cgtAmount: Math.round(cgt),
         effectiveRate,
         notes: '25% estimated effective CGT (50% inclusion rate at marginal tax rate).',
+      };
+    },
+  },
+
+  CH: {
+    code: 'CH',
+    name: 'Switzerland',
+    currency: 'CHF',
+    flag: '🇨🇭',
+    tagline: 'Sovereign Swiss Franc Safe-Haven & Tapered Exit Regime',
+    stampDutyName: 'Cantonal Transfer Tax (Handänderungssteuer) & Notary',
+    buyerStatusOptions: [
+      { id: 'citizen', label: 'Swiss Citizen', desc: 'Unrestricted freehold acquisition across all 26 cantons' },
+      { id: 'pr', label: 'C-Permit Holder', desc: 'Treated identically to Swiss citizens for real estate acquisition' },
+      { id: 'foreigner', label: 'Foreign Buyer (Lex Koller)', desc: 'Restricted by Lex Koller quotas to designated holiday zones (Valais, Graubünden) or commercial real estate' },
+      { id: 'company', label: 'Swiss Holding Entity / AG', desc: 'Corporate ownership with cantonal commercial asset qualification' },
+    ],
+    capitalGainsTaxRateDesc: 'Grundstückgewinnsteuer: Steeply tapered holding tax (up to 50% if held < 1 yr down to 10% after 20+ yrs to eliminate speculation).',
+    rentalIncomeTaxDesc: 'Combined Federal Direct Tax (IFD) + Cantonal/Communal Tax (ICC) with 20% statutory deemed maintenance expense deduction.',
+    keyBenefits: [
+      'Swiss Franc (CHF) unmatched global currency stability and safe-haven reserve status',
+      'No federal inheritance tax for direct descendants in most cantons',
+      'Institutional lease agreements with index-linked inflation protection',
+      'Triple-A rated legal and political jurisdiction with centuries of banking discretion',
+    ],
+    calculateAcquisitionTaxes: (price, status) => {
+      // Cantonal transfer tax varies 1.0% - 3.3% (Zurich 0%, Bern 1.8%, Geneva 3.0%), average ~1.5%
+      const cantonTransferTax = price * 0.015;
+      const landRegistryAndNotary = price * 0.005; // Grundbuch + Notariat ~0.5%
+      const lexKollerPermit = status === 'foreigner' ? 3500 : 0;
+      return {
+        standardStampDuty: Math.round(cantonTransferTax),
+        additionalDuty: Math.round(lexKollerPermit),
+        legalAndAdmin: Math.round(landRegistryAndNotary),
+        totalAcquisitionCosts: Math.round(cantonTransferTax + landRegistryAndNotary + lexKollerPermit),
+        breakdown: [
+          { label: 'Cantonal Transfer Tax (Handänderungssteuer ~1.5% avg)', amount: Math.round(cantonTransferTax), rateStr: '1.5%' },
+          { label: 'Land Registry (Grundbuch) & Public Notary', amount: Math.round(landRegistryAndNotary), rateStr: '0.5%' },
+          ...(status === 'foreigner' ? [{ label: 'Lex Koller Cantonal Authorization Filing', amount: 3500, rateStr: 'Fixed' }] : []),
+        ],
+      };
+    },
+    calculateExitTaxes: (capitalGain, holdingYears) => {
+      let effectiveRate = 0.50;
+      if (holdingYears >= 20) effectiveRate = 0.10;
+      else if (holdingYears >= 15) effectiveRate = 0.14;
+      else if (holdingYears >= 10) effectiveRate = 0.18;
+      else if (holdingYears >= 5) effectiveRate = 0.25;
+      else if (holdingYears >= 2) effectiveRate = 0.35;
+      else if (holdingYears >= 1) effectiveRate = 0.40;
+
+      const cgt = Math.max(0, capitalGain * effectiveRate);
+      return {
+        cgtAmount: Math.round(cgt),
+        effectiveRate,
+        notes: `${Math.round(effectiveRate * 100)}% tapered Grundstückgewinnsteuer (Swiss Cantonal rate decreases from 50% to 10% over holding duration).`,
+      };
+    },
+  },
+
+  LK: {
+    code: 'LK',
+    name: 'Sri Lanka',
+    currency: 'LKR',
+    flag: '🇱🇰',
+    tagline: 'Colombo Port City SEZ & Emerging High-Yield Island Frontier',
+    stampDutyName: 'Provincial Stamp Duty + Land Registry & Notary',
+    buyerStatusOptions: [
+      { id: 'citizen', label: 'Sri Lankan Citizen', desc: 'Standard provincial stamp duty; full freehold ownership nationwide' },
+      { id: 'pr', label: 'Resident Visa / Dual National', desc: 'Full residential property acquisition rights' },
+      { id: 'foreigner', label: 'Foreign Buyer / Port City SEZ', desc: 'Condominiums above 4th floor permitted freehold nationwide; Port City SEZ allows 100% foreign freehold + zero tax incentives' },
+      { id: 'company', label: 'Board of Investment (BOI) Co', desc: 'Corporate SPV with BOI strategic status & tax holiday incentives' },
+    ],
+    capitalGainsTaxRateDesc: '10% Flat CGT under Inland Revenue Act No. 24 of 2017 (0% in Colombo Port City SEZ).',
+    rentalIncomeTaxDesc: 'Progressive resident rate (6%-36%) or non-resident flat rate, with 25% statutory relief for repairs & upkeep.',
+    keyBenefits: [
+      'Colombo Port City SEZ offers zero capital gains tax and zero foreign exchange repatriation controls',
+      'Low entry cost relative to regional hubs with 7%-9% prime hospitality rental yields',
+      'Freehold ownership legally guaranteed for foreigners on condominium developments above 4th floor',
+      'Strategic Indian Ocean maritime corridor experiencing renewed bilateral infrastructure investment',
+    ],
+    calculateAcquisitionTaxes: (price) => {
+      // Provincial stamp duty: 3% on first LKR 100,000 + 4% on balance
+      const firstTier = Math.min(price, 100000);
+      const balance = Math.max(0, price - 100000);
+      const stampDuty = (firstTier * 0.03) + (balance * 0.04);
+      const landRegistry = price * 0.01;
+      const legalNotary = price * 0.01;
+      return {
+        standardStampDuty: Math.round(stampDuty),
+        additionalDuty: 0,
+        legalAndAdmin: Math.round(landRegistry + legalNotary),
+        totalAcquisitionCosts: Math.round(stampDuty + landRegistry + legalNotary),
+        breakdown: [
+          { label: 'Provincial Council Stamp Duty (3% on 1st 100k, 4% on balance)', amount: Math.round(stampDuty), rateStr: '~4.0%' },
+          { label: 'Land Registry Deed Registration Fee', amount: Math.round(landRegistry), rateStr: '1.0%' },
+          { label: 'Notary Public Title & Legal Conveyancing', amount: Math.round(legalNotary), rateStr: '1.0%' },
+        ],
+      };
+    },
+    calculateExitTaxes: (capitalGain) => {
+      const effectiveRate = 0.10;
+      const cgt = Math.max(0, capitalGain * effectiveRate);
+      return {
+        cgtAmount: Math.round(cgt),
+        effectiveRate,
+        notes: '10% flat Capital Gains Tax under Inland Revenue Act No. 24 of 2017 (0% if structured via Port City SEZ).',
+      };
+    },
+  },
+
+  NZ: {
+    code: 'NZ',
+    name: 'New Zealand',
+    currency: 'NZD',
+    flag: '🇳🇿',
+    tagline: 'Zero Stamp Duty & Restored 2-Year Bright-Line 0% CGT',
+    stampDutyName: 'Zero Transfer Stamp Duty (0% NZ Statutory Rate)',
+    buyerStatusOptions: [
+      { id: 'citizen', label: 'New Zealand Citizen', desc: 'Zero stamp duty, unrestricted purchase rights, 100% mortgage interest deductibility restored' },
+      { id: 'pr', label: 'NZ Permanent Resident / Aus Citizen', desc: 'Exempt from Overseas Investment Act (OIA) consent under bilateral trans-Tasman reciprocity' },
+      { id: 'foreigner', label: 'Foreign Buyer (OIA Consent)', desc: 'Governed by Overseas Investment Act (OIA); off-the-plan multi-unit apartment exemption available' },
+      { id: 'company', label: 'Look-Through Company (LTC) / Trust', desc: 'Flow-through tax transparency vehicle for property investors' },
+    ],
+    capitalGainsTaxRateDesc: '0% Capital Gains Tax past 24 months under restored 2-year Bright-Line test (2024 legislation).',
+    rentalIncomeTaxDesc: 'Rental profits taxed at individual marginal rate. Mortgage interest deductibility 80% (2024/25) and 100% fully restored from April 2025 onwards.',
+    keyBenefits: [
+      'Zero Stamp Duty: New Zealand levies 0% transfer duty, 0% mortgage stamp duty, and 0% registration tax',
+      'Restored 2-Year Bright-Line Test: 0% capital gains tax upon sale after just 24 months of ownership',
+      '100% Mortgage Interest Deductibility fully restored under updated tax code',
+      'Strong legal transparency, zero foreign buyer stamp duty surcharges',
+    ],
+    calculateAcquisitionTaxes: (price, status) => {
+      const legalConveyancing = Math.min(Math.max(price * 0.002, 1800), 4000);
+      const oiaFee = status === 'foreigner' ? 2500 : 0;
+      return {
+        standardStampDuty: 0,
+        additionalDuty: oiaFee,
+        legalAndAdmin: Math.round(legalConveyancing),
+        totalAcquisitionCosts: Math.round(legalConveyancing + oiaFee),
+        breakdown: [
+          { label: 'New Zealand Stamp Duty (Statutory Zero Rate)', amount: 0, rateStr: '0.0%' },
+          { label: 'Solicitor Conveyancing & LINZ Title Registration', amount: Math.round(legalConveyancing), rateStr: '~0.2%' },
+          ...(status === 'foreigner' ? [{ label: 'Overseas Investment Office (OIO) Filing Fee', amount: 2500, rateStr: 'Fixed' }] : []),
+        ],
+      };
+    },
+    calculateExitTaxes: (capitalGain, holdingYears) => {
+      const qualifiesForZeroRate = holdingYears >= 2;
+      const effectiveRate = qualifiesForZeroRate ? 0 : 0.39;
+      const cgt = Math.max(0, capitalGain * effectiveRate);
+      return {
+        cgtAmount: Math.round(cgt),
+        effectiveRate,
+        notes: qualifiesForZeroRate
+          ? '0% Capital Gains Tax (Exempt under restored 2-year Bright-Line Test).'
+          : '39% top marginal rate applies if sold within the 2-year Bright-Line holding window.',
       };
     },
   },

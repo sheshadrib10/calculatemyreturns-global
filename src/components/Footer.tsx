@@ -50,22 +50,22 @@ export const Footer: React.FC<FooterProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#2E2421] pb-4">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-[#B88A58]">
-                    Managing Director · Ariel Group of Companies
+                    Owner &amp; Managing Director
                   </span>
                   <div className="font-serif text-2xl font-normal text-[#FAF7F2] mt-0.5">
-                    Dr. B. James, PhD
+                    Mr. Babu James
                   </div>
                   <div className="text-xs text-[#8C857E] font-light">
-                    Mr. Babu James · Singapore Headquarters
+                    Dr. B. James, PhD · Ariel Group of Companies, Singapore
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <a
-                    href="https://wa.me/6598551924?text=Hello%20Dr.%20James,%20I%20am%20enquiring%20about%20Ariel%20Investments%20portfolio."
+                    href="https://wa.me/6598551924?text=Hello%20Mr.%20Babu%20James,%20I%20am%20enquiring%20about%20Ariel%20Investments%20portfolio."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3.5 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#14100F] font-semibold text-xs transition-all flex items-center gap-1.5 shadow-sm"
+                    className="px-3.5 py-1.5 rounded-full bg-[#B88A58] hover:bg-[#C5A880] text-[#14100F] font-semibold text-xs transition-all flex items-center gap-1.5 shadow-sm"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>WhatsApp</span>
@@ -107,7 +107,7 @@ export const Footer: React.FC<FooterProps> = ({
                     href="https://www.ariel.sg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block text-emerald-400 hover:underline"
+                    className="block text-[#B88A58] hover:underline"
                   >
                     www.ariel.sg ↗
                   </a>
@@ -125,13 +125,13 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="px-2 py-0.5 rounded bg-[#191514] border border-[#2E2421]">ISO 9001</span>
                 <span className="px-2 py-0.5 rounded bg-[#191514] border border-[#2E2421]">ISO 45001</span>
                 <span className="px-2 py-0.5 rounded bg-[#191514] border border-[#2E2421]">ISO 14001</span>
-                <span className="px-2 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-500/30">bizSAFE Star</span>
+                <span className="px-2 py-0.5 rounded bg-[#191514] text-[#FAF7F2] border border-[#302826]">bizSAFE Star</span>
                 <span className="px-2 py-0.5 rounded bg-[#191514] border border-[#2E2421]">SME500 Award</span>
               </div>
             </div>
 
-            <div className="pt-2 flex items-center gap-3 text-xs font-mono text-emerald-400">
-              <Lock className="w-4 h-4" />
+            <div className="pt-2 flex items-center gap-3 text-xs font-mono text-[#8C857E]">
+              <Lock className="w-4 h-4 text-[#B88A58]" />
               <span>100% Client-Side Computation · Zero Data Tracked · Strict Confidentiality</span>
             </div>
           </div>
@@ -197,7 +197,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </a>
               </div>
               <div className="text-[11px] text-[#8C857E] font-light mt-0.5 font-sans">
-                Marketing, Customer Experience &amp; Growth Firm · Creative Technology &amp; AI
+                Marketing, Customer Experience &amp; Growth Firm · Creative Technology &amp; Computational Design
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ export const NoveroShowcase: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#302826]">
           <div>
             <div className="flex items-center gap-2.5 text-xs font-sans uppercase tracking-[0.25em] text-[#8C857E] mb-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#B88A58]" />
               <span>Agency of Record · Digital Craftsmanship</span>
             </div>
 
@@ -79,18 +79,18 @@ export const NoveroShowcase: React.FC = () => {
 
           <div className="bg-[#191514] border border-[#302826] rounded-3xl p-7 flex flex-col justify-between">
             <div>
-              <div className="w-10 h-10 rounded-2xl bg-[#211A19] border border-[#302826] flex items-center justify-center text-emerald-400 mb-5">
+              <div className="w-10 h-10 rounded-2xl bg-[#211A19] border border-[#302826] flex items-center justify-center text-[#B88A58] mb-5">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#FAF7F2]">
-                AI &amp; Bespoke Computational Architecture
+                Bespoke Computational &amp; Statutory Architecture
               </h3>
               <p className="mt-3 text-xs text-[#A39E98] leading-relaxed font-sans font-light">
-                Like the Ariel Returns Calculator, our platforms integrate custom mathematical algorithms and intelligent AI copilots that provide flawless accuracy, zero data lag, and institutional trust.
+                Like the Ariel Returns Calculator, our platforms integrate custom mathematical algorithms and sovereign statutory models that provide deterministic accuracy, zero data lag, and institutional trust.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-[#2A2220] text-[11px] font-mono text-emerald-400">
-              Shulo AI · Edge Compute · Cloudflare
+            <div className="mt-6 pt-4 border-t border-[#2A2220] text-[11px] font-mono text-[#B88A58]">
+              Deterministic Engines · Edge Compute · Cloudflare
             </div>
           </div>
 

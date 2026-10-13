@@ -232,14 +232,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Direct Enquiry with Managing Director Dr. Babu James */}
+            {/* Direct Enquiry with Managing Director & Owner Mr. Babu James */}
             <button
               onClick={onOpenPrincipalContact}
-              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-emerald-500/35 bg-emerald-950/30 hover:border-emerald-400 text-emerald-300 text-xs font-sans tracking-wide transition-all shadow-sm"
-              title="Direct Enquiry with Dr. B. James, PhD (Managing Director)"
+              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#3E3330] bg-[#211A19] hover:border-[#8C5E3C] hover:bg-[#2A211E] text-[#FAF7F2] text-xs font-sans tracking-wide transition-all shadow-sm"
+              title="Direct Enquiry with Mr. Babu James (Owner & Managing Director)"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Contact Dr. James</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
+              <span>Contact Mr. Babu James</span>
             </button>
 
             {/* Lenval-style "Private Audit / Let's Talk" Magnetic Pill Button */}
@@ -351,21 +351,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="font-serif text-4xl sm:text-6xl text-left text-[#8C5E3C] hover:text-[#FAF7F2] transition-colors"
               >
-                05. Launch Ariel AI Audit
+                05. Private Underwriting Memorandum
               </button>
             </div>
           </div>
 
-          {/* Dr. Babu James Managing Director Block inside Drawer */}
+          {/* Mr. Babu James Managing Director Block inside Drawer */}
           <div className="bg-[#1E1716] border border-[#302826] rounded-2xl p-4 sm:p-5 my-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <ArielLogo size="sm" showSubtitle={false} />
               <div>
                 <div className="text-[10px] uppercase font-mono tracking-widest text-[#B88A58]">
-                  Managing Director · Ariel Group of Companies
+                  Owner &amp; Managing Director · Ariel Group of Companies
                 </div>
                 <div className="text-sm text-[#FAF7F2] font-serif font-medium">
-                  Dr. B. James, PhD (Mr. Babu James)
+                  Mr. Babu James (Dr. B. James, PhD)
                 </div>
                 <div className="text-[10px] text-[#8C857E] font-mono mt-0.5">
                   Mobile: +65 9855 1924 · Office: +65 6908 4338 · Singapore
@@ -374,13 +374,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <a
-                href="https://wa.me/6598551924?text=Hello%20Dr.%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments."
+                href="https://wa.me/6598551924?text=Hello%20Mr.%20Babu%20James,%20I%20would%20like%20to%20enquire%20about%20Ariel%20Investments."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 sm:flex-none text-center px-4 py-2 rounded-full bg-emerald-500 text-[#14100F] text-xs font-sans font-semibold hover:bg-emerald-400 transition-all flex items-center justify-center gap-1.5"
+                className="flex-1 sm:flex-none text-center px-4 py-2 rounded-full bg-[#B88A58] text-[#14100F] text-xs font-sans font-medium hover:bg-[#C5A880] transition-all flex items-center justify-center gap-1.5"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
-                <span>WhatsApp Dr. James</span>
+                <span>WhatsApp Mr. Babu James</span>
               </a>
               <a
                 href="tel:+6598551924"
@@ -434,7 +434,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-6">
               <span>Zero-Storage Privacy</span>
               <span>No Cookies / No Tracking</span>
-              <span className="text-emerald-400">● 100% Client-Side</span>
+              <span className="text-[#B88A58]">● 100% Client-Side</span>
             </div>
           </div>
 

@@ -1,4 +1,18 @@
-export type CurrencyCode = 'SGD' | 'MYR' | 'INR' | 'AED' | 'USD' | 'GBP' | 'AUD' | 'CAD' | 'EUR' | 'CHF' | 'HKD' | 'JPY';
+export type CurrencyCode =
+  | 'SGD'
+  | 'MYR'
+  | 'INR'
+  | 'AED'
+  | 'USD'
+  | 'GBP'
+  | 'AUD'
+  | 'CAD'
+  | 'EUR'
+  | 'CHF'
+  | 'HKD'
+  | 'JPY'
+  | 'NZD'
+  | 'LKR';
 
 export interface CurrencyConfig {
   code: CurrencyCode;
@@ -13,7 +27,7 @@ export interface CurrencyConfig {
   rentStep: number;
 }
 
-export type JurisdictionCode = 'SG' | 'MY' | 'IN' | 'AE' | 'US' | 'GB' | 'AU' | 'CA';
+export type JurisdictionCode = 'SG' | 'MY' | 'IN' | 'AE' | 'US' | 'GB' | 'AU' | 'CA' | 'CH' | 'LK' | 'NZ';
 
 export type BuyerStatus = 'citizen' | 'pr' | 'foreigner' | 'company';
 

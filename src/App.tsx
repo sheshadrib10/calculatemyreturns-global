@@ -190,7 +190,7 @@ export const App: React.FC = () => {
             rel="noopener noreferrer"
             className="flex items-center gap-2"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
             <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-widest text-[#8C857E] group-hover:text-[#D9D3CE] transition-colors">
               Powered &amp; Built by
             </span>

@@ -34,9 +34,9 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Cinematic Full-Bleed Background (Ultra-Luxury Private Aviation on Tarmac with Boarding Stairs) */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://plus.unsplash.com/premium_photo-1754214178965-0d1dd64c934b?fm=jpg&w=2160&auto=format&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1684838200815-36eef38f353c?auto=format&fit=crop&w=2160&q=80"
           alt="Ariel Private Aviation and Sovereign Wealth"
-          className="w-full h-full object-cover object-center filter brightness-[0.44] contrast-[1.12] scale-105 animate-in fade-in duration-1000"
+          className="w-full h-full object-cover object-center filter brightness-[0.46] contrast-[1.1] scale-105 animate-in fade-in duration-1000"
         />
         {/* Top and Bottom Lenval Gradient Fades */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#191514] via-[#191514]/45 to-[#191514]/85" />
@@ -52,20 +52,28 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-sans uppercase tracking-[0.2em] text-[#E5DFD9] font-medium">
           <span className="inline-flex items-center gap-1.5"><CountryFlag code="SG" size="xs" /> Singapore</span>
           <span className="text-[#8C857E]">·</span>
-          <span className="inline-flex items-center gap-1.5"><CountryFlag code="MY" size="xs" /> Malaysia</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="CH" size="xs" /> Zurich</span>
           <span className="text-[#8C857E]">·</span>
           <span className="inline-flex items-center gap-1.5"><CountryFlag code="AE" size="xs" /> Dubai</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="AU" size="xs" /> Sydney</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="NZ" size="xs" /> Auckland</span>
           <span className="text-[#8C857E]">·</span>
           <span className="inline-flex items-center gap-1.5"><CountryFlag code="GB" size="xs" /> London</span>
           <span className="text-[#8C857E]">·</span>
           <span className="inline-flex items-center gap-1.5"><CountryFlag code="US" size="xs" /> New York</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="MY" size="xs" /> Malaysia</span>
+          <span className="text-[#8C857E]">·</span>
+          <span className="inline-flex items-center gap-1.5"><CountryFlag code="LK" size="xs" /> Colombo</span>
           <span className="text-[#8C857E]">·</span>
           <span className="inline-flex items-center gap-1.5"><CountryFlag code="IN" size="xs" /> Mumbai</span>
         </div>
 
         {/* Prominent Powered & Built by Novero Attribution */}
         <div className="mt-3 sm:mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#191514]/85 backdrop-blur-md border border-[#FAF7F2]/20 hover:border-[#8C5E3C] transition-all shadow-lg group">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B88A58]" />
           <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-[#D9D3CE]">
             Powered &amp; Built by
           </span>
@@ -186,21 +194,29 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="font-serif text-base sm:text-lg text-[#FAF7F2] mt-1 truncate">
               {currentJurisdiction === 'SG' || currentJurisdiction === 'AE'
                 ? '0% Exit Capital Gains'
+                : currentJurisdiction === 'NZ'
+                ? '0% Stamp Duty · 0% CGT'
+                : currentJurisdiction === 'CH'
+                ? 'Lex Koller · CHF Haven'
+                : currentJurisdiction === 'LK'
+                ? '10% CGT · Port City SEZ'
+                : currentJurisdiction === 'AU'
+                ? '50% CGT Discount (>12m)'
                 : currentJurisdiction === 'MY'
                 ? '0% RPGT after 5 Years'
                 : currentJurisdiction === 'IN'
                 ? '12.5% Budget 2024 LTCG'
                 : '27.5-Yr US Tax Shelter'}
             </div>
-            <div className="text-[10px] sm:text-[11px] font-mono text-emerald-400 mt-0.5">Verified Legal Model</div>
+            <div className="text-[10px] sm:text-[11px] font-mono text-[#B88A58] mt-0.5">Verified Legal Model</div>
           </div>
 
           <div className="border-t lg:border-t-0 pt-3 lg:pt-0">
             <div className="text-[9px] sm:text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C857E]">
               Data Privacy
             </div>
-            <div className="font-serif text-base sm:text-lg text-emerald-400 mt-1 flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5" />
+            <div className="font-serif text-base sm:text-lg text-[#FAF7F2] mt-1 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#B88A58]" />
               <span>Zero-Storage</span>
             </div>
             <div className="text-[10px] sm:text-[11px] font-mono text-[#8C857E] mt-0.5">No Tracking · Client-Side</div>

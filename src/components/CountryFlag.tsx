@@ -11,6 +11,8 @@ export type SupportedCountryCode =
   | 'AU'
   | 'CA'
   | 'CH'
+  | 'LK'
+  | 'NZ'
   | 'EU'
   | 'HK'
   | 'JP'
@@ -43,6 +45,8 @@ export const CountryFlag: React.FC<CountryFlagProps> = ({
     : normalized === 'CAD' ? 'CA'
     : normalized === 'EUR' ? 'EU'
     : normalized === 'CHF' ? 'CH'
+    : normalized === 'LKR' ? 'LK'
+    : normalized === 'NZD' ? 'NZ'
     : normalized === 'HKD' ? 'HK'
     : normalized === 'JPY' ? 'JP'
     : normalized;
@@ -66,6 +70,8 @@ export const CountryFlag: React.FC<CountryFlagProps> = ({
     : countryCode === 'AU' ? 'Australia Flag'
     : countryCode === 'CA' ? 'Canada Flag'
     : countryCode === 'CH' ? 'Switzerland Flag'
+    : countryCode === 'LK' ? 'Sri Lanka Flag'
+    : countryCode === 'NZ' ? 'New Zealand Flag'
     : countryCode === 'EU' ? 'European Union Flag'
     : countryCode === 'HK' ? 'Hong Kong Flag'
     : countryCode === 'JP' ? 'Japan Flag'
@@ -320,9 +326,114 @@ export const CountryFlag: React.FC<CountryFlagProps> = ({
           </g>
         )}
 
+        {/* Sri Lanka (LK) */}
+        {countryCode === 'LK' && (
+          <g>
+            {/* Outer Gold Border */}
+            <rect width="640" height="480" fill="#FFBE29" />
+            {/* Teal Green Vertical Stripe (Muslim minority) */}
+            <rect x="30" y="30" width="70" height="420" fill="#005F41" />
+            {/* Saffron Orange Vertical Stripe (Tamil minority) */}
+            <rect x="106" y="30" width="70" height="420" fill="#EB7400" />
+            {/* Gold separator between stripes and maroon field */}
+            <rect x="182" y="30" width="12" height="420" fill="#FFBE29" />
+            {/* Crimson/Maroon Field */}
+            <rect x="200" y="30" width="410" height="420" fill="#8D153A" />
+            {/* 4 Bo Leaves (Pip) in corners of maroon field */}
+            <path d="M225,55 C240,65 240,85 225,95 C215,85 215,65 225,55 Z" fill="#FFBE29" />
+            <path d="M585,55 C600,65 600,85 585,95 C575,85 575,65 585,55 Z" fill="#FFBE29" />
+            <path d="M225,415 C240,405 240,385 225,375 C215,385 215,405 225,415 Z" fill="#FFBE29" />
+            <path d="M585,415 C600,405 600,385 585,375 C575,385 575,405 585,415 Z" fill="#FFBE29" />
+            {/* Golden Royal Lion (Sinha) holding Kastane Sword */}
+            <g transform="translate(370, 210) scale(1.1)">
+              {/* Lion body */}
+              <ellipse cx="25" cy="40" rx="42" ry="26" fill="#FFBE29" />
+              {/* Lion head & mane */}
+              <circle cx="65" cy="22" r="24" fill="#FFBE29" />
+              <path d="M75,8 C85,15 88,32 78,40 C68,36 68,18 75,8 Z" fill="#FFBE29" />
+              {/* Eye */}
+              <circle cx="72" cy="18" r="3" fill="#8D153A" />
+              {/* Open roaring mouth & nose */}
+              <path d="M80,24 L90,26 L82,32 Z" fill="#FFBE29" />
+              {/* Forepaws */}
+              <rect x="42" y="55" width="10" height="35" rx="5" fill="#FFBE29" />
+              <rect x="58" y="52" width="10" height="38" rx="5" fill="#FFBE29" />
+              {/* Hind legs */}
+              <rect x="-8" y="52" width="12" height="38" rx="6" fill="#FFBE29" />
+              <rect x="10" y="55" width="11" height="35" rx="5" fill="#FFBE29" />
+              {/* Curved Tail holding aloft */}
+              <path d="M-15,40 C-35,30 -35,-10 -5,-5 C-12,5 -18,20 -15,40 Z" fill="#FFBE29" />
+              <circle cx="-5" cy="-8" r="8" fill="#FFBE29" />
+              {/* Raised Right Forepaw holding upright Sword (Kastane) */}
+              <path d="M68,30 L78,10 L86,14 L75,34 Z" fill="#FFBE29" />
+              {/* Sword blade & hilt */}
+              <rect x="80" y="-30" width="6" height="52" fill="#FFBE29" rx="2" />
+              <polygon points="83,-38 79,-30 87,-30" fill="#FFBE29" />
+              <rect x="74" y="14" width="18" height="5" fill="#FFBE29" rx="1.5" />
+            </g>
+          </g>
+        )}
+
+        {/* New Zealand (NZ) */}
+        {countryCode === 'NZ' && (
+          <g>
+            {/* Royal Navy Blue Field */}
+            <rect width="640" height="480" fill="#00247D" />
+            {/* Mini Union Jack in upper hoist quadrant */}
+            <g transform="scale(0.5)">
+              <rect width="640" height="480" fill="#012169" />
+              <line x1="0" y1="0" x2="640" y2="480" stroke="#FFFFFF" strokeWidth="80" />
+              <line x1="640" y1="0" x2="0" y2="480" stroke="#FFFFFF" strokeWidth="80" />
+              <line x1="0" y1="0" x2="640" y2="480" stroke="#C8102E" strokeWidth="48" />
+              <line x1="640" y1="0" x2="0" y2="480" stroke="#C8102E" strokeWidth="48" />
+              <rect x="256" width="128" height="480" fill="#FFFFFF" />
+              <rect y="176" width="640" height="128" fill="#FFFFFF" />
+              <rect x="272" width="96" height="480" fill="#C8102E" />
+              <rect y="192" width="640" height="96" fill="#C8102E" />
+            </g>
+            {/* Southern Cross constellation (4 Red 5-Pointed Stars with White Outlines) */}
+            {/* Gacrux (Top) */}
+            <g transform="translate(480, 95)">
+              <polygon
+                points="0,-26 8,-8 26,-8 12,4 17,22 0,11 -17,22 -12,4 -26,-8 -8,-8"
+                fill="#CC142B"
+                stroke="#FFFFFF"
+                strokeWidth="4.5"
+              />
+            </g>
+            {/* Acrux (Bottom) */}
+            <g transform="translate(480, 385)">
+              <polygon
+                points="0,-30 9,-9 30,-9 14,5 19,25 0,13 -19,25 -14,5 -30,-9 -9,-9"
+                fill="#CC142B"
+                stroke="#FFFFFF"
+                strokeWidth="5"
+              />
+            </g>
+            {/* Becrux / Mimosa (Left) */}
+            <g transform="translate(405, 220)">
+              <polygon
+                points="0,-26 8,-8 26,-8 12,4 17,22 0,11 -17,22 -12,4 -26,-8 -8,-8"
+                fill="#CC142B"
+                stroke="#FFFFFF"
+                strokeWidth="4.5"
+              />
+            </g>
+            {/* Delta Crucis (Right) */}
+            <g transform="translate(555, 185)">
+              <polygon
+                points="0,-22 7,-7 22,-7 10,3 14,18 0,9 -14,18 -10,3 -22,-7 -7,-7"
+                fill="#CC142B"
+                stroke="#FFFFFF"
+                strokeWidth="4"
+              />
+            </g>
+          </g>
+        )}
+
         {/* Default / Fallback: Gold sovereign crest */}
         {![
-          'SG', 'MY', 'IN', 'AE', 'US', 'GB', 'UK', 'AU', 'CA', 'CH', 'EU', 'JP', 'HK',
+          'SG', 'MY', 'IN', 'AE', 'US', 'GB', 'UK', 'AU', 'CA', 'CH', 'LK', 'NZ', 'EU', 'JP', 'HK',
         ].includes(countryCode) && (
           <g>
             <rect width="640" height="480" fill="#211A19" />

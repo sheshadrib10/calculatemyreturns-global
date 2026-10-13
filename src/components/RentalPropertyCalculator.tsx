@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BuyerStatus, CurrencyCode, JurisdictionCode, PropertyInputs } from '../types';
 import { CURRENCIES, JURISDICTIONS } from '../data/jurisdictions';
 import { formatCurrency, formatPercent, simulatePropertyInvestment } from '../utils/finance';
-import { generateDeterministicAiAudit, queryAuraAi } from '../utils/aiAdvisory';
+import { generateDeterministicAiAudit } from '../utils/aiAdvisory';
+import { fetchLiveMarketRates, LiveMarketRates } from '../services/liveRatesService';
 import { CountryFlag } from './CountryFlag';
 import {
   Building2,
@@ -13,8 +14,6 @@ import {
   Printer,
   ChevronDown,
   ChevronUp,
-  Send,
-  Loader2,
   ShieldCheck,
   Scale,
   Clock,
@@ -97,18 +96,61 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
   const [fixedYieldStr, setFixedYieldStr] = useState<string>('5.5');
   const [inflationRateStr, setInflationRateStr] = useState<string>('3.0');
 
-  // Sync illustrative defaults when jurisdiction or currency changes
-  React.useEffect(() => {
+  // Live Market Rates State pulled from internet
+  const [liveRates, setLiveRates] = useState<LiveMarketRates | null>(null);
+  const [isSyncingRates, setIsSyncingRates] = useState<boolean>(false);
+  const [rateSyncTime, setRateSyncTime] = useState<string>('');
+  const [isCustomOverridden, setIsCustomOverridden] = useState<boolean>(false);
+
+  // Sync illustrative defaults and pull live returns/rates from internet
+  useEffect(() => {
+    let isMounted = true;
     const defaultP = jur.currency === curr.code ? curr.defaultPrice : 1500000;
     const defaultR = jur.currency === curr.code ? curr.defaultRent : 4500;
-    const defaultRate = currentJurisdiction === 'SG' ? 3.4 : currentJurisdiction === 'MY' ? 4.3 : currentJurisdiction === 'IN' ? 8.5 : currentJurisdiction === 'AE' ? 4.9 : 6.5;
-    const defaultApprec = currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5;
     setPropertyCostStr(String(defaultP));
     setMonthlyRentStr(String(defaultR));
-    setLoanRateStr(String(defaultRate));
-    setAppreciationRateStr(String(defaultApprec));
     setMonthlyMaintenanceStr(String(Math.round(defaultR * 0.12)));
+
+    setIsSyncingRates(true);
+    fetchLiveMarketRates(currentJurisdiction)
+      .then((rates) => {
+        if (!isMounted) return;
+        setLiveRates(rates);
+        setRateSyncTime(rates.timestamp);
+        setIsSyncingRates(false);
+
+        // Auto-populate with live statutory and market returns from internet
+        setLoanRateStr(String(rates.benchmarkMortgageRate));
+        setAppreciationRateStr(String(currentJurisdiction === 'IN' ? 8.0 : currentJurisdiction === 'AE' ? 6.5 : 4.5));
+        setEquityCagrStr(String(rates.equityBenchmarkCagr));
+        setFixedYieldStr(String(rates.sovereign10YYield));
+        setInflationRateStr(String(rates.headlineInflation));
+        setIsCustomOverridden(false);
+      })
+      .catch(() => {
+        if (isMounted) setIsSyncingRates(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [currentJurisdiction, currentCurrency]);
+
+  const handleSyncLiveRates = async () => {
+    setIsSyncingRates(true);
+    try {
+      const rates = await fetchLiveMarketRates(currentJurisdiction);
+      setLiveRates(rates);
+      setRateSyncTime(rates.timestamp);
+      setLoanRateStr(String(rates.benchmarkMortgageRate));
+      setEquityCagrStr(String(rates.equityBenchmarkCagr));
+      setFixedYieldStr(String(rates.sovereign10YYield));
+      setInflationRateStr(String(rates.headlineInflation));
+      setIsCustomOverridden(false);
+    } finally {
+      setIsSyncingRates(false);
+    }
+  };
 
   // Safe parsing helper that falls back gracefully when user temporarily clears an input
   const parseSafe = (val: string, fallback: number = 0): number => {
@@ -131,11 +173,6 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
   // Table expand state
   const [showFullTable, setShowFullTable] = useState<boolean>(false);
-
-  // Inline AI Query state
-  const [aiQuestion, setAiQuestion] = useState<string>('');
-  const [aiResponse, setAiResponse] = useState<string>('');
-  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
 
   // Assemble inputs
   const inputs: PropertyInputs = useMemo(() => ({
@@ -177,27 +214,6 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
   const auditReport = useMemo(() => {
     return generateDeterministicAiAudit(inputs, results, currentJurisdiction);
   }, [inputs, results, currentJurisdiction]);
-
-  // Handle user AI query
-  const handleAskAi = async (promptOverride?: string) => {
-    const query = promptOverride || aiQuestion;
-    if (!query.trim()) return;
-    setIsAiLoading(true);
-    setAiResponse('');
-    try {
-      const answer = await queryAuraAi(query, {
-        inputs,
-        results,
-        jurisdictionCode: currentJurisdiction,
-      });
-      setAiResponse(answer);
-    } catch {
-      setAiResponse('Unable to process AI inquiry. Please refer to verified ledger calculations.');
-    } finally {
-      setIsAiLoading(false);
-      if (!promptOverride) setAiQuestion('');
-    }
-  };
 
   // SVG Chart points calculation
   const chartData = useMemo(() => {
@@ -371,7 +387,49 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               className="px-5 py-2 rounded-full bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans uppercase tracking-[0.1em] font-medium transition-all flex items-center gap-2 shadow-lg"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Executive AI Audit</span>
+              <span>Executive Memorandum</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Live Market Returns & Rates Sync Bar */}
+        <div className="mt-8 liquid-glass rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-[#B88A58]" />
+            <div>
+              <div className="text-xs font-mono text-[#FAF7F2] font-semibold flex items-center gap-2">
+                <span>Live Returns &amp; Sovereign Benchmark Rates Synced</span>
+                <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-[#FAF7F2]/10 text-[#C5A880]">
+                  Internet Feed
+                </span>
+              </div>
+              <div className="text-[11px] font-sans text-[#8C857E] mt-0.5">
+                {liveRates?.source || `${jur.name} Central Bank`} · Synced {rateSyncTime || 'Real-time'} · Fully adjustable by client
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
+              <span className="text-[#8C857E]">Live Mortgage:</span>
+              <span className="text-[#FAF7F2] font-semibold">{liveRates?.benchmarkMortgageRate.toFixed(2)}%</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
+              <span className="text-[#8C857E]">10Y Sovereign:</span>
+              <span className="text-[#FAF7F2] font-semibold">{liveRates?.sovereign10YYield.toFixed(2)}%</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#191514] border border-[#302826]">
+              <span className="text-[#8C857E]">CPI Inflation:</span>
+              <span className="text-[#FAF7F2] font-semibold">{liveRates?.headlineInflation.toFixed(2)}%</span>
+            </div>
+            <button
+              onClick={handleSyncLiveRates}
+              disabled={isSyncingRates}
+              className="px-3.5 py-1.5 rounded-xl bg-[#FAF7F2] text-[#191514] hover:bg-[#FAF7F2]/90 text-xs font-sans font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95 disabled:opacity-50"
+              title="Pull latest live returns and rates from the internet"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 text-[#191514] ${isSyncingRates ? 'animate-spin' : ''}`} />
+              <span>{isSyncingRates ? 'Syncing...' : 'Sync Live Rates'}</span>
             </button>
           </div>
         </div>
@@ -541,7 +599,12 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               {/* Mortgage Rate & Tenure */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#A39E98] mb-1">Mortgage Rate (%)</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs text-[#A39E98]">Mortgage Rate (%)</label>
+                    <span className="text-[10px] font-mono text-[#B88A58]">
+                      {isCustomOverridden ? 'Adjusted' : `Live: ${liveRates?.benchmarkMortgageRate.toFixed(2) || '3.10'}%`}
+                    </span>
+                  </div>
                   <div className="relative">
                     <input
                       type="text"
@@ -552,6 +615,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                         const v = e.target.value;
                         if (v === '' || /^[\d,]*\.?\d*$/.test(v)) {
                           setLoanRateStr(v);
+                          setIsCustomOverridden(true);
                         }
                       }}
                       className="w-full bg-[#191514] border border-[#302826] rounded-2xl px-3 py-2.5 text-base sm:text-xs text-[#FAF7F2] font-mono focus:outline-none focus:border-[#8C5E3C]"
@@ -635,7 +699,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               <div>
                 <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
                   <label>Current Monthly Rent</label>
-                  <span className="font-mono text-emerald-400">{formatCurrency(monthlyRent, currentCurrency)}/mo</span>
+                  <span className="font-mono text-[#FAF7F2]">{formatCurrency(monthlyRent, currentCurrency)}/mo</span>
                 </div>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#8C857E]">
@@ -769,7 +833,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                 <div>
                   <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Monthly Net</div>
                   <div className={`mt-1 font-mono text-base font-semibold ${
-                    results.initialMonthlyCashFlow >= 0 ? 'text-emerald-400' : 'text-[#B88A58]'
+                    results.initialMonthlyCashFlow >= 0 ? 'text-[#FAF7F2]' : 'text-[#B88A58]'
                   }`}>
                     {formatCurrency(results.initialMonthlyCashFlow, currentCurrency)}
                   </div>
@@ -851,8 +915,8 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   </span>
 
                   <div className="flex items-center gap-4 text-[11px] font-mono">
-                    <span className="flex items-center gap-1.5 text-emerald-400">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span className="flex items-center gap-1.5 text-[#FAF7F2]">
+                      <span className="w-2 h-2 rounded-full bg-[#FAF7F2]" />
                       Value
                     </span>
                     <span className="flex items-center gap-1.5 text-[#B88A58]">
@@ -888,7 +952,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
                     <polyline
                       fill="none"
-                      stroke="#059669"
+                      stroke="#FAF7F2"
                       strokeWidth="2.5"
                       points={chartData.propPoints}
                     />
@@ -960,11 +1024,11 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                         <td className="py-2.5 px-3 text-right text-[#B88A58]">
                           {formatCurrency(row.equity, currentCurrency, true)}
                         </td>
-                        <td className="py-2.5 px-3 text-right text-emerald-400">
+                        <td className="py-2.5 px-3 text-right text-[#FAF7F2]">
                           {formatCurrency(row.effectiveRent, currentCurrency, true)}
                         </td>
                         <td className={`py-2.5 pl-3 text-right font-semibold ${
-                          row.netCashFlow >= 0 ? 'text-emerald-400' : 'text-[#B88A58]'
+                          row.netCashFlow >= 0 ? 'text-[#FAF7F2]' : 'text-[#B88A58]'
                         }`}>
                           {formatCurrency(row.netCashFlow, currentCurrency, true)}
                         </td>
@@ -973,81 +1037,6 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                   </tbody>
                 </table>
               </div>
-            </div>
-
-            {/* Ariel AI Advisory Box */}
-            <div className="bg-[#211A19] border border-[#302826] rounded-3xl p-8 space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-[#302826]">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#B88A58]" />
-                  <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#FAF7F2]">
-                    Ariel AI · Localized Real Estate Advisory
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono text-emerald-400">Deterministic Mathematical Guardrails</span>
-              </div>
-
-              {/* Suggestion Chips */}
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleAskAi(`How does ${jur.name}'s tax structure and stamp duty affect my IRR?`)}
-                  className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
-                >
-                  <CountryFlag code={currentJurisdiction} size="xs" />
-                  <span>Analyze {jur.name} Stamp Duty</span>
-                </button>
-                <button
-                  onClick={() => handleAskAi('What happens to monthly cash flow if interest rates rise by 200 bps?')}
-                  className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors"
-                >
-                  Stress Test +2% Rate Spike
-                </button>
-                {currentJurisdiction === 'AE' && (
-                  <button
-                    onClick={() => handleAskAi('Does this property meet the Dubai 10-year Golden Visa requirements?')}
-                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
-                  >
-                    <CountryFlag code="AE" size="xs" />
-                    <span>Golden Visa Eligibility</span>
-                  </button>
-                )}
-                {currentJurisdiction === 'SG' && (
-                  <button
-                    onClick={() => handleAskAi('How can I optimize ABSD in Singapore?')}
-                    className="px-3 py-1.5 rounded-full bg-[#191514] hover:bg-[#2B2220] border border-[#302826] text-[11px] text-[#FAF7F2] transition-colors flex items-center gap-1.5"
-                  >
-                    <CountryFlag code="SG" size="xs" />
-                    <span>Optimize Singapore ABSD</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Input */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={aiQuestion}
-                  onChange={(e) => setAiQuestion(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                  placeholder={`Ask Ariel AI about this ${jur.name} investment deal...`}
-                  className="flex-1 bg-[#191514] border border-[#302826] rounded-2xl px-4 py-3 text-xs text-[#FAF7F2] placeholder-[#8C857E] focus:outline-none focus:border-[#8C5E3C]"
-                />
-                <button
-                  onClick={() => handleAskAi()}
-                  disabled={isAiLoading || !aiQuestion.trim()}
-                  className="px-5 py-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#FAF7F2]/90 text-[#191514] font-medium text-xs flex items-center gap-1.5 transition-all disabled:opacity-50"
-                >
-                  {isAiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                  <span>Ask AI</span>
-                </button>
-              </div>
-
-              {/* Response */}
-              {aiResponse && (
-                <div className="p-5 rounded-2xl bg-[#191514] border border-[#302826] text-xs text-[#FAF7F2] leading-relaxed whitespace-pre-line animate-in fade-in duration-300">
-                  {aiResponse}
-                </div>
-              )}
             </div>
 
           </div>
@@ -1120,7 +1109,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               <div>
                 <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
                   <label>Expected Equity CAGR (%)</label>
-                  <span className="font-mono text-emerald-400 font-semibold">{equityCagrStr}%</span>
+                  <span className="font-mono text-[#FAF7F2] font-semibold">{equityCagrStr}%</span>
                 </div>
                 <input
                   type="range"
@@ -1206,7 +1195,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                       <span className="font-serif text-5xl sm:text-7xl font-normal text-[#FAF7F2] tracking-tight">
                         {formatCurrency(equitySipResults.corpus, currentCurrency, true)}
                       </span>
-                      <span className="text-xs font-mono text-emerald-400 font-semibold">
+                      <span className="text-xs font-mono text-[#C5A880] font-semibold">
                         {equitySipResults.multiple.toFixed(2)}x Growth
                       </span>
                     </div>
@@ -1227,7 +1216,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
                   <div>
                     <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Compounded Gain</div>
-                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
                       +{formatCurrency(equitySipResults.gain, currentCurrency, true)}
                     </div>
                     <div className="text-[10px] text-[#736B65]">Market Return</div>
@@ -1264,7 +1253,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                         <span className="text-[#A39E98]">End of Year {pt.year}</span>
                         <div className="flex items-center gap-4">
                           <span className="text-[#8C857E]">Invested: {formatCurrency(pt.invested, currentCurrency, true)}</span>
-                          <span className="text-emerald-400 font-semibold">Corpus: {formatCurrency(pt.corpus, currentCurrency, true)}</span>
+                          <span className="text-[#FAF7F2] font-semibold">Corpus: {formatCurrency(pt.corpus, currentCurrency, true)}</span>
                         </div>
                       </div>
                     ))}
@@ -1347,7 +1336,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                 <div>
                   <div className="flex justify-between text-xs text-[#A39E98] mb-1">
                     <span>📈 Global Equities &amp; ETFs</span>
-                    <span className="font-mono text-emerald-400 font-semibold">{equityWeight}%</span>
+                    <span className="font-mono text-[#FAF7F2] font-semibold">{equityWeight}%</span>
                   </div>
                   <input
                     type="range"
@@ -1356,7 +1345,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     step={5}
                     value={equityWeight}
                     onChange={(e) => setEquityWeight(Number(e.target.value))}
-                    className="w-full accent-emerald-400 cursor-pointer"
+                    className="w-full accent-[#B88A58] cursor-pointer"
                   />
                 </div>
 
@@ -1379,7 +1368,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                 <div>
                   <div className="flex justify-between text-xs text-[#A39E98] mb-1">
                     <span>🛡️ Sovereign Debt &amp; Fixed Income</span>
-                    <span className="font-mono text-cyan-400 font-semibold">{debtWeight}%</span>
+                    <span className="font-mono text-[#C4BCB5] font-semibold">{debtWeight}%</span>
                   </div>
                   <input
                     type="range"
@@ -1388,7 +1377,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                     step={5}
                     value={debtWeight}
                     onChange={(e) => setDebtWeight(Number(e.target.value))}
-                    className="w-full accent-cyan-400 cursor-pointer"
+                    className="w-full accent-[#8C5E3C] cursor-pointer"
                   />
                 </div>
 
@@ -1423,7 +1412,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                       <span className="font-serif text-5xl sm:text-7xl font-normal text-[#FAF7F2] tracking-tight">
                         {formatCurrency(portfolioResults.futureVal, currentCurrency, true)}
                       </span>
-                      <span className="text-xs font-mono text-emerald-400 font-semibold">
+                      <span className="text-xs font-mono text-[#C5A880] font-semibold">
                         {portfolioResults.multiple.toFixed(2)}x Multiple
                       </span>
                     </div>
@@ -1444,7 +1433,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
                   <div>
                     <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Total Gain</div>
-                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
                       +{formatCurrency(portfolioResults.gain, currentCurrency, true)}
                     </div>
                     <div className="text-[10px] text-[#736B65]">Portfolio Appreciation</div>
@@ -1476,10 +1465,10 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                 <div className="space-y-3 font-mono text-xs">
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-[#A39E98] flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span className="w-2 h-2 rounded-full bg-[#B88A58]" />
                       <span>Global Equities ({equityWeight}%)</span>
                     </span>
-                    <span className="text-emerald-400 font-semibold">{formatCurrency(portfolioResults.equityVal, currentCurrency, true)}</span>
+                    <span className="text-[#FAF7F2] font-semibold">{formatCurrency(portfolioResults.equityVal, currentCurrency, true)}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
@@ -1492,10 +1481,10 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-[#A39E98] flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                      <span className="w-2 h-2 rounded-full bg-[#8C5E3C]" />
                       <span>Sovereign Fixed Income ({debtWeight}%)</span>
                     </span>
-                    <span className="text-cyan-400 font-semibold">{formatCurrency(portfolioResults.debtVal, currentCurrency, true)}</span>
+                    <span className="text-[#C4BCB5] font-semibold">{formatCurrency(portfolioResults.debtVal, currentCurrency, true)}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
@@ -1584,7 +1573,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
               <div>
                 <div className="flex justify-between text-xs text-[#A39E98] mb-1.5">
                   <label>Fixed Income Coupon / Yield (%)</label>
-                  <span className="font-mono text-emerald-400 font-semibold">{fixedYieldStr}%</span>
+                  <span className="font-mono text-[#FAF7F2] font-semibold">{fixedYieldStr}%</span>
                 </div>
                 <input
                   type="range"
@@ -1625,7 +1614,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
                       Monthly Inflation-Hedged Cashflow
                     </span>
                     <div className="mt-2 flex items-baseline gap-4">
-                      <span className="font-serif text-5xl sm:text-7xl font-normal text-emerald-400 tracking-tight">
+                      <span className="font-serif text-5xl sm:text-7xl font-normal text-[#FAF7F2] tracking-tight">
                         {formatCurrency(preservationResults.monthlyWithdrawal, currentCurrency)}
                       </span>
                       <span className="text-xs font-mono text-[#FAF7F2]">
@@ -1649,7 +1638,7 @@ export const RentalPropertyCalculator: React.FC<RentalPropertyCalculatorProps> =
 
                   <div>
                     <div className="text-[11px] font-sans uppercase tracking-[0.15em] text-[#8C857E]">Real Net Yield</div>
-                    <div className="mt-1 font-mono text-base font-semibold text-emerald-400">
+                    <div className="mt-1 font-mono text-base font-semibold text-[#FAF7F2]">
                       +{preservationResults.realYield.toFixed(2)}%
                     </div>
                     <div className="text-[10px] text-[#736B65]">Yield minus Inflation</div>

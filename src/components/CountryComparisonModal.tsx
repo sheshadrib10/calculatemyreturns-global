@@ -105,6 +105,58 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
       tagline: 'Negative Gearing Salary Shelter',
       highlight: 'Negative Gearing Tax Write-off',
     },
+    {
+      code: 'CH' as JurisdictionCode,
+      name: 'Switzerland',
+      flag: '🇨🇭',
+      currency: 'CHF',
+      typicalYield: '2.5% - 3.4%',
+      upfrontTax: '1.5% Cantonal Duty + 0.5% Grundbuch',
+      exitCgt: 'Tapered 50% to 10% (Lex Koller)',
+      projectedIrr: '+8.2%',
+      visaBenefit: 'Swiss Franc Sovereign Reserve',
+      tagline: 'Unmatched Safe-Haven Currency Strength',
+      highlight: 'Triple-A Reserve Currency',
+    },
+    {
+      code: 'NZ' as JurisdictionCode,
+      name: 'New Zealand',
+      flag: '🇳🇿',
+      currency: 'NZD',
+      typicalYield: '4.5% - 5.8%',
+      upfrontTax: '0% Transfer Duty (Zero Stamp Duty)',
+      exitCgt: '0% CGT past 24m (Bright-Line)',
+      projectedIrr: '+11.2%',
+      visaBenefit: 'Direct Trans-Tasman Reciprocity',
+      tagline: 'Zero Stamp Duty & 100% Interest Deduction',
+      highlight: '0% Stamp Duty · 0% CGT',
+    },
+    {
+      code: 'LK' as JurisdictionCode,
+      name: 'Sri Lanka',
+      flag: '🇱🇰',
+      currency: 'LKR',
+      typicalYield: '7.5% - 9.5%',
+      upfrontTax: '4.0% Provincial Duty + 2% Reg/Legal',
+      exitCgt: '10% Flat CGT (0% Port City SEZ)',
+      projectedIrr: '+14.6%',
+      visaBenefit: 'Port City Colombo SEZ Incentives',
+      tagline: 'High Rental Yield & Port City SEZ Tax Holiday',
+      highlight: 'Port City SEZ 0% Tax Haven',
+    },
+    {
+      code: 'CA' as JurisdictionCode,
+      name: 'Canada',
+      flag: '🇨🇦',
+      currency: 'CAD',
+      typicalYield: '4.2% - 5.6%',
+      upfrontTax: '2.5% - 4.0% Provincial/Municipal LTT',
+      exitCgt: '50% CGT Inclusion Rate',
+      projectedIrr: '+9.8%',
+      visaBenefit: 'G7 Rule of Law & Resource Base',
+      tagline: '100% Primary Residence Exemption',
+      highlight: 'Stable G7 Asset Anchor',
+    },
   ];
 
   return (
@@ -164,7 +216,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
                   <div className="space-y-2.5 text-xs font-mono">
                     <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
                       <span className="text-[#8C857E]">Prime Yield:</span>
-                      <span className="text-emerald-400 font-semibold">{c.typicalYield}</span>
+                      <span className="text-[#FAF7F2] font-semibold">{c.typicalYield}</span>
                     </div>
 
                     <div className="flex justify-between py-1.5 border-b border-[#2A2220]">
@@ -184,7 +236,7 @@ export const CountryComparisonModal: React.FC<CountryComparisonModalProps> = ({
 
                     <div className="flex justify-between py-1.5">
                       <span className="text-[#8C857E]">Residency / Visa:</span>
-                      <span className="text-emerald-400 truncate max-w-[130px]">{c.visaBenefit}</span>
+                      <span className="text-[#C5A880] truncate max-w-[130px]">{c.visaBenefit}</span>
                     </div>
                   </div>
                 </div>

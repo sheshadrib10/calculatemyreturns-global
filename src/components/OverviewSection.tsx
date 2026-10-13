@@ -87,6 +87,14 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
                 <span className="font-mono text-[#211A19] text-right font-medium">
                   {currentJurisdiction === 'SG' || currentJurisdiction === 'AE'
                     ? '0% Tax-Free Disposal'
+                    : currentJurisdiction === 'NZ'
+                    ? '0% Bright-Line CGT (>24m)'
+                    : currentJurisdiction === 'CH'
+                    ? 'Tapered Cantonal Holding Tax'
+                    : currentJurisdiction === 'LK'
+                    ? '10% Flat (0% Port City SEZ)'
+                    : currentJurisdiction === 'AU'
+                    ? '50% Resident CGT Discount'
                     : currentJurisdiction === 'MY'
                     ? '0% RPGT from Year 6'
                     : currentJurisdiction === 'IN'
@@ -95,27 +103,9 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
                 </span>
               </div>
 
-              <div className="flex justify-between py-2 border-b border-[#E8E2D8]/80">
-                <span className="text-[#8C857E]">Algorithmic Verification</span>
-                <span className="text-emerald-800 font-mono font-medium">100% Deterministic Math</span>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-[#E8E2D8]/80">
+              <div className="flex justify-between py-2">
                 <span className="text-[#8C857E]">Confidentiality</span>
                 <span className="text-[#211A19] font-medium">Zero-Storage · No Signup</span>
-              </div>
-
-              <div className="flex justify-between py-2">
-                <span className="text-[#8C857E]">Architecture &amp; Engine</span>
-                <a
-                  href="https://shulo.xyz/novero"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-mono font-bold text-[#8C5E3C] hover:underline flex items-center gap-1"
-                >
-                  <span>Powered &amp; Built by NOVERO</span>
-                  <span>↗</span>
-                </a>
               </div>
             </div>
 

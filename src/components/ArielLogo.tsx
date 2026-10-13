@@ -50,3 +50,4 @@ export const ArielLogo: React.FC<ArielLogoProps> = ({
     </div>
   );
 };
+
